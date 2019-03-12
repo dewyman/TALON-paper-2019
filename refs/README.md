@@ -12,3 +12,5 @@
     * Use with TranscriptClean
 * Set of common variants from dbSNP
     * Use with TranscriptClean for human data (we don't use SNPs for mouse)
+* Initialized TALON databases for human and mouse
+    * These are intended to be maintained in their original state- if you want to use one for a TALON run, be sure to make a copy and run on that, rather than the original copy.
