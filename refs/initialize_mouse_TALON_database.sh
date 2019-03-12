@@ -6,6 +6,8 @@
 #$ -cwd
 #$ -j y
 
+DATE=$(date +%F\(%a\) | awk -F"(" '{print $1}')
+
 module load dwyman/anaconda/3
 source activate mypython3.7.2
 cd /pub/dwyman/TALON-paper-2019/refs
@@ -20,6 +22,6 @@ time python /pub/dwyman/TALON/initialize_talon_database.py \
     --idprefix ENCODE-human \
     --5p 500 \
     --3p 300 \
-    --o unmodified_full_gencode_vM20
+    --o unmodified_full_gencode_vM20_${DATE}
 
 source deactivate
