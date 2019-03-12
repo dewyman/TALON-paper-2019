@@ -2,6 +2,9 @@
 * human and mouse GENCODE annotations (GTF) 
     * Human: GENCODE v29 comprehensive, primary chromosomes only
     * Mouse: GENCODE vM20 comprehensive, primary chromosomes only
+* human and mouse GENCODE transcript sequences
+    * Human: GENCODE v29 comprehensive, primary chromosomes only
+    * Mouse: GENCODE vM20 comprehensive, primary chromosomes only
 * human and mouse reference genomes  
     * Human: GRCh38 (hg38). 
     * Mouse: mm10
@@ -14,3 +17,4 @@
     * Use with TranscriptClean for human data (we don't use SNPs for mouse)
 * Initialized TALON databases for human and mouse
     * These are intended to be maintained in their original state- if you want to use one for a TALON run, be sure to make a copy and run on that, rather than the original copy.
+* Kallisto index made from GENCODE annotation (one for human, one for mouse)
