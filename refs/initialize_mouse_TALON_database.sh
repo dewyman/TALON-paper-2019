@@ -13,7 +13,7 @@ mkdir -p TALON
 cd TALON
 
 time python /pub/dwyman/TALON/initialize_talon_database.py \
-    --f ref/gencode.vM20.annotation.gtf \
+    --f ../gencode.vM20.annotation.gtf \
     --a gencode_vM20 \
     --g mm10 \
     --l 300 \

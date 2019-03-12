@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -q sam128
-#$ -N init_talon_db_full
+#$ -N init_human_db_full
 #$ -M dwyman@uci.edu
 #$ -m ea
 #$ -cwd
@@ -13,7 +13,7 @@ mkdir -p TALON
 cd TALON
 
 time python /pub/dwyman/TALON/initialize_talon_database.py \
-    --f ref/gencode.v29.annotation.gtf \
+    --f ../gencode.v29.annotation.gtf \
     --a gencode_v29 \
     --g hg38 \
     --l 300 \
