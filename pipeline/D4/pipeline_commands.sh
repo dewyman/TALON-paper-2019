@@ -17,3 +17,4 @@ cp /share/samdata/dwyman/PB69/Minimap2/2_B01/mapped_FLNC.sam $Minimap2/2_B01/.
 /share/samdata/dwyman/sequel_scripts/./filter-TC-output.sh $WORKDIR
 
 # Run TALON
+/share/samdata/dwyman/sequel_scripts/./make-TALON-human-script.sh $WORKDIR HepG2 PacBio-Sequel
