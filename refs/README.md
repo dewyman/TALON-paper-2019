@@ -10,3 +10,5 @@
     * Downloaded from ENCODE
 * Splice junctions derived from the GTF files 
     * Use with TranscriptClean
+* Set of common variants from dbSNP
+    * Use with TranscriptClean for human data (we don't use SNPs for mouse)
