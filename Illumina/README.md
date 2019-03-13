@@ -17,3 +17,9 @@ mitochondrial_blacklist <- c("MT-TF", "MT-RNR1", "MT-TV", "MT-RNR2", "MT-TL1", "
 After performing these filtering steps, we should normalize the expression values so that they sum to 1M again.
 
 When performing an analysis focusing on genes rather than transcripts, we change the filtering slightly: we aggregate the transcripts for each gene before applying the TPM cutoff. The reason: we know that short read quantification estimates on the transcript level are approximate, so we want to consider all of the reads mapping to the gene when doing this filtering.
+
+Scripts for these things:
+```
+TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R
+TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R
+```
