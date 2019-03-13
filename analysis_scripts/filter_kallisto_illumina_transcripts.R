@@ -1,3 +1,4 @@
+library(tidyverse)
 
 filter_kallisto_illumina_transcripts <- function(kallisto_file) {
     # This function takes a Kallisto abundance file and filters the transcripts
@@ -15,7 +16,7 @@ filter_kallisto_illumina_transcripts <- function(kallisto_file) {
     # Remove transcripts that are < 300 bp in length because PacBio chucks anything that size, and
     # keep only transcripts that have polyA tails. Also require TPM > 1
     filter_set <- c("protein_coding", "lincRNA", "processed_transcript", "macro_lncRNA")
-    filtered_transcripts <- subset(gencode.quantitation, eff_length >= 300 & class %in% filter_set & tpm > 1)
+    filtered_transcripts <- subset(gencode.quantitation, length >= 300 & class %in% filter_set & tpm > 1)
 
 
     mitochondrial_blacklist <- c("MT-TF", "MT-RNR1", "MT-TV", "MT-RNR2", "MT-TL1", "MT-ND1", "MT-TI", "MT-TQ", "MT-TM", "MT-ND2", "MT-TW", "MT-TA", "MT-TN", "MT-TC", "MT-TY", "MT-CO1", "MT-TS1", "MT-TD", "MT-CO2", "MT-TK", "MT-ATP8", "MT-ATP6", "MT-CO3", "MT-TG", "MT-ND3", "MT-TR", "MT-ND4L", "MT-ND4", "MT-TH", "MT-TS2", "MT-TL2", "MT-ND5", "MT-ND6", "MT-CYB")

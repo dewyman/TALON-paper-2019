@@ -1,3 +1,4 @@
+library(tidyverse)
 
 filter_kallisto_illumina_genes <- function(kallisto_file) {
     # This function takes a Kallisto abundance file and filters the genes
@@ -15,7 +16,7 @@ filter_kallisto_illumina_genes <- function(kallisto_file) {
     # Remove transcripts that are < 300 bp in length because PacBio chucks anything that size, and
     # keep only transcripts that have polyA tails
     filter_set = c("protein_coding", "lincRNA", "processed_transcript", "macro_lncRNA")
-    gencode_quant_min300 = subset(gencode.quantitation, eff_length >= 300 & class %in% filter_set)
+    gencode_quant_min300 = subset(gencode.quantitation, length >= 300 & class %in% filter_set)
 
     # Aggregate by gene
     gene_gencode_quant_min300 <- aggregate(gencode_quant_min300$tpm, by=list(gencode_quant_min300$gene), FUN=sum)
