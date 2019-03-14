@@ -41,7 +41,7 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
     distinct_transcripts$novelty <- as.factor(distinct_transcripts$novelty)
 
     # Remap levels to easier names
-    distinct_transcripts$novelty = revalue(distinct_transcripts$novelty, c("FSM_transcript"="KNOWN (FSM)", 
+    distinct_transcripts$novelty = revalue(distinct_transcripts$novelty, c("FSM_transcript"="Known", 
                                             "ISM-prefix_transcript"="ISM",
                                             "ISM-suffix_transcript"="ISM",
                                             "other_ISM_transcript"="ISM",
@@ -49,7 +49,7 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
                                             "NNC_transcript"= "NNC",
                                             "antisense_transcript"= "antisense",
                                             "intergenic_transcript"= "intergenic"))
-    distinct_transcripts$novelty <- factor(distinct_transcripts$novelty, levels = c("KNOWN (FSM)", "ISM", 
+    distinct_transcripts$novelty <- factor(distinct_transcripts$novelty, levels = c("Known", "ISM", 
                                                                                     "NIC", "NNC", 
                                                                                     "antisense", "intergenic"))    
     
@@ -57,12 +57,12 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
     fname <- paste(outdir, "/distinct_isoforms_by_category.png", sep="")
     xlabel <- "Isoform category"
     ylabel <- "Number of distinct isoforms"
-    ymax <- 0.7*nrow(distinct_transcripts)
+    ymax <- 1.02*(max(count(distinct_transcripts,"novelty")$freq))
 
     colors <- c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7")
 
     png(filename = fname,
-        width = 4000, height = 2500, units = "px",
+        width = 3000, height = 3500, units = "px",
         bg = "white",  res = 300)
     g = ggplot(distinct_transcripts, aes(x = novelty, width=.6,
                fill = as.factor(novelty))) + 
@@ -89,7 +89,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
 
     # Remap levels to easier names
     observed_transcripts$novelty <- revalue(as.factor(observed_transcripts$novelty), 
-                                          c("FSM_transcript"="KNOWN",
+                                          c("FSM_transcript"="Known",
                                             "ISM-prefix_transcript"="ISM",
                                             "ISM-suffix_transcript"="ISM",
                                             "other_ISM_transcript"="ISM",
@@ -97,18 +97,21 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                                             "NNC_transcript"= "NNC",
                                             "antisense_transcript"= "antisense",
                                             "intergenic_transcript"= "intergenic"))
-    observed_transcripts$novelty <- factor(observed_transcripts$novelty, levels = c("KNOWN", "ISM",
+    observed_transcripts$novelty <- factor(observed_transcripts$novelty, levels = c("Known", "ISM",
                                                                                     "NIC", "NNC",
                                                                                     "antisense", "intergenic"))
 
     # Compute percentages
-    percentages <- as.data.frame(round(prop.table(table(observed_transcripts$novelty))*100, 1))
-    colnames(percentages) <- c("novelty", "percent")
-    print(percentages)
+    freqs_by_dataset <- count(observed_transcripts, c("dataset","novelty"))
+    freqs_by_dataset <- freqs_by_dataset %>% group_by(dataset) %>% 
+                        mutate(percent = round(100*freq/sum(freq),1))
     
-    observed_transcripts <- merge(observed_transcripts, percentages, 
-                                  by = "novelty", all.x = T, all.y = F)
 
+    observed_transcripts <- merge(observed_transcripts, freqs_by_dataset, 
+                                  by = c("dataset","novelty"), all.x = T, all.y = F)
+   
+    print(head(observed_transcripts)) 
+    
     # Plotting
     fname <- paste(outdir, "/reads_by_isoform_category.png", sep="")
     xlabel <- "Dataset"
@@ -119,7 +122,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
     png(filename = fname,
         width = 4000, height = 2500, units = "px",
         bg = "white",  res = 300)
-    g = ggplot(observed_transcripts, aes(x = dataset, width=.5,
+    g = ggplot(observed_transcripts, aes(x = dataset,
                fill = as.factor(novelty))) + #factor(ERCC, levels = novelty)) +
                geom_bar(position="dodge") + #custom_theme() +
                xlab(xlabel) + ylab(ylabel) +
@@ -138,17 +141,18 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                      legend.title = element_text(color="black", size=rel(1))) +
                 yscale("log2", .format = TRUE) +
                 coord_cartesian(ylim = c(1, ymax)) +
-                geom_text(aes(y = log(prop.table(..count..),2), 
+                geom_text(aes(y = ..count.., 
                   label = paste0(percent, '%')), 
                   stat = 'count', 
-                  #position = position_dodge(.9), 
-                  size = 7)
+                  position = position_dodge(.9), 
+                  size = 7, vjust=-0.25)
                 
 
 
     print(g)
     dev.off()
     quit()
+
     # Write a log file
     FSM_rows = subset(observed_transcripts, novelty == "KNOWN")
     ISM_rows = subset(observed_transcripts, novelty == "ISM")
