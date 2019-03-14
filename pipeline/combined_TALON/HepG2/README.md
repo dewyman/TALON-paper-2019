@@ -36,3 +36,15 @@ python /pub/dwyman/post-TALON_tools/create_abundance_file_from_database.py \
            --filter \
            --o HepG2 
 ```
+
+## Detection by TPM
+```
+module load R/3.5.1
+Rscript ../../../analysis_scripts/plot_detection_by_TPM_for_datasets.R \
+           --db ../full_gencode_v29_2019-03-12.db \
+           --datasets D4,D5 \
+           --ik ../../../Illumina/HepG2/Kallisto/abundance.tsv \
+           --whitelist HepG2_whitelist.csv \
+           --color green \
+           -o HepG2_plots
+```
