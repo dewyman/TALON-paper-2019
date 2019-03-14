@@ -30,7 +30,7 @@ python /pub/dwyman/post-TALON_tools/create_GTF_from_database.py \
 
 ## Make a filtered abundance matrix  
 ```
-python /pub/dwyman/post-TALON_tools/create_abundance_file_from_database.py \
+python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
            --db ../full_gencode_v29_2019-03-12.db \
            -a gencode_v29 \
            --filter \
@@ -47,4 +47,26 @@ Rscript ../../../analysis_scripts/plot_detection_by_TPM_for_datasets.R \
            --whitelist HepG2_whitelist.csv \
            --color green \
            -o HepG2_plots
+```
+
+## Plot correlation of D4 and D5
+```
+module load R/3.5.1
+Rscript ../../../analysis_scripts/plot_pacbio_expression_corr.R \
+          --f HepG2_talon_abundance_filtered.tsv \
+          --w HepG2_whitelist.csv \
+          --color green \
+          --d1 D4 --d2 D5 \
+          -o HepG2_plots
+```
+
+## MA plot
+```
+Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/plot_TPM_chisquare_pvalues.R \
+    --f HepG2_talon_abundance_filtered.tsv \
+    --datasets D4,D5 \
+    --ik ../../../Illumina/HepG2/Kallisto/abundance.tsv \
+    --color green \
+    -o HepG2_plots
+
 ```
