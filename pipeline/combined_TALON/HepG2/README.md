@@ -68,5 +68,12 @@ Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/plot_TPM_chisquare_pvalues
     --ik ../../../Illumina/HepG2/Kallisto/abundance.tsv \
     --color green \
     -o HepG2_plots
+```
 
+## Novelty categories plots
+```
+Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/plot_novelty_categories.R \
+        --db ../full_gencode_v29_2019-03-12.db \
+        --w HepG2_whitelist.csv \
+        -o HepG2_plots
 ```
