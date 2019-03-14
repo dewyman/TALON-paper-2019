@@ -1,0 +1,210 @@
+main <-function() {
+
+    load_packages()
+    opt <- parse_options()
+    database <- opt$database
+    outdir <- opt$outdir
+
+
+    # If no whitelist is provided, the plots are made on all of the genes
+
+    # Read in whitelist file, and get gene and transcript whitelists from that
+    whitelist <- read_delim(opt$whitelist, ",", escape_double = FALSE,
+                                  col_names = FALSE, trim_ws = TRUE, na = "NA")
+
+    colnames(whitelist) <- c("gene_ID", "transcript_ID", "novelty")
+    
+    # Fetch observed transcripts, then filter to only those in the whitelist
+    con <- dbConnect(SQLite(), dbname=database)
+    query <- dbSendQuery(con, "SELECT read_name, gene_ID, transcript_ID, dataset FROM observed")
+    transcript_table <- as.data.frame(dbFetch(query, n = -1))
+
+    dbClearResult(query)
+    dbDisconnect(con)
+
+    transcript_table <- merge( x = transcript_table,
+                               y = whitelist,
+                               by = "transcript_ID",
+                               all.x = F, all.y = F)
+    
+    plot_distinct_novelty(transcript_table, outdir)
+    plot_novelty_on_reads(transcript_table, outdir)
+}
+
+plot_distinct_novelty <- function(observed_transcripts, outdir){
+    # This function plots the number of whitelist items that belong to each 
+    # transcript novelty class. So it amounts to the number of unique transcripts
+    # of each type that were identified in each dataset
+
+    # Filter table to get unique instances
+    distinct_transcripts <- observed_transcripts[!duplicated(observed_transcripts[,c('transcript_ID', 'novelty')]),]
+    distinct_transcripts$novelty <- as.factor(distinct_transcripts$novelty)
+
+    # Remap levels to easier names
+    distinct_transcripts$novelty = revalue(distinct_transcripts$novelty, c("FSM_transcript"="KNOWN (FSM)", 
+                                            "ISM-prefix_transcript"="ISM",
+                                            "ISM-suffix_transcript"="ISM",
+                                            "other_ISM_transcript"="ISM",
+                                            "NIC_transcript"= "NIC",
+                                            "NNC_transcript"= "NNC",
+                                            "antisense_transcript"= "antisense",
+                                            "intergenic_transcript"= "intergenic"))
+    distinct_transcripts$novelty <- factor(distinct_transcripts$novelty, levels = c("KNOWN (FSM)", "ISM", 
+                                                                                    "NIC", "NNC", 
+                                                                                    "antisense", "intergenic"))    
+    
+    # Plotting
+    fname <- paste(outdir, "/distinct_isoforms_by_category.png", sep="")
+    xlabel <- "Isoform category"
+    ylabel <- "Number of distinct isoforms"
+    ymax <- 0.7*nrow(distinct_transcripts)
+
+    colors <- c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7")
+
+    png(filename = fname,
+        width = 4000, height = 2500, units = "px",
+        bg = "white",  res = 300)
+    g = ggplot(distinct_transcripts, aes(x = novelty, width=.6,
+               fill = as.factor(novelty))) + 
+               geom_bar() + 
+               xlab(xlabel) + ylab(ylabel) +
+               scale_fill_manual("Isoform Type", values = colors) +
+               theme_bw(base_family = "Helvetica", base_size = 18) +
+               theme(axis.line.x = element_line(color="black", size = 0.5),
+                     axis.line.y = element_line(color="black", size = 0.5),
+                     axis.text.x = element_text(color="black", size = rel(1.5)),
+                     axis.text.y = element_text(color="black", size = rel(1.5)),
+                     axis.title.x = element_text(color="black", size=rel(1.75)),
+                     axis.title.y = element_text(color="black", size=rel(1.75))) +
+               guides(fill = FALSE) + coord_cartesian(ylim = c(0, ymax))
+
+    print(g)
+    dev.off()
+
+}
+
+plot_novelty_on_reads <- function(observed_transcripts, outdir){
+    # This function plots the number of reads per dataset that got assigned to
+    # each novelty type.
+
+    # Remap levels to easier names
+    observed_transcripts$novelty <- revalue(as.factor(observed_transcripts$novelty), 
+                                          c("FSM_transcript"="KNOWN",
+                                            "ISM-prefix_transcript"="ISM",
+                                            "ISM-suffix_transcript"="ISM",
+                                            "other_ISM_transcript"="ISM",
+                                            "NIC_transcript"= "NIC",
+                                            "NNC_transcript"= "NNC",
+                                            "antisense_transcript"= "antisense",
+                                            "intergenic_transcript"= "intergenic"))
+    observed_transcripts$novelty <- factor(observed_transcripts$novelty, levels = c("KNOWN", "ISM",
+                                                                                    "NIC", "NNC",
+                                                                                    "antisense", "intergenic"))
+
+    # Compute percentages
+    percentages <- as.data.frame(round(prop.table(table(observed_transcripts$novelty))*100, 1))
+    colnames(percentages) <- c("novelty", "percent")
+    print(percentages)
+    
+    observed_transcripts <- merge(observed_transcripts, percentages, 
+                                  by = "novelty", all.x = T, all.y = F)
+
+    # Plotting
+    fname <- paste(outdir, "/reads_by_isoform_category.png", sep="")
+    xlabel <- "Dataset"
+    ylabel <- "log2(read count)"
+    colors <- c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7")
+    ymax <- 0.9*nrow(observed_transcripts)
+
+    png(filename = fname,
+        width = 4000, height = 2500, units = "px",
+        bg = "white",  res = 300)
+    g = ggplot(observed_transcripts, aes(x = dataset, width=.5,
+               fill = as.factor(novelty))) + #factor(ERCC, levels = novelty)) +
+               geom_bar(position="dodge") + #custom_theme() +
+               xlab(xlabel) + ylab(ylabel) +
+               theme(legend.text = element_text(color="black", size = rel(1)), 
+                     legend.title = element_text(color="black", size=rel(1))) +
+               theme_bw(base_family = "Helvetica", base_size = 18) +
+               scale_fill_manual("Isoform Type", values = colors) +
+               theme_bw(base_family = "Helvetica", base_size = 18) +
+               theme(axis.line.x = element_line(color="black", size = 0.5),
+                     axis.line.y = element_line(color="black", size = 0.5),
+                     axis.text.x = element_text(color="black", size = rel(1.5)),
+                     axis.text.y = element_text(color="black", size = rel(1.5)),
+                     axis.title.x = element_text(color="black", size=rel(1.5)),
+                     axis.title.y = element_text(color="black", size=rel(1.5))) +
+               theme(legend.text = element_text(color="black", size = rel(1)),
+                     legend.title = element_text(color="black", size=rel(1))) +
+                yscale("log2", .format = TRUE) +
+                coord_cartesian(ylim = c(1, ymax)) +
+                geom_text(aes(y = log(prop.table(..count..),2), 
+                  label = paste0(percent, '%')), 
+                  stat = 'count', 
+                  #position = position_dodge(.9), 
+                  size = 7)
+                
+
+
+    print(g)
+    dev.off()
+    quit()
+    # Write a log file
+    FSM_rows = subset(observed_transcripts, novelty == "KNOWN")
+    ISM_rows = subset(observed_transcripts, novelty == "ISM")
+    NIC_rows = subset(observed_transcripts, novelty == "NIC")
+    NNC_rows = subset(observed_transcripts, novelty == "NNC")
+    antisense_rows = subset(observed_transcripts, novelty == "antisense")
+    intergenic_rows = subset(observed_transcripts, novelty == "intergenic")
+
+    FSMs_per_dataset <- table(FSM_rows$dataset)
+    ISMs_per_dataset <- table(ISM_rows$dataset)
+    NIC_per_dataset <- table(NIC_rows$dataset)
+    NNC_per_dataset <- table(NNC_rows$dataset)
+    antisense_per_dataset <- table(antisense_rows$dataset)
+    intergenic_per_dataset <- table(intergenic_rows$dataset)
+
+    reads_per_dataset <- table(observed_transcripts$dataset)
+    datasets <- names(FSMs_per_dataset)
+
+    FSM_table <- data.frame("dataset" = as.character(datasets),
+                            "total_reads" = as.numeric(reads_per_dataset),
+                            "percent_FSM" = 100*as.numeric(FSMs_per_dataset)/as.numeric(reads_per_dataset),
+                            "percent_ISM" = 100*as.numeric(ISMs_per_dataset)/as.numeric(reads_per_dataset),
+                            "percent_NIC" = 100*as.numeric(NIC_per_dataset)/as.numeric(reads_per_dataset),
+                            "percent_NNC" = 100*as.numeric(NNC_per_dataset)/as.numeric(reads_per_dataset),
+                            "percent_antisense" = 100*as.numeric(antisense_per_dataset)/as.numeric(reads_per_dataset),
+                            "percent_intergenic" = 100*as.numeric(intergenic_per_dataset)/as.numeric(reads_per_dataset),
+                            stringsAsFactors = FALSE)
+    print(FSM_table)
+     
+} 
+
+load_packages <- function() {
+    suppressPackageStartupMessages(library("DBI"))
+    suppressPackageStartupMessages(library("RSQLite"))
+    suppressPackageStartupMessages(library("readr"))
+    suppressPackageStartupMessages(library("ggplot2"))
+    suppressPackageStartupMessages(library("plyr"))
+    suppressPackageStartupMessages(library("optparse"))
+    suppressPackageStartupMessages(library("ggpubr"))
+
+    return
+}
+
+parse_options <- function() {
+
+    option_list <- list(
+        make_option(c("--db"), action = "store", dest = "database",
+                    default = NULL, help = "TALON database"),
+        make_option(c("--w"), action = "store", dest = "whitelist",
+                    default = NULL, help = "whitelist csv file"),
+        make_option(c("-o","--outdir"), action = "store", dest = "outdir",
+                    default = NULL, help = "Output directory for plots and outfiles")
+        )
+
+    opt <- parse_args(OptionParser(option_list=option_list))
+    return(opt)
+}
+
+main()
