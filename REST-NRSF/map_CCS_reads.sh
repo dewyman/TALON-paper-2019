@@ -28,5 +28,5 @@ mapped_ccs=HepG2_D4_ccs_reads.sam
            $fasta \
            > $mapped_ccs         \
            2> mapped_ccs.log
-samtools view -bS $mapped_ccs > /pub/public-www/dwyman/HepG2_D4_ccs_reads.bam
-samtools index /pub/public-www/dwyman/HepG2_D4_ccs_reads.bam
+samtools view -bS $mapped_ccs | samtools sort > /pub/public-www/dwyman/sorted_HepG2_D4_ccs_reads.bam
+samtools index /pub/public-www/dwyman/sorted_HepG2_D4_ccs_reads.bam
