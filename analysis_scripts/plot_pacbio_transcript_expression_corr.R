@@ -118,7 +118,6 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("readr"))
     suppressPackageStartupMessages(library("ggplot2"))
     suppressPackageStartupMessages(library("plyr"))
-    suppressPackageStartupMessages(library("knitr"))
     suppressPackageStartupMessages(library("optparse"))
 
     return
