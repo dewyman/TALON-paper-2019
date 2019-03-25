@@ -59,17 +59,39 @@ Rscript ../../../analysis_scripts/plot_pacbio_expression_corr.R \
           --color green \
           --d1 D4 --d2 D5 \
           -o HepG2_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
+          --color green \
+          --d1 D4 --d2 D5 \
+          -o HepG2_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
+          --d1 D4 --d2 D5 \
+          -o HepG2_plots
 ```
 
-## MA plot
+## MA plot for known genes
 ```
 Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/plot_TPM_chisquare_pvalues.R \
-    --f HepG2_talon_abundance_filtered.tsv \
+    --f HepG2_talon_abundance.tsv \
     --datasets D4,D5 \
     --ik ../../../Illumina/HepG2/Kallisto/abundance.tsv \
     --color green \
     -o HepG2_plots
 ```
+
+## MA plot for known transcripts
+```
+Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/MA_plot_for_transcripts.R \
+    --f HepG2_talon_abundance.tsv \
+    --datasets D4,D5 \
+    --ik ../Illumina/HepG2/Kallisto/abundance.tsv \
+    --color green \
+    -o HepG2_plots
+```
+
 
 ## Novelty categories plots
 ```
