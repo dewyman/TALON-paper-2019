@@ -32,10 +32,16 @@ main <-function() {
     dataset_2 <- data_names[2]
     
     # Read in whitelist file, and get gene and transcript whitelists from that
-    whitelist <- as.data.frame(read_delim(opt$whitelist, ",", escape_double = FALSE,
+    if (is.null(opt$whitelist)) {
+        whitelisted_gene_IDs = NULL
+        whitelisted_transcript_IDs = NULL
+    } else {
+        whitelist <- as.data.frame(read_delim(opt$whitelist, ",", escape_double = FALSE,
                                   col_names = FALSE, trim_ws = TRUE, na = "NA"))
-    whitelisted_gene_IDs <- unique(whitelist[,1])
-    whitelisted_transcript_IDs <- whitelist[,2]
+        whitelisted_gene_IDs <- unique(whitelist[,1])
+        whitelisted_transcript_IDs <- whitelist[,2]
+    }
+
     full_transcript_table <- get_database_transcript_table(opt$database)
 
     # Now get filtered genes/transcripts detected in the datasets
@@ -170,8 +176,12 @@ get_detected_genes_for_dataset <- function(dataset, whitelisted_genes, database)
     dbClearResult(query)
     dbDisconnect(con)
 
-    filtered_geneIDs <- geneIDs[geneIDs %in% whitelisted_genes]
-    return(filtered_geneIDs)
+    if (!(is.null(whitelisted_genes))) {
+        filtered_geneIDs <- geneIDs[geneIDs %in% whitelisted_genes]
+        return(filtered_geneIDs)
+    } else {
+        return(geneIDs)
+    }
 }
 
 get_detected_transcripts_for_dataset <- function(dataset, whitelisted_transcripts, database) {
@@ -185,8 +195,13 @@ get_detected_transcripts_for_dataset <- function(dataset, whitelisted_transcript
     dbClearResult(query)
     dbDisconnect(con)
 
-    filtered_transcriptIDs <- transcriptIDs[transcriptIDs %in% whitelisted_transcripts]
-    return(filtered_transcriptIDs)
+    # Filter transcripts if a whetelist was provided
+    if (!(is.null(whitelisted_transcripts))) {
+        filtered_transcriptIDs <- transcriptIDs[transcriptIDs %in% whitelisted_transcripts]
+        return(filtered_transcriptIDs)
+    } else {
+        return(transcriptIDs)
+    }
 }
 
 load_packages <- function() {
