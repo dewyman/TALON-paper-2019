@@ -32,8 +32,8 @@ main <-function() {
     # Read PacBio abundance file
     pb_abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
-    pb_abundance <- pb_abundance[, c("annot_transcript_name", dataset1, dataset2)]
-    pb_abundance <- pb_abundance[complete.cases(pb_abundance), ]    
+    pb_abundance <- subset(pb_abundance, transcript_status == "KNOWN")
+    pb_abundance <- pb_abundance[, c("annot_transcript_name", dataset1, dataset2)] 
 
     # Sum together the PacBio abundances
     pb_abundance$both_pacbio <- pb_abundance[,dataset1] + pb_abundance[,dataset2]
@@ -93,19 +93,25 @@ plot_MA_observed_expected <- function(data, fillcolor, outdir) {
     ylabel <- "log2(ratio of observed to expected PacBio counts)"
 
     png(filename = fname,
-     width = 2500, height = 2000, units = "px",
+     width = 2500, height = 2500, units = "px",
     bg = "white",  res = 300)
 
     p = ggplot(data, aes(x = A, y = M, color = status)) +
-               geom_jitter(alpha = 0.4) +
+               geom_jitter(alpha = 0.4, size = 2.5) +
                xlab(xlabel) + ylab(ylabel) + theme_bw() +
                scale_color_manual(values = c("orange", fillcolor),
-                                  labels = c("Bonf. p-value <= 0.01 \nor log2 fold change > 1", "Bonf. p-value > 0.01")) +
-               #coord_cartesian(xlim = c(0,1)) +
+                                  labels = c("Significant", "Not significant")) +
+                                  #labels = c("Bonf. p-value <= 0.01 \nor log2 fold change > 1", "Bonf. p-value > 0.01")) +
+               guides(colour = guide_legend(override.aes = list(size=2.5))) +
                theme(axis.text.x = element_text(color="black", size=20),
                      axis.text.y = element_text(color="black", size=20),
                      axis.title.x = element_text(color="black", size=16),
-                     axis.title.y = element_text(color="black", size=16))
+                     axis.title.y = element_text(color="black", size=16)) +
+               theme(legend.position=c(0.8,0.2),
+                     legend.title = element_blank(),
+                     legend.background = element_rect(fill="white", color = "black"),
+                     legend.key = element_rect(fill="transparent"),
+                     legend.text = element_text(colour = 'black', size = 16))
 
     print(p)
     dev.off()
