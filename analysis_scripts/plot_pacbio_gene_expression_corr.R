@@ -100,24 +100,75 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
-    g = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
-        geom_jitter(alpha = 0.5) + theme_bw() +
-        #geom_rug(alpha = 1/2, position = "jitter") +
-        xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
-        theme(axis.text.x = element_text(color = "black", size=24),
-              axis.text.y = element_text(color = "black", size=24)) +
-        annotate("text", x = 5, y = 14, label = paste("Pearson r: ",
-                 round(pearsonCorr, 2), "\nSpearman rho: ",
-                 round(spearmanCorr, 2), sep=""),  color="black", size = 8) +
-        coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
-        scale_colour_manual("", values=color_vec) +
-        theme(legend.position=c(0.8,0.2),
-              legend.background = element_rect(fill="transparent"),
-              legend.key = element_rect(fill="transparent"),
-              legend.text = element_text(colour = 'black', size = 20))
 
-     g = ggMarginal(g, groupColour = TRUE, groupFill = TRUE ) + scale_y_continuous()
+    # Main scatterplot
+    scatterplot = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
+                         geom_jitter(alpha = 0.5) + theme_bw() +
+                         xlab(xlabel)  + ylab(ylabel) + 
+                         theme(text= element_text(size=24)) +
+                         theme(axis.text.x = element_text(color = "black", size=24),
+                               axis.text.y = element_text(color = "black", size=24)) +
+                         annotate("text", x = 5, y = 14, label = paste("Pearson r: ",
+                                  round(pearsonCorr, 2), "\nSpearman rho: ",
+                                  round(spearmanCorr, 2), sep=""),  
+                                  color="black", size = 8) +
+                         coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
+                         scale_colour_manual("", values=color_vec) +
+                         theme(legend.position=c(0.8,0.2),
+                             legend.background = element_rect(fill="transparent"),
+                             legend.key = element_rect(fill="transparent"),
+                             legend.text = element_text(colour = 'black', size = 20))
 
+     # Max values
+     xd_max <- max(density(merged_abundances$data2.TPM)$y)
+     yd_max <- max(density(merged_abundances$data1.TPM)$y)
+     plot_max <- round(max(c(xd_max, yd_max))*1.1, 2)
+     print(plot_max)
+
+     # Marginal density plot of x (top panel)
+     xdensity <- ggplot(merged_abundances, aes(data1.TPM, fill=novelty, color=novelty)) + 
+                        geom_density(alpha=.5) + 
+                        scale_fill_manual(values = color_vec) + 
+                        scale_color_manual(values = color_vec) +
+                        coord_cartesian(ylim = c(0, plot_max)) +
+                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                        theme(legend.position = "none",
+                              axis.title.x=element_blank(),
+                              axis.text.x=element_blank(),
+                              axis.ticks.x=element_blank())
+
+    # Marginal density plot of y (right panel)
+    ydensity <- ggplot(merged_abundances, aes(data2.TPM, fill=novelty, color=novelty)) + 
+                       geom_density(alpha=.5) + 
+                       scale_fill_manual(values = color_vec) +
+                       scale_color_manual(values = color_vec) +
+                       coord_cartesian(ylim = c(0, plot_max)) +
+                       scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                       theme(legend.position = "none",
+                             axis.title.y=element_blank(),
+                              axis.text.y=element_blank(),
+                              axis.ticks.y=element_blank()) +
+                              coord_flip(ylim = c(0, plot_max))
+                       
+
+    # Blank placeholder plot
+    blankPlot <- ggplot()+geom_blank(aes(1,1))+
+                 theme(
+                      plot.background = element_blank(), 
+                      panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(), 
+                      panel.border = element_blank(),
+                      panel.background = element_blank(),
+                      axis.title.x = element_blank(),
+                      axis.title.y = element_blank(),
+                      axis.text.x = element_blank(), 
+                      axis.text.y = element_blank(),
+                      axis.ticks = element_blank(),
+                      axis.line = element_blank())
+
+     g = grid.arrange(xdensity, blankPlot, scatterplot, ydensity, 
+                      ncol=2, nrow=2, widths=c(4, 0.9), heights=c(0.9, 4))
+     
      print(g)
      dev.off()
 
@@ -127,8 +178,8 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("tidyverse"))
     suppressPackageStartupMessages(library("ggplot2"))
     suppressPackageStartupMessages(library("optparse"))
-    suppressPackageStartupMessages(library("ggExtra"))
-    suppressPackageStartupMessages(library("scales"))
+    suppressPackageStartupMessages(library("gridExtra"))
+    suppressPackageStartupMessages(library("cowplot"))
     return
 }
 
