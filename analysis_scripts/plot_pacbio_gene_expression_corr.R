@@ -119,10 +119,12 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                              legend.key = element_rect(fill="transparent"),
                              legend.text = element_text(colour = 'black', size = 20))
 
-     # Max values
-     xd_max <- max(density(merged_abundances$data2.TPM)$y)
-     yd_max <- max(density(merged_abundances$data1.TPM)$y)
-     plot_max <- round(max(c(xd_max, yd_max))*1.1, 2)
+     # Find max density y value across both datasets
+     vars <- unique(merged_abundances$novelty)
+     print(vars)
+     xd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data2.TPM"))
+     yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.TPM"))
+     plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
      print(plot_max)
 
      # Marginal density plot of x (top panel)
@@ -172,6 +174,12 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
      print(g)
      dev.off()
 
+}
+
+compute_max_density_for_var <- function(var, data, dataset) {
+    # Compute the max density y value for a particular gene type
+    data <- subset(data, data$novelty == var)[,dataset]
+    return(max(density(data)$y))
 }
 
 load_packages <- function() {
