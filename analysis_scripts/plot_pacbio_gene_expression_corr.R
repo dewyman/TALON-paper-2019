@@ -73,10 +73,10 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = c("Known", "Antisense", "Intergenic"))
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec)
+    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec) {
+expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype) {
 
     # Take log2(TPM + 1)
     merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
@@ -94,8 +94,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
         joined_names <- paste(joined_names, "withIntergenic", sep="_")
     }
     fname <- paste(joined_names, "gene", "correlationPlot.png", sep="_")
-    xlabel <- paste("log2(TPM+1) of gene in ", "Rep1", sep="")
-    ylabel <- paste("log2(TPM+1) of gene in ", "Rep2", sep="")
+    xlabel <- paste("log2(TPM+1) in ", celltype, " Rep1", sep="")
+    ylabel <- paste("log2(TPM+1) in ", celltype, " Rep2", sep="")
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
@@ -116,7 +116,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
               legend.key = element_rect(fill="transparent"),
               legend.text = element_text(colour = 'black', size = 20))
 
-     g = ggMarginal(g, groupColour = TRUE, groupFill = TRUE )
+     g = ggMarginal(g, groupColour = TRUE, groupFill = TRUE ) + scale_y_continuous()
 
      print(g)
      dev.off()
@@ -128,6 +128,7 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("ggplot2"))
     suppressPackageStartupMessages(library("optparse"))
     suppressPackageStartupMessages(library("ggExtra"))
+    suppressPackageStartupMessages(library("scales"))
     return
 }
 
@@ -142,6 +143,8 @@ parse_options <- function() {
                     default = NULL, help = "First dataset name to use in comparison"),
         make_option("--d2", action = "store", dest = "d2",
                     default = NULL, help = "Second dataset name to use in comparison"),
+        make_option("--celltype", action = "store", dest = "celltype",
+                    default = NULL, help = "Celltype to use in plot labels"),
         make_option(c("--antisense"), action="store_true", dest="antisense",
               help="Set this option to include antisense genes", default = F),
         make_option(c("--intergenic"), action="store_true", dest="intergenic",
