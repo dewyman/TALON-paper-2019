@@ -86,7 +86,7 @@ Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/plot_TPM_chisquare_pvalues
 Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/MA_plot_for_transcripts.R \
     --f HepG2_talon_abundance.tsv \
     --datasets D4,D5 \
-    --ik ../Illumina/HepG2/Kallisto/abundance.tsv \
+    --ik ../../../Illumina/HepG2/Kallisto/abundance.tsv \
     --color green \
     -o HepG2_plots
 ```
