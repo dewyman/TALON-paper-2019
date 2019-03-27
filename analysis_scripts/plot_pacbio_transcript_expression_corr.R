@@ -58,7 +58,7 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = t_levels)
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec)
+    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec, opt$celltype)
 }
 
 filter_transcripts_on_options <- function(abundance_table, opt) {
@@ -143,7 +143,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     return(filtered)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec) {
+expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype) {
 
     # Take log2(TPM + 1)
     merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
@@ -158,15 +158,14 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec) {
     joined_names <- paste(outdir, "/", d1, "-", d2, "_", nov_types, sep = "")
     
     fname <- paste(joined_names, "transcript", "correlationPlot.png", sep="_")
-    xlabel <- paste("log2(TPM+1) of transcript in ", "Rep1", sep="")
-    ylabel <- paste("log2(TPM+1) of transcript in ", "Rep2", sep="")
+    xlabel <- paste("log2(TPM+1) in ", celltype, " Rep1", sep="")
+    ylabel <- paste("log2(TPM+1) in ", celltype, " Rep2", sep="")
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
-    g = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
+    scatterplot = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
         geom_jitter(alpha = 0.5) + theme_bw() +
-        #geom_rug(alpha = 1/2, position = "jitter") +
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
@@ -176,22 +175,79 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec) {
         coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("", values=color_vec) +
         theme(legend.position=c(0.8,0.2),
-              legend.background = element_rect(fill="transparent"),
+              legend.title = element_blank(),
+              legend.background = element_rect(fill="white", color = "black"),
               legend.key = element_rect(fill="transparent"),
               legend.text = element_text(colour = 'black', size = 20))
 
-     g = ggMarginal(g, groupColour = TRUE, groupFill = TRUE )
 
+     # Find max density y value across both datasets
+     vars <- unique(merged_abundances$novelty)
+     xd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data2.TPM"))
+     yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.TPM"))
+     plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
+
+     # Marginal density plot of x (top panel)
+     xdensity <- ggplot(merged_abundances, aes(data1.TPM, fill=novelty, color=novelty)) + 
+                        geom_density(alpha=.5) + 
+                        scale_fill_manual(values = color_vec) + 
+                        scale_color_manual(values = color_vec) +
+                        coord_cartesian(ylim = c(0, plot_max)) +
+                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                        theme(legend.position = "none",
+                              axis.title.x=element_blank(),
+                              axis.text.x=element_blank(),
+                              axis.ticks.x=element_blank())
+
+    # Marginal density plot of y (right panel)
+    ydensity <- ggplot(merged_abundances, aes(data2.TPM, fill=novelty, color=novelty)) + 
+                       geom_density(alpha=.5) + 
+                       scale_fill_manual(values = color_vec) +
+                       scale_color_manual(values = color_vec) +
+                       coord_cartesian(ylim = c(0, plot_max)) +
+                       scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                       theme(legend.position = "none",
+                             axis.title.y=element_blank(),
+                              axis.text.y=element_blank(),
+                              axis.ticks.y=element_blank()) +
+                              coord_flip(ylim = c(0, plot_max))
+                       
+
+    # Blank placeholder plot
+    blankPlot <- ggplot()+geom_blank(aes(1,1))+
+                 theme(
+                      plot.background = element_blank(), 
+                      panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(), 
+                      panel.border = element_blank(),
+                      panel.background = element_blank(),
+                      axis.title.x = element_blank(),
+                      axis.title.y = element_blank(),
+                      axis.text.x = element_blank(), 
+                      axis.text.y = element_blank(),
+                      axis.ticks = element_blank(),
+                      axis.line = element_blank())
+
+     g = grid.arrange(xdensity, blankPlot, scatterplot, ydensity, 
+                      ncol=2, nrow=2, widths=c(4, 0.9), heights=c(0.9, 4))
+     
      print(g)
      dev.off()
 
+}
+
+compute_max_density_for_var <- function(var, data, dataset) {
+    # Compute the max density y value for a particular gene type
+    data <- subset(data, data$novelty == var)[,dataset]
+    return(max(density(data)$y))
 }
 
 load_packages <- function() {
     suppressPackageStartupMessages(library("tidyverse"))
     suppressPackageStartupMessages(library("ggplot2"))
     suppressPackageStartupMessages(library("optparse"))
-    suppressPackageStartupMessages(library("ggExtra"))
+    suppressPackageStartupMessages(library("gridExtra"))
+    suppressPackageStartupMessages(library("cowplot"))
     return
 }
 
@@ -206,6 +262,8 @@ parse_options <- function() {
                     default = NULL, help = "First dataset name to use in comparison"),
         make_option("--d2", action = "store", dest = "d2",
                     default = NULL, help = "Second dataset name to use in comparison"),
+        make_option("--celltype", action = "store", dest = "celltype",
+                    default = NULL, help = "Celltype to use in plot labels"),
         make_option("--w", action = "store", dest = "whitelist",
                     default = NULL, help = "Optional: a whitelist for filtering transcripts"),
         make_option(c("--ISM"), action="store_true", dest="ISM",
