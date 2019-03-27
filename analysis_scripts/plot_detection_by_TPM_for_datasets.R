@@ -119,14 +119,22 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
     ylabel <- paste("Proportion of ", cat_type, "s", sep="")
 
     png(filename = fname,
-        width = 2500, height = 2000, units = "px",
+        width = 2000, height = 2500, units = "px",
         bg = "white",  res = 300)
     g = ggplot(illumina, aes(x = group, fill = factor(detection, levels = c("Not detected in PacBio", "Detected in one PacBio rep", "Detected in both PacBio reps")))) +
-       geom_bar(position = "fill", col = "black") + scale_fill_manual("",values=color_vec)  + 
-       theme_bw() + scale_y_continuous(breaks=c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1)) + 
-       theme(axis.text.x = element_text(angle = 30, hjust = 1, color = "black", size=17)) + 
-       xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=17)) + 
-       theme(axis.text.y = element_text(color = "black", size=17)) + scale_x_discrete(labels=cIntervals)
+       geom_bar(position = "fill", col = "black") + 
+       scale_fill_manual("",values=color_vec)  + 
+       theme_bw() + 
+       scale_y_continuous(breaks=c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1)) + 
+       theme(axis.text.x = element_text(angle = 30, hjust = 1, color = "black", size=20)) + 
+       xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=20)) + 
+       theme(axis.text.y = element_text(color = "black", size=20)) + 
+       scale_x_discrete(labels=cIntervals) + 
+       theme(legend.position=c(0.65,0.2),
+              legend.title = element_blank(),
+              legend.background = element_rect(fill="white", color = "black"),
+              legend.key = element_rect(fill="transparent"),
+              legend.text = element_text(colour = 'black', size = 16))
 
     print(g)
     dev.off()
@@ -154,12 +162,14 @@ plot_length_hists_by_detection <- function(illumina, outdir) {
         width = 3000, height = 2000, units = "px",
         bg = "white",  res = 300)
     g = ggplot(illumina, aes(x = length, color = factor(detection, levels = c("Not detected in PacBio", "Detected in one PacBio rep", "Detected in both PacBio reps")))) +
-       geom_freqpoly(binwidth = 0.1) + scale_colour_manual("",values=c("red", "skyblue", "navy"))  +
+       geom_freqpoly(binwidth = 0.1) + 
+       scale_colour_manual("",values=c("red", "skyblue", "navy"))  +
        theme_bw() + 
        theme(axis.text.x = element_text(color = "black", size=17)) +
        xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=17)) +
        theme(axis.text.y = element_text(color = "black", size=17)) + 
-       coord_cartesian(xlim=c(0, 7), ylim=c(0,60)) + scale_x_continuous(breaks=seq(0,7, by = 1)) 
+       coord_cartesian(xlim=c(0, 7), ylim=c(0,60)) + 
+       scale_x_continuous(breaks=seq(0,7, by = 1))
 
     print(g)
     dev.off()
