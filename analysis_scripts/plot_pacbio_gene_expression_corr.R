@@ -115,17 +115,16 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                          coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
                          scale_colour_manual("", values=color_vec) +
                          theme(legend.position=c(0.8,0.2),
-                             legend.background = element_rect(fill="transparent"),
+                             legend.title = element_blank(),
+                             legend.background = element_rect(fill="white", color = "black"),
                              legend.key = element_rect(fill="transparent"),
                              legend.text = element_text(colour = 'black', size = 20))
 
      # Find max density y value across both datasets
      vars <- unique(merged_abundances$novelty)
-     print(vars)
      xd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data2.TPM"))
      yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.TPM"))
      plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
-     print(plot_max)
 
      # Marginal density plot of x (top panel)
      xdensity <- ggplot(merged_abundances, aes(data1.TPM, fill=novelty, color=novelty)) + 
