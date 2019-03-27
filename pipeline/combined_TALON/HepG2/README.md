@@ -49,25 +49,73 @@ Rscript ../../../analysis_scripts/plot_detection_by_TPM_for_datasets.R \
            -o HepG2_plots
 ```
 
-## Plot correlation of D4 and D5
+## Plot gene correlation of D4 and D5
 ```
 module load R/3.5.1
-Rscript ../../../analysis_scripts/plot_pacbio_expression_corr.R \
-          --f HepG2_talon_abundance_filtered.tsv \
-          --w HepG2_whitelist.csv \
+Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
           --color green \
           --d1 D4 --d2 D5 \
+          --celltype HepG2 \
           -o HepG2_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
           --f HepG2_talon_abundance.tsv \
           --color green \
           --d1 D4 --d2 D5 \
+          --celltype HepG2 \
+          --intergenic \
+          -o HepG2_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
+          --color green \
+          --d1 D4 --d2 D5 \
+          --celltype HepG2 \
+          --antisense \
+          --intergenic \
+          -o HepG2_plots
+```
+
+## Plot transcript correlation
+```
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
+          --d1 D4 --d2 D5 \
+          --celltype HepG2 \
           -o HepG2_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
           --f HepG2_talon_abundance.tsv \
           --d1 D4 --d2 D5 \
+          --celltype HepG2 \
+          --ISM \
+          -o HepG2_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
+          --d1 D4 --d2 D5 \
+          --celltype HepG2 \
+          --NIC \
+          -o HepG2_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
+          --d1 D4 --d2 D5 \
+          --celltype HepG2 \
+          --NNC \
+          -o HepG2_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f HepG2_talon_abundance.tsv \
+          --d1 D4 --d2 D5 \
+          --celltype HepG2 \
+          --ISM \
+          --NIC \
+          --NNC \
+          --antisense \
+          --intergenic \
+          --genomic \
           -o HepG2_plots
 ```
 
