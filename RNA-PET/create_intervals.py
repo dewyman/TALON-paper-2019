@@ -4,10 +4,10 @@ def create_interval(pos, pos_type, dist):
     """ Creates a zero-based interval around the provided position (must also be 
         zero-based) of size dist on either side. """
 
-    if pos_type == "start":
+    if pos_type == "left":
         start = pos - dist
         end = pos + dist + 1
-    elif pos_type == "end":
+    elif pos_type == "right":
         start = pos - dist - 1
         end = pos + dist
 
