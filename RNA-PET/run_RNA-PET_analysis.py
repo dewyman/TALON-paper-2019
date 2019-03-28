@@ -41,21 +41,23 @@ def main():
         print(e)
         sys.exit("Something went wrong with talon_GTF_2_transcript_bed.py run")
 
-    exit()
     # Next, take the transcript bed file and create intervals of specified size
     # around the starts and ends. These go into separate files.
-    try:
-        pass
-    except Exception as e:
-        pass
+    #try:
+    #    pass
+    #except Exception as e:
+    #    pass
 
     # Extract the start and end points (len 1) of each RNA-PET cluster. Put them
     # into separate files
     try:
-        pass
+        subprocess.check_output(["python", "get_RNA_PET_starts_and_ends.py",
+                                 "--rnapet", rna_pet_file, "--o",  outprefix])
     except Exception as e:
-        pass
+        print(e)
+        sys.exit("Something went wrong with get_RNA_PET_starts_and_ends.py run")
 
+    exit()
     # Run Bedtools intersect on (a) transcript starts and RNA-PET starts
     #                           (b) transcript ends and RNA-PET ends
     try:
