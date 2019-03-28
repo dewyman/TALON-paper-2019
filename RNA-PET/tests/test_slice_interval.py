@@ -14,13 +14,13 @@ class TestSliceInterval(object):
 
         # Get interval for start
         interval_start, interval_end = cI.create_interval(transcript_start, 
-                                                          "start", dist)
+                                                          "left", dist)
         assert interval_start == 100
         assert interval_end == 101
 
         # Get interval for end
         interval_start, interval_end = cI.create_interval(transcript_end, 
-                                                          "end", dist) 
+                                                          "right", dist) 
         assert interval_start == 109
         assert interval_end == 110
 
@@ -33,12 +33,12 @@ class TestSliceInterval(object):
 
         # Get interval for start
         interval_start, interval_end = cI.create_interval(transcript_start,
-                                                          "start", dist)
+                                                          "left", dist)
         assert interval_start == 99
         assert interval_end == 104
 
         # Get interval for end
         interval_start, interval_end = cI.create_interval(transcript_end,
-                                                          "end", dist)
+                                                          "right", dist)
         assert interval_start == 105
         assert interval_end == 110
