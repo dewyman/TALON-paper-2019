@@ -5,21 +5,21 @@ To externally validate our long read transcript starts and ends, we compare them
 ```
 ./download_RNA-PET.sh
 # HepG2: clone
-wget https://www.encodeproject.org/files/ENCFF001TIR/@@download/ENCFF001TIR.bed.gz
-
-### GM12878: clone-free
-wget https://www.encodeproject.org/files/ENCFF001TIL/@@download/ENCFF001TIL.bed.gz
-
+# GM12878: clone-free
 # K562: clone-free
-https://www.encodeproject.org/files/ENCFF001TJA/@@download/ENCFF001TJA.bed.gz
 ```
 
-## Obtain the Liftover tool and chain file from the UCSC genome browser:
+## Download Liftover
+```
+# Program:
+Linux: wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/liftOver
+Mac OSX: wget http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/liftOver
+
+# Chain file:
+wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz
 ```
 
+## Lift over each BED file that we downloaded: 
 ```
-
-## Lift over each BED file that we downloaded
-```
-
+./liftover_RNA-PET.sh
 ```
