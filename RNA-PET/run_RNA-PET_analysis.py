@@ -84,7 +84,7 @@ def main():
         rna_pet_starts = outdir + "/RNA-PET_beds/" + name + \
                             "_RNA-PET_starts.bed"
         out = outdir + "/intersection_files/starts.tsv"
-        os.system("bedtools intersect -a %s -b %s -wa -wb -s > %s" % 
+        os.system("bedtools intersect -a %s -b %s -loj -s > %s" % 
                   (transcript_starts, rna_pet_starts, out))
     except Exception as e:
         print(e)
@@ -96,19 +96,24 @@ def main():
         rna_pet_ends = outdir + "/RNA-PET_beds/" + name + \
                             "_RNA-PET_ends.bed"
         out = outdir + "/intersection_files/ends.tsv"
-        os.system("bedtools intersect -a %s -b %s -wa -wb -s > %s" %
+        os.system("bedtools intersect -a %s -b %s -loj -s > %s" %
                   (transcript_ends, rna_pet_ends, out))
     except Exception as e:
         print(e)
         sys.exit("Something went wrong with bedtools intersect (ends)")
 
-    exit()
     # Take the Bedtools output and determine whether each transcript start-end 
     # pair matched with at least one RNA-PET start-end pair or not. 
     try:
-        pass
+        out = outprefix
+        subprocess.check_output(["python", "parse_bedtools_output.py",
+                                 "--starts", outdir + "/intersection_files/starts.tsv",
+                                 "--ends",  outdir + "/intersection_files/ends.tsv",
+                                 "--o",  outprefix])
+        
     except Exception as e:
-        pass
+        print(e)
+        sys.exit("Something went wrong during the parse_bedtools_output.py run")
 
     # Generate an RNA-PET coverage plot based on the output file from the 
     # previous step
