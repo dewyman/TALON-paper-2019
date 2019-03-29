@@ -4,7 +4,7 @@ sys.path.append("..")
 import create_intervals as cI
 import get_RNA_PET_starts_and_ends as grpets
 
-class TestSliceInterval(object):
+class TestRnaPetInterval(object):
     def test_plus_strand(self):
         """ Interval on the plus strand"""
 
