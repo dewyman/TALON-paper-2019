@@ -75,14 +75,34 @@ def main():
         print(e)
         sys.exit("Something went wrong with get_RNA_PET_starts_and_ends.py run")
 
-    exit()
+    
     # Run Bedtools intersect on (a) transcript starts and RNA-PET starts
     #                           (b) transcript ends and RNA-PET ends
     try:
-        pass
+        transcript_starts = outdir + "/transcript_beds/" + name + \
+                            "_transcript_starts.bed"
+        rna_pet_starts = outdir + "/RNA-PET_beds/" + name + \
+                            "_RNA-PET_starts.bed"
+        out = outdir + "/intersection_files/starts.tsv"
+        os.system("bedtools intersect -a %s -b %s -wa -wb -s > %s" % 
+                  (transcript_starts, rna_pet_starts, out))
     except Exception as e:
-        pass
+        print(e)
+        sys.exit("Something went wrong with bedtools intersect (starts)")
 
+    try:
+        transcript_ends = outdir + "/transcript_beds/" + name + \
+                            "_transcript_ends.bed"
+        rna_pet_ends = outdir + "/RNA-PET_beds/" + name + \
+                            "_RNA-PET_ends.bed"
+        out = outdir + "/intersection_files/ends.tsv"
+        os.system("bedtools intersect -a %s -b %s -wa -wb -s > %s" %
+                  (transcript_ends, rna_pet_ends, out))
+    except Exception as e:
+        print(e)
+        sys.exit("Something went wrong with bedtools intersect (ends)")
+
+    exit()
     # Take the Bedtools output and determine whether each transcript start-end 
     # pair matched with at least one RNA-PET start-end pair or not. 
     try:
