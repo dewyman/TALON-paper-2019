@@ -32,11 +32,23 @@ def main():
     rna_pet_file = options.rnapet
     max_dist = options.maxdist
     outprefix = options.outprefix
+    name = outprefix.split("/")[-1]
+
+    # Step 0: set up directory structure
+    try:
+        outdir = "/".join(outprefix.split("/")[0:-1])
+        subprocess.check_output(["mkdir", "-p", outdir + "/transcript_beds"])
+        subprocess.check_output(["mkdir", "-p", outdir + "/RNA-PET_beds"])
+        subprocess.check_output(["mkdir", "-p", outdir + "/intersection_files"])
+    except Exception as e:
+        print(e)
+        sys.exit("Something went wrong while initializing dirs")
 
     # First step: Create a bed file from the transcript GTF along with metadata
     try:
+        out = outdir + "/transcript_beds/" + name
         subprocess.check_output(["python", "talon_GTF_2_transcript_bed.py",
-                                 "--gtf", gtf, "--o",  outprefix])
+                                 "--gtf", gtf, "--o",  out])
     except Exception as e:    
         print(e)
         sys.exit("Something went wrong with talon_GTF_2_transcript_bed.py run")
@@ -44,10 +56,11 @@ def main():
     # Next, take the transcript bed file and create intervals of specified size
     # around the starts and ends. These go into separate files.
     try:
-        bedfile = outprefix + ".bed"
+        out = outdir + "/transcript_beds/" + name
+        bedfile = outdir + "/transcript_beds/"+ name + ".bed"
         subprocess.check_output(["python", "get_transcript_start_end_intervals.py",
                                  "--bed", bedfile, "--maxdist", str(max_dist),
-                                 "--o",  outprefix])
+                                 "--o",  out])
     except Exception as e:
         print(e)
         sys.exit("Something went wrong with get_transcript_start_end_intervals.py run")
@@ -55,8 +68,9 @@ def main():
     # Extract the start and end points (len 1) of each RNA-PET cluster. Put them
     # into separate files
     try:
+        out = outdir + "/RNA-PET_beds/" + name
         subprocess.check_output(["python", "get_RNA_PET_starts_and_ends.py",
-                                 "--rnapet", rna_pet_file, "--o",  outprefix])
+                                 "--rnapet", rna_pet_file, "--o",  out])
     except Exception as e:
         print(e)
         sys.exit("Something went wrong with get_RNA_PET_starts_and_ends.py run")
