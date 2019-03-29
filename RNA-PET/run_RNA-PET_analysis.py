@@ -30,7 +30,7 @@ def main():
     options = getOptions()
     gtf = options.gtf
     rna_pet_file = options.rnapet
-    max_dist = int(options.maxdist)
+    max_dist = options.maxdist
     outprefix = options.outprefix
 
     # First step: Create a bed file from the transcript GTF along with metadata
@@ -43,10 +43,14 @@ def main():
 
     # Next, take the transcript bed file and create intervals of specified size
     # around the starts and ends. These go into separate files.
-    #try:
-    #    pass
-    #except Exception as e:
-    #    pass
+    try:
+        bedfile = outprefix + ".bed"
+        subprocess.check_output(["python", "get_transcript_start_end_intervals.py",
+                                 "--bed", bedfile, "--maxdist", str(max_dist),
+                                 "--o",  outprefix])
+    except Exception as e:
+        print(e)
+        sys.exit("Something went wrong with get_transcript_start_end_intervals.py run")
 
     # Extract the start and end points (len 1) of each RNA-PET cluster. Put them
     # into separate files
