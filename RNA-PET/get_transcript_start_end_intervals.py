@@ -67,6 +67,10 @@ def main():
             name = entry[3]
             strand = entry[5]
 
+            # Skip chrM and chrEBV
+            if chromosome in ["chrM", "chrEBV"]:
+                continue
+
             start_interval, end_interval = make_intervals(entry, dist)
 
             # Write BED entry for the start
