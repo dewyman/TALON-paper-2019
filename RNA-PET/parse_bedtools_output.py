@@ -66,9 +66,9 @@ def main():
         # If the union of the sets is smaller than the sum of their lengths,
         # that means that there was at least one start-end match
         if len(curr_starts | curr_ends) < len(curr_starts) + len(curr_ends):
-            pet_support = "1"
+            pet_support = "yes"
         else:
-            pet_support = "0"
+            pet_support = "no"
         
         o.write(",".join([transcript, pet_support]) + "\n")
 
