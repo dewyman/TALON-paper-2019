@@ -5,9 +5,9 @@ main <-function() {
 
     # Get colors
     if (opt$color_scheme == "red") {
-        color_vec <- c("red2", "orange")
+        color_vec <- c("red2", "black", "orange")
     } else if (opt$color_scheme == "blue") {
-        color_vec <- c("navy", "orange")
+        color_vec <- c("navy", "black", "orange")
     } else if (opt$color_scheme == "green") {
         color_vec <- c("springgreen4", "black", "orange")
     }
