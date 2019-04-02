@@ -1,6 +1,6 @@
 # Post-TALON analysis on GM12878
 
-## Make a whitelist file of filtered HepG2 transcripts
+## Make a whitelist file of filtered GM12878 transcripts
 ```
 python /pub/dwyman/TALON/post-TALON_tools/filter_talon_transcripts.py \
           --db full_gencode_v29_2019-03-12.db \
@@ -47,4 +47,128 @@ Rscript ../../../analysis_scripts/plot_detection_by_TPM_for_datasets.R \
            --ik ../../../Illumina/GM12878/Kallisto/abundance.tsv \
            --color blue \
            -o GM12878_plots
+```
+
+## Plot gene correlation of D8 and D9
+```
+module load R/3.5.1
+Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --color blue \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --color blue \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --intergenic \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --color blue \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --intergenic \
+          --antisense \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --color blue \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --antisense \
+          -o GM12878_plots
+
+```
+
+## Plot transcript correlation
+```
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --ISM \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --NIC \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --NNC \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --ISM \
+          --NIC \
+          --NNC \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --NIC \
+          --NNC \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --ISM \
+          --NIC \
+          --NNC \
+          --antisense \
+          --intergenic \
+          --genomic \
+          -o GM12878_plots
+```
+
+## MA plot for known genes
+```
+Rscript ../../../analysis_scripts/plot_TPM_chisquare_pvalues.R \
+    --f GM12878_talon_abundance.tsv \
+    --datasets D8,D9 \
+    --ik ../../../Illumina/GM12878/Kallisto/abundance.tsv \
+    --color blue \
+    -o GM12878_plots
+```
+
+## MA plot for known transcripts
+```
+Rscript ../../../analysis_scripts/MA_plot_for_transcripts.R \
+    --f GM12878_talon_abundance.tsv \
+    --datasets D8,D9 \
+    --ik ../../../Illumina/GM12878/Kallisto/abundance.tsv \
+    --color green \
+    -o GM12878_plots
+```
+
+## Novelty categories plots
+```
+Rscript ../../../analysis_scripts/plot_novelty_categories.R \
+        --db full_gencode_v29_2019-03-12.db \
+        --w GM12878_whitelist.csv \
+        -o GM12878_plots
 ```
