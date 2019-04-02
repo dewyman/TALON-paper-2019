@@ -3,10 +3,8 @@ main <-function() {
     load_packages()
     opt <- parse_options()
     database <- opt$database
+    datasets <- opt$datasets
     outdir <- opt$outdir
-
-
-    # If no whitelist is provided, the plots are made on all of the genes
 
     # Read in whitelist file, and get gene and transcript whitelists from that
     whitelist <- read_delim(opt$whitelist, ",", escape_double = FALSE,
@@ -21,6 +19,12 @@ main <-function() {
 
     dbClearResult(query)
     dbDisconnect(con)
+
+    # If datasets selected, filter the results to limit them to those datasets
+    if (!is.null(datasets)) {
+        datasets <- unlist(strsplit(datasets, ","))
+        transcript_table <- subset(transcript_table, dataset %in% datasets)
+    }
 
     transcript_table <- merge( x = transcript_table,
                                y = whitelist,
@@ -203,6 +207,8 @@ parse_options <- function() {
                     default = NULL, help = "TALON database"),
         make_option(c("--w"), action = "store", dest = "whitelist",
                     default = NULL, help = "whitelist csv file"),
+        make_option(c("--datasets"), action = "store", dest = "datasets",
+                    default = NULL, help = "Optional: Comma-separated list of datasets to include"),
         make_option(c("-o","--outdir"), action = "store", dest = "outdir",
                     default = NULL, help = "Output directory for plots and outfiles")
         )
