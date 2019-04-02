@@ -27,6 +27,11 @@ main <-function() {
     # Read PacBio abundance file
     pb_abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
+    
+    # Keep known genes only
+    pb_abundance <- subset(pb_abundance, gene_status == "KNOWN")
+
+    # Cut out unnecessary cols
     pb_abundance <- pb_abundance[, c("annot_gene_name", dataset1, dataset2)]
 
     # Aggregate PacBio by gene name to get gene counts
@@ -38,7 +43,7 @@ main <-function() {
 
     # Merge PacBio with Illumina on annot_gene_name
     merged_illumina_pacbio <- merge(illumina_gene_table, pb_gene_abundance, by = "annot_gene_name",
-                                    all.x = T, all.y = F)
+                                    all.x = T, all.y = T)
     merged_illumina_pacbio[is.na(merged_illumina_pacbio)] <- 0
 
     final_table <- merged_illumina_pacbio[, c("both_pacbio", "illumina_TPM")]

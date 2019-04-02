@@ -15,7 +15,7 @@ main <-function() {
     } else if (opt$color_scheme == "blue") {
         fill_color <- "navy"
     } else if (opt$color_scheme == "green") {
-        fill_color <- "springgreen4"
+        fill_color <- "#009E73"
     }
 
     # Get the names of the first and second dataset that we will be working with
@@ -32,6 +32,8 @@ main <-function() {
     # Read PacBio abundance file
     pb_abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
+
+    # Known transcripts only
     pb_abundance <- subset(pb_abundance, transcript_status == "KNOWN")
     pb_abundance <- pb_abundance[, c("annot_transcript_name", dataset1, dataset2)] 
 
@@ -40,10 +42,9 @@ main <-function() {
     total_pacbio_reads <- sum(pb_abundance[,dataset1]) + sum(pb_abundance[,dataset2])
 
     # Merge PacBio with Illumina on annot_transcript_name
-    # TODO: should we restrict to Illumina-only transcripts?
     merged_illumina_pacbio <- merge(illumina_table, pb_abundance, 
                                     by = "annot_transcript_name",
-                                    all.x = T, all.y = F)
+                                    all.x = T, all.y = T)
     merged_illumina_pacbio[is.na(merged_illumina_pacbio)] <- 0
     print(nrow(merged_illumina_pacbio))
 
