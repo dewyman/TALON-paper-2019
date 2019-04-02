@@ -38,49 +38,95 @@ main <-function() {
     pb_gene_abundance <- ddply(pb_abundance, c("annot_gene_name"), function(x) colSums(x[c(dataset1, dataset2)]))
     pb_gene_abundance$both_pacbio <- pb_gene_abundance[,dataset1] + pb_gene_abundance[,dataset2]
 
-    # Get total PacBio read counts from this table
-    total_pacbio_reads <- sum(pb_gene_abundance[,dataset1]) + sum(pb_gene_abundance[,dataset2])
-
     # Merge PacBio with Illumina on annot_gene_name
     merged_illumina_pacbio <- merge(illumina_gene_table, pb_gene_abundance, by = "annot_gene_name",
                                     all.x = T, all.y = T)
     merged_illumina_pacbio[is.na(merged_illumina_pacbio)] <- 0
 
-    final_table <- merged_illumina_pacbio[, c("both_pacbio", "illumina_TPM")]
+    IP <- merged_illumina_pacbio[, c("both_pacbio", "illumina_TPM")]
+    IP$illumina_TPM <- round(IP$illumina_TPM)
 
-    final_table$illumina_TPM <- round(final_table$illumina_TPM)
-    total_illumina <- sum(final_table$illumina_TPM)
-    final_table[, c("pvals", "expected")] <- t(apply(final_table, 1, run_chisquare_test, total_pacbio_reads, total_illumina))
+    # Perform quantile normalization
+    gene_counts <- as.matrix(IP[, c("both_pacbio", "illumina_TPM")])
+    gene_counts <- as.data.frame(normalize.quantiles(gene_counts))
+    final_table <- data.frame( norm_both_pacbio = round(gene_counts[,1]),
+                                  norm_illumina_TPM = round(gene_counts[,2]))
+    total_pacbio <- sum(final_table$norm_both_pacbio)
+    total_illumina <- sum(final_table$norm_illumina_TPM)
+
+    final_table[, c("pvals", "expected")] <- t(apply(final_table, 1, run_chisquare_test, total_pacbio, total_illumina))
     final_table$gene_name <- merged_illumina_pacbio$annot_gene_name
     final_table$pvals <- p.adjust(final_table$pvals, method = "bonferroni")
 
+    volcano_plot(final_table, fill_color, opt$outdir)
     data <- plot_MA_observed_expected(final_table, fill_color, opt$outdir)
 
     printable <- subset(data, status == "Bonf. p-value <= 0.01")
-    printable <- printable[,c("gene_name", "illumina_TPM", "expected", "observed", "pvals", "A", "M")]
-    colnames(printable) <- c("gene_name", "illumina_TPM", "expected_TPM", "observed_pacbio_TPM", "corrected_p-value", "A", "M")
+    printable <- printable[,c("gene_name", "norm_illumina_TPM", "expected", "observed", "pvals", "A", "M")]
+    colnames(printable) <- c("gene_name", "norm_illumina_TPM", "expected_TPM", "norm_observed_pacbio_TPM", "corrected_p-value", "A", "M")
     write.table(printable, paste(opt$outdir, "/MA_plot_gene_table.tsv", sep=""), row.names=F, col.names=T, quote=F, sep="\t")
 
 
-    plot_gene_longest_for_groups(data, opt$illumina_kallisto, opt$outdir)   
-    plot_gene_shortest_for_groups(data, opt$illumina_kallisto, opt$outdir)
-    plot_gene_avg_for_groups(data, opt$illumina_kallisto, opt$outdir)
+    #plot_gene_longest_for_groups(data, opt$illumina_kallisto, opt$outdir)   
+    #plot_gene_shortest_for_groups(data, opt$illumina_kallisto, opt$outdir)
+    #plot_gene_avg_for_groups(data, opt$illumina_kallisto, opt$outdir)
+}
+
+volcano_plot <- function(data, fillcolor, outdir) {
+
+    data$observed <- data$norm_both_pacbio
+    data$pvals <- data$pvals + 10^-24
+
+    data$log2FoldChange <- log2(data$observed + 1) - log2(data$expected + 1)
+    data$fold_change = 2^data$log2FoldChange
+    data$status <- as.factor(ifelse(abs(data$log2FoldChange) >= 1 & data$pvals <= 0.01, 
+                             "Bonf. p-value <= 0.01", "Bonf. p-value > 0.01"))
+
+    n_sig <- length(data$status[data$status == "Bonf. p-value <= 0.01"])
+    n_no_sig <- length(data$status[data$status == "Bonf. p-value > 0.01"])
+
+    fname <- paste(outdir, "/pacbio_illumina_gene_volcano_plot.png", sep="")
+    xlabel <- "log2-fold change"
+    ylabel <- "-log10 adjusted p-value"
+
+    png(filename = fname,
+        width = 2500, height = 2500, units = "px",
+        bg = "white",  res = 300)
+
+    g <- ggplot(data, aes(x=log2FoldChange, y=-log2(pvals), color = status)) +
+         geom_point(alpha = 0.4, size = 2) +
+         xlab(xlabel) + ylab(ylabel) + theme_bw() +
+         coord_cartesian(xlim = c(-10,10)) +
+         scale_color_manual(values = c("orange", fillcolor),
+                                  labels = c(paste0("Significant (n = ", n_sig, ")"),
+                                             paste0("Not significant (n = ", n_no_sig, ")"))) +
+         theme(axis.text.x = element_text(color="black", size=20),
+                     axis.text.y = element_text(color="black", size=20),
+                     axis.title.x = element_text(color="black", size=16),
+                     axis.title.y = element_text(color="black", size=16)) +
+               guides(colour = guide_legend(override.aes = list(size=2.5))) +
+               theme(legend.position=c(0.75,0.8),
+                     legend.title = element_blank(),
+                     legend.background = element_rect(fill="white", color = "black"),
+                     legend.key = element_rect(fill="transparent"),
+                     legend.text = element_text(colour = 'black', size = 16))        
+
+    print(g)
+    dev.off()
 
 }
 
+
 plot_MA_observed_expected <- function(data, fillcolor, outdir) {
 
-    # Perform quantile normalization
-    gene_counts <- as.matrix(data[, c("both_pacbio", "expected")])
-    gene_counts <- as.data.frame(normalize.quantiles(gene_counts))
-    data$observed <- gene_counts[,1] + 1
-    data$expected <- gene_counts[,2] + 1
+    data$observed <- data$norm_both_pacbio
 
-    data$M <- log(data$observed, base=2) - log(data$expected, base=2)
-    data$A <- 0.5*(log(data$observed, base=2) + log(data$expected, base=2))
+    data$M <- log2(data$observed + 1) - log2(data$expected + 1) # Same thing as the fold change
+    data$A <- 0.5*(log2(data$observed + 1) + log2(data$expected + 1))
 
-    data$fold_change <- (data$observed - data$expected) / data$expected
     data$status <- as.factor(ifelse(abs(data$M) >= 1 & data$pvals <= 0.01, "Bonf. p-value <= 0.01", "Bonf. p-value > 0.01"))
+    n_sig <- length(data$status[data$status == "Bonf. p-value <= 0.01"])
+    n_no_sig <- length(data$status[data$status == "Bonf. p-value > 0.01"])
 
     print(nrow(data))
     print(nrow(subset(data, status == "Bonf. p-value <= 0.01")))
@@ -94,10 +140,11 @@ plot_MA_observed_expected <- function(data, fillcolor, outdir) {
     bg = "white",  res = 300)
 
     p = ggplot(data, aes(x = A, y = M, color = status)) +
-               geom_jitter(alpha = 0.4, size = 2.5) +
+               geom_jitter(alpha = 0.4, size = 2) +
                xlab(xlabel) + ylab(ylabel) + theme_bw() +
                scale_color_manual(values = c("orange", fillcolor),
-                                  labels = c("Significant", "Not significant")) +
+                                  labels = c(paste0("Significant (n = ", n_sig, ")"),
+                                             paste0("Not significant (n = ", n_no_sig, ")"))) +
                                   #labels = c("Bonf. p-value <= 0.01 \nor log2 fold change > 1", "Bonf. p-value > 0.01")) +
                #coord_cartesian(xlim = c(0,1)) +
                theme(axis.text.x = element_text(color="black", size=20),
@@ -105,7 +152,7 @@ plot_MA_observed_expected <- function(data, fillcolor, outdir) {
                      axis.title.x = element_text(color="black", size=16),
                      axis.title.y = element_text(color="black", size=16)) + 
                guides(colour = guide_legend(override.aes = list(size=2.5))) +
-               theme(legend.position=c(0.8,0.2),
+               theme(legend.position=c(0.75,0.1),
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
