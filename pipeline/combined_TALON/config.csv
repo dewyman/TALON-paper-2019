@@ -1,2 +1,6 @@
 D4,HepG2,PacBio-Sequel,/pub/dwyman/TALON-paper-2019/pipeline/D4/TC_v1.0.7/sorted_canonical.sam
 D5,HepG2,PacBio-Sequel,/pub/dwyman/TALON-paper-2019/pipeline/D5/TC_v1.0.7/sorted_canonical.sam
+D8,GM12878,PacBio-Sequel,/pub/dwyman/TALON-paper-2019/pipeline/D8/TC_v1.0.7/sorted_canonical.sam
+D9,GM12878,PacBio-Sequel,/pub/dwyman/TALON-paper-2019/pipeline/D9/TC_v1.0.7/sorted_canonical.sam
+D10,K562,PacBio-Sequel,/pub/dwyman/TALON-paper-2019/pipeline/D10/TC_v1.0.7/sorted_canonical.sam
+D11,K562,PacBio-Sequel,/pub/dwyman/TALON-paper-2019/pipeline/D11/TC_v1.0.7/sorted_canonical.sam
