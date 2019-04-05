@@ -144,6 +144,15 @@ Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
           --genomic \
           -o GM12878_plots
 ```
+## Demo scatterplot just for Figure 1A
+```
+Rscript ../../../analysis_scripts/plot_simplified_corr_fig1.R \
+          --f GM12878_talon_abundance.tsv \
+          --d1 D8 --d2 D9 \
+          --color blue \
+          -o GM12878_plots
+```
+
 
 ## MA plot for known genes
 ```
@@ -170,5 +179,6 @@ Rscript ../../../analysis_scripts/MA_plot_for_transcripts.R \
 Rscript ../../../analysis_scripts/plot_novelty_categories.R \
         --db full_gencode_v29_2019-03-12.db \
         --w GM12878_whitelist.csv \
+        --datasets D8,D9 \
         -o GM12878_plots
 ```
