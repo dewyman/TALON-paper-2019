@@ -152,7 +152,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     
     # Plot log2(TPM + 1) for each dataset on a scatterplot. Color points according to known/novel status
     pearsonCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "pearson", continuity = FALSE, conf.level = 0.95)$estimate
-    spearmanCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "spearman", continuity = FALSE, conf.level = 0.95)$estimate
+    spearmanCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "spearman", continuity = FALSE, 
+                             exact = FALSE, conf.level = 0.95)$estimate
 
     nov_types <- paste(t_levels, collapse = '-')
     joined_names <- paste(outdir, "/", d1, "-", d2, "_", nov_types, sep = "")
