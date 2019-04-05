@@ -25,6 +25,9 @@ main <-function() {
         quit()
     }
 
+    # Remove genomic transcripts
+    abundance_table <- subset(abundance_table, genomic_transcript == "No")
+
     # Restrict to genes that were observed in at least one of the datasets
     abundance_table <- abundance_table[abundance_table[,d1] +
                                        abundance_table[,d2] > 0, ]
@@ -103,6 +106,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
 
     # Main scatterplot
     scatterplot = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
+                         geom_abline(slope=1, intercept=0, color = "gray") +
                          geom_jitter(alpha = 0.5) + theme_bw() +
                          xlab(xlabel)  + ylab(ylabel) + 
                          theme(text= element_text(size=24)) +
@@ -113,9 +117,9 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                                   round(spearmanCorr, 2), sep=""),  
                                   color="black", size = 8) +
                          coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
-                         scale_colour_manual("", values=color_vec) +
+                         scale_colour_manual("Gene status", values=color_vec) +
                          theme(legend.position=c(0.8,0.2),
-                             legend.title = element_blank(),
+                             legend.title = element_text(colour = 'black', size = 21),
                              legend.background = element_rect(fill="white", color = "black"),
                              legend.key = element_rect(fill="transparent"),
                              legend.text = element_text(colour = 'black', size = 20))

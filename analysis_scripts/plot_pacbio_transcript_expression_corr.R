@@ -165,6 +165,7 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
     scatterplot = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
+        geom_abline(slope=1, intercept=0, color = "gray") +
         geom_jitter(alpha = 0.5) + theme_bw() +
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
@@ -173,9 +174,9 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
                  round(pearsonCorr, 2), "\nSpearman rho: ",
                  round(spearmanCorr, 2), sep=""),  color="black", size = 8) +
         coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
-        scale_colour_manual("", values=color_vec) +
-        theme(legend.position=c(0.8,0.2),
-              legend.title = element_blank(),
+        scale_colour_manual("Transcript status", values=color_vec) +
+        theme(legend.position=c(0.75,0.25),
+              legend.title = element_text(colour = 'black', size = 21),
               legend.background = element_rect(fill="white", color = "black"),
               legend.key = element_rect(fill="transparent"),
               legend.text = element_text(colour = 'black', size = 20))
