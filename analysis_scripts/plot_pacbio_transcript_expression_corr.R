@@ -155,6 +155,13 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     spearmanCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "spearman", continuity = FALSE, 
                              exact = FALSE, conf.level = 0.95)$estimate
 
+    # Least-Square Regression Line
+    mod<-lm(data2.TPM~data1.TPM, data=merged_abundances)
+    print(lm(data2.TPM~data1.TPM, data=merged_abundances))
+    print(lm(data1.TPM~data2.TPM, data=merged_abundances))
+    print(summary(merged_abundances$data1.TPM))
+    print(summary(merged_abundances$data2.TPM))   
+ 
     nov_types <- paste(t_levels, collapse = '-')
     joined_names <- paste(outdir, "/", d1, "-", d2, "_", nov_types, sep = "")
     
@@ -165,15 +172,17 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
-    scatterplot = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
-        geom_abline(slope=1, intercept=0, color = "gray") +
+    scatterplot <- ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
+        geom_abline(slope = mod$coefficients[2], intercept = mod$coefficients[1],
+                    color = "gray", lwd=1, lty=2) +
         geom_jitter(alpha = 0.5) + theme_bw() +
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
         annotate("text", x = 5, y = 14, label = paste("Pearson r: ",
                  round(pearsonCorr, 2), "\nSpearman rho: ",
-                 round(spearmanCorr, 2), sep=""),  color="black", size = 8) +
+                 round(spearmanCorr, 2), "\nLSR slope: ",
+                 round(mod$coefficients[2], 2), sep=""),  color="black", size = 8) +
         coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("Transcript status", values=color_vec) +
         theme(legend.position=c(0.75,0.25),
