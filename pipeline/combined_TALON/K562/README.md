@@ -53,7 +53,7 @@ Rscript ../../../analysis_scripts/plot_detection_by_TPM_for_datasets.R \
            --db full_gencode_v29_2019-03-12.db \
            --datasets D10,D11 \
            --ik ../../../Illumina/K562/Kallisto/abundance.tsv \
-           --color green \
+           --color red \
            -o K562_plots
 ```
 
@@ -153,6 +153,7 @@ Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/MA_plot_for_transcripts.R 
 Rscript ../../../analysis_scripts/plot_novelty_categories.R \
         --db full_gencode_v29_2019-03-12.db \
         --w K562_whitelist.csv \
+        --datasets D10,D11 \
         -o K562_plots
 ```
 

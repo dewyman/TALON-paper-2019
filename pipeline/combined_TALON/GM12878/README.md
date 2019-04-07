@@ -89,43 +89,43 @@ Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
 ## Plot transcript correlation
 ```
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f GM12878_talon_abundance.tsv \
+          --f GM12878_talon_abundance_filtered.tsv \
           --d1 D8 --d2 D9 \
           --celltype GM12878 \
           -o GM12878_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f GM12878_talon_abundance.tsv \
-          --d1 D8 --d2 D9 \
-          --celltype GM12878 \
-          --ISM \
-          -o GM12878_plots
-
-Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f GM12878_talon_abundance.tsv \
-          --d1 D8 --d2 D9 \
-          --celltype GM12878 \
-          --NIC \
-          -o GM12878_plots
-
-Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f GM12878_talon_abundance.tsv \
-          --d1 D8 --d2 D9 \
-          --celltype GM12878 \
-          --NNC \
-          -o GM12878_plots
-
-Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f GM12878_talon_abundance.tsv \
+          --f GM12878_talon_abundance_filtered.tsv \
           --d1 D8 --d2 D9 \
           --celltype GM12878 \
           --ISM \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance_filtered.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --NIC \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance_filtered.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --NNC \
+          -o GM12878_plots
+
+Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
+          --f GM12878_talon_abundance_filtered.tsv \
+          --d1 D8 --d2 D9 \
+          --celltype GM12878 \
+          --ISM \
           --NIC \
           --NNC \
           -o GM12878_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f GM12878_talon_abundance.tsv \
+          --f GM12878_talon_abundance_filtered.tsv \
           --d1 D8 --d2 D9 \
           --celltype GM12878 \
           --NIC \
@@ -133,7 +133,7 @@ Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
           -o GM12878_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f GM12878_talon_abundance.tsv \
+          --f GM12878_talon_abundance_filtered.tsv \
           --d1 D8 --d2 D9 \
           --celltype GM12878 \
           --ISM \
@@ -141,7 +141,6 @@ Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
           --NNC \
           --antisense \
           --intergenic \
-          --genomic \
           -o GM12878_plots
 ```
 ## Demo scatterplot just for Figure 1A
@@ -181,4 +180,21 @@ Rscript ../../../analysis_scripts/plot_novelty_categories.R \
         --w GM12878_whitelist.csv \
         --datasets D8,D9 \
         -o GM12878_plots
+```
+
+## RNA-PET analysis
+```
+mkdir -p RNA-PET
+module load bedtools
+cd ../../../RNA-PET
+python run_RNA-PET_analysis.py \
+    --gtf ../pipeline/combined_TALON/GM12878/GM12878_filtered_talon.gtf \
+    --rnapet data/GM12878_hg38.bed \
+    --maxdist 100 \
+    --o ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878
+
+Rscript plot_RNA-PET_support.R \
+    --f ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878_RNA-PET_results.csv \
+    --novelty ../pipeline/combined_TALON/GM12878/RNA-PET/transcript_beds/GM12878_novelty.csv \
+    -o ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878
 ```

@@ -80,34 +80,34 @@ Rscript ../../../analysis_scripts/plot_pacbio_gene_expression_corr.R \
 ## Plot transcript correlation
 ```
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f HepG2_talon_abundance.tsv \
+          --f HepG2_talon_abundance_filtered.tsv \
           --d1 D4 --d2 D5 \
           --celltype HepG2 \
           -o HepG2_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f HepG2_talon_abundance.tsv \
+          --f HepG2_talon_abundance_filtered.tsv \
           --d1 D4 --d2 D5 \
           --celltype HepG2 \
           --ISM \
           -o HepG2_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f HepG2_talon_abundance.tsv \
+          --f HepG2_talon_abundance_filtered.tsv \
           --d1 D4 --d2 D5 \
           --celltype HepG2 \
           --NIC \
           -o HepG2_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f HepG2_talon_abundance.tsv \
+          --f HepG2_talon_abundance_filtered.tsv \
           --d1 D4 --d2 D5 \
           --celltype HepG2 \
           --NNC \
           -o HepG2_plots
 
 Rscript ../../../analysis_scripts/plot_pacbio_transcript_expression_corr.R \
-          --f HepG2_talon_abundance.tsv \
+          --f HepG2_talon_abundance_filtered.tsv \
           --d1 D4 --d2 D5 \
           --celltype HepG2 \
           --ISM \
@@ -145,6 +145,7 @@ Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/MA_plot_for_transcripts.R 
 Rscript ../../../analysis_scripts/plot_novelty_categories.R \
         --db full_gencode_v29_2019-03-12.db \
         --w HepG2_whitelist.csv \
+        --datasets D4,D5 \
         -o HepG2_plots
 ```
 
