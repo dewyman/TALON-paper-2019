@@ -47,7 +47,7 @@ plot_support <- function(data, color, outprefix) {
                            levels = rev(c("Known", "ISM", "NIC", "NNC",
                                          "Antisense", "Intergenic")))
 
-    colors <- c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7")
+    colors <- rev(c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7"))
     fname <- paste(outprefix, "RNA-PET_support.png", sep="_")
     xlabel <- "Transcript category"
     ylabel <- "Fraction transcripts with RNA-PET support"
