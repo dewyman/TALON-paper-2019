@@ -142,8 +142,23 @@ Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/MA_plot_for_transcripts.R 
 
 ## Novelty categories plots
 ```
-Rscript /pub/dwyman/TALON-paper-2019/analysis_scripts/plot_novelty_categories.R \
-        --db ../full_gencode_v29_2019-03-12.db \
+Rscript ../../../analysis_scripts/plot_novelty_categories.R \
+        --db full_gencode_v29_2019-03-12.db \
         --w HepG2_whitelist.csv \
         -o HepG2_plots
+```
+
+## RNA-PET analysis
+```
+python run_RNA-PET_analysis.py \
+    --gtf HepG2_filtered_talon.gtf \
+    --rnapet ../../../RNA-PET/data/HepG2_hg38.bed \
+    --maxdist 100 \
+    --o RNA-PET/HepG2
+
+    cd ../../../RNA-PET
+    Rscript plot_RNA-PET_support.R \
+    --f ../pipeline/combined_TALON/HepG2/RNA-PET/HepG2_RNA-PET_results.csv \
+    --novelty ../pipeline/combined_TALON/HepG2/RNA-PET/transcript_beds/HepG2_novelty.csv \
+    -o ../pipeline/combined_TALON/HepG2/RNA-PET/HepG2
 ```
