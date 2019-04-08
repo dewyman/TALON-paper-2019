@@ -17,6 +17,8 @@ main <-function() {
     novelty <- as.data.frame(read_delim(opt$novelty, delim = "\t",
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
+    # Read in expression level information
+
     # Merge RNA-PET support with the novelty labels
     rna_pet <- merge(rna_pet, novelty, by = "transcript_ID", all.x = T, all.y = F)
 
@@ -70,12 +72,10 @@ plot_support <- function(data, color, outprefix) {
                      axis.text.y = element_text(color="black", size = rel(1.5)),
                      axis.title.x = element_text(color="black", size=rel(1.25)),
                      axis.title.y = element_text(color="black", size=rel(1.25))) +
-                coord_flip(ylim = c(0, 1)) + guides(fill=FALSE)
-                #geom_text(aes(y = ..count.., 
-                #  label = paste0(percent, '%')), 
-                #  stat = 'count', 
-                #  position = position_dodge(.9), 
-                #  size = 7, vjust=-0.25)
+                coord_flip(ylim = c(0, 1)) + guides(fill=FALSE) +
+                geom_text(aes(y = freq - 0.12, label = paste0(round(freq*100), '%')), 
+                  position = position_dodge(0.9),
+                  color = "white", size = 10)
     print(g)
     dev.off()
 } 
@@ -84,9 +84,6 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("tidyverse"))
     suppressPackageStartupMessages(library("ggplot2"))
     suppressPackageStartupMessages(library("optparse"))
-    #suppressPackageStartupMessages(library("plyr"))
-    #suppressPackageStartupMessages(library("gridExtra"))
-    #suppressPackageStartupMessages(library("cowplot"))
     return
 }
 
