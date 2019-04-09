@@ -23,3 +23,7 @@ wget http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.cha
 ```
 ./liftover_RNA-PET.sh
 ```
+
+## After this, run script run_RNA-PET_analysis.py to run the comparison
+
+## Finally, run plot_RNA-PET_support.R to visualize the results 
