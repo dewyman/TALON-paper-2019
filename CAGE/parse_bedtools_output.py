@@ -18,7 +18,7 @@ def getOptions():
 
 def main():
     options = getOptions()
-    start_file = options.infile
+    infile = options.infile
     outprefix = options.outprefix
     transcript_seen = {} # To avoid duplicates
 
@@ -37,7 +37,7 @@ def main():
 
             if transcript_ID in transcript_seen:
                 continue
-            if intersect != "-1":
+            if intersect != ".":
                 cage_support = "yes"
             else:
                 cage_support = "no"
