@@ -68,7 +68,7 @@ main <-function() {
     colnames(median_TPM_by_novelty)[2] <- "Median_gene_TPM"
     print(median_TPM_by_novelty) 
 
-    # Compute median TPM of gene by novelty category
+    # Compute mean TPM of gene by novelty category
     mean_TPM_by_novelty <- aggregate(rna_pet$gene_TPM_max,
                                      by=list(rna_pet$novelty), FUN=mean)
     colnames(mean_TPM_by_novelty)[2] <- "Mean_gene_TPM"
@@ -84,7 +84,65 @@ main <-function() {
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 100, opt$outprefix)
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 500, opt$outprefix) 
 
+
+    # Plot gene expression level by support
+    plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
 }
+
+plot_expression_levels_by_support <- function(data, outprefix) {
+    # Create a violin plot showing the gene expression level of transcripts
+    # with and without support
+
+    fname <- paste(outprefix, "_RNA-PET_support_by_gene_expression_level.png", sep="")
+    xlabel <- "RNA-PET support for transcript"
+    ylabel <- "Log2 gene expression level"
+    data$novelty <- factor(data$novelty,
+                           levels = c("Known", "ISM", "NIC", "NNC",
+                                         "Antisense", "Intergenic"))
+
+    # Set colors: novelty color for supported transcripts, and grey for unsupported
+    data$subcat <- paste(data$novelty, data$support, sep='_')
+    data$subcat <- factor(data$subcat, levels = c("Known_yes", "Known_no", 
+                                                "ISM_yes", "ISM_no",
+                                                "NIC_yes", "NIC_no", 
+                                                "NNC_yes", "NNC_no",
+                                                "Antisense_yes", "Antisense_no", 
+                                                "Intergenic_yes", "Intergenic_no"))
+    values = c("A" = "#E08214", "B" = "#E08214")
+    color_vec <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00",
+                "NNC" = "#E69F00", "Antisense" = "#1A1A1A", "Intergenic" = "#CC79A7")
+
+    png(filename = fname,
+        width = 2500, height = 2000, units = "px",
+        bg = "white",  res = 300)
+
+    # Get summary stats for labels
+    data %>%  group_by(novelty, support) %>% summarise(n=n(), max = max(log2(gene_TPM_max + 1))) ->Summary.data
+    print(Summary.data)
+
+    g = ggplot(data, aes(x = factor(support, levels = c("yes", "no")),
+                         y = log2(gene_TPM_max + 1), fill = novelty)) +
+               geom_violin(alpha = 0.8) + 
+               geom_boxplot(width=0.1, fill="white", outlier.size=-1) +
+               coord_cartesian(ylim = c(0, 17)) +
+               xlab(xlabel) + ylab(ylabel) +
+               theme_bw(base_family = "Helvetica", base_size = 18) +
+               scale_fill_manual("", values = color_vec) +
+               theme_bw(base_family = "Helvetica", base_size = 18) +
+               theme(axis.line.x = element_line(color="black", size = 0.5),
+                     axis.line.y = element_line(color="black", size = 0.5),
+                     axis.text.x = element_text(color="black", size = rel(1.5)),
+                     axis.text.y = element_text(color="black", size = rel(1.5)),
+                     axis.title.x = element_text(color="black", size=rel(1.25)),
+                     axis.title.y = element_text(color="black", size=rel(1.25))) +
+                guides(fill=FALSE) + facet_wrap(~ novelty) +
+                geom_text(data=Summary.data ,aes(x = support, y = max + 1, 
+                          label = paste0("n=", n)), color="black", size = 5) 
+    print(g)    
+
+    dev.off()
+}
+
 
 compute_gene_TPMs <- function(abundance_table, d1, d2) {
 
@@ -143,7 +201,8 @@ plot_support <- function(data, color, min_TPM, outprefix) {
                            levels = rev(c("Known", "ISM", "NIC", "NNC",
                                          "Antisense", "Intergenic")))
 
-    colors <- rev(c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7"))
+    colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
+                "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7")
     fname <- paste(outprefix, "_RNA-PET_support_minTPM-", min_TPM, ".png", sep="")
     xlabel <- "Transcript category"
     ylabel <- "Fraction transcripts with RNA-PET support"
