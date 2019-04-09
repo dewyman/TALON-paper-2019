@@ -30,6 +30,16 @@ main <-function() {
         quit()
     }
 
+    # Read in antisense gene ID mapping file so that we can get the sense gene IDs
+    antisense_2_sense <- as.data.frame(read_delim(opt$antisense, ",", escape_double = FALSE,
+                                  col_names = TRUE, trim_ws = TRUE, na = "NA"))
+    colnames(antisense_2_sense)[1] <- "gene_ID"
+
+    # Replace antisense gene IDs in the abundance table with their sense counterparts
+    abundance_table <- merge(abundance_table, antisense_2_sense, by = "gene_ID",
+                             all.x = T, all.y = F)
+    abundance_table[!is.na(abundance_table$sense_talon_ID), "gene_ID"] <- abundance_table[!is.na(abundance_table$sense_talon_ID), "sense_talon_ID"]
+
     # Merge RNA-PET support with the novelty labels
     rna_pet <- merge(rna_pet, novelty, by = "transcript_ID", all.x = T, all.y = F)
 
@@ -52,20 +62,28 @@ main <-function() {
     rna_pet <- merge(rna_pet, abundances, by = "transcript_ID", all.x = T, all.y = F)
     rna_pet$gene_TPM_max <- pmax(rna_pet$gene_TPM.1, rna_pet$gene_TPM.2)
 
-    # Compute mean TPM of gene by novelty category
+    # Compute median TPM of gene by novelty category
     median_TPM_by_novelty <- aggregate(rna_pet$gene_TPM_max, 
                                      by=list(rna_pet$novelty), FUN=median)
     colnames(median_TPM_by_novelty)[2] <- "Median_gene_TPM"
     print(median_TPM_by_novelty) 
 
+    # Compute median TPM of gene by novelty category
+    mean_TPM_by_novelty <- aggregate(rna_pet$gene_TPM_max,
+                                     by=list(rna_pet$novelty), FUN=mean)
+    colnames(mean_TPM_by_novelty)[2] <- "Mean_gene_TPM"
+    print(mean_TPM_by_novelty)
+
     # Plot all transcripts
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 0, opt$outprefix)
 
+    #print(rna_pet[rna_pet$gene_TPM_max > 30000,])
+
     # Make the same support plot, but apply a TPM cutoff
+    plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 50, opt$outprefix)
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 100, opt$outprefix)
-   
-    # Make the same support plot, but apply a TPM cutoff
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 500, opt$outprefix) 
+
 }
 
 compute_gene_TPMs <- function(abundance_table, d1, d2) {
@@ -113,6 +131,7 @@ plot_support <- function(data, color, min_TPM, outprefix) {
     # Filter data
     data <- subset(data, gene_TPM_max >= min_TPM)
 
+    print(summary(subset(data, novelty == "Antisense")$gene_TPM_max))
     print(table(data$novelty))
 
     # Compute percentages
@@ -123,8 +142,6 @@ plot_support <- function(data, color, min_TPM, outprefix) {
     freqs$novelty <- factor(freqs$novelty,
                            levels = rev(c("Known", "ISM", "NIC", "NNC",
                                          "Antisense", "Intergenic")))
-
-    print(freqs)
 
     colors <- rev(c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7"))
     fname <- paste(outprefix, "_RNA-PET_support_minTPM-", min_TPM, ".png", sep="")
@@ -177,6 +194,8 @@ parse_options <- function() {
                     default = NULL, help = "First dataset name to use in comparison"),
         make_option("--d2", action = "store", dest = "d2",
                     default = NULL, help = "Second dataset name to use in comparison"),
+        make_option("--as", action = "store", dest = "antisense",
+                    default = NULL, help = "File mapping antisense TALON IDs to the sense TALON gene IDs"),
         make_option(c("-o","--outdir"), action = "store", dest = "outprefix",
                     default = NULL, help = "Output prefix")
         )

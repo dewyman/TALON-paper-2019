@@ -182,6 +182,14 @@ Rscript ../../../analysis_scripts/plot_novelty_categories.R \
         -o GM12878_plots
 ```
 
+## Map antisense TALON genes to their sense counterparts
+```
+python /dfs2/pub/dwyman/TALON/post-TALON_tools/map_antisense_genes_to_sense.py \
+    --db full_gencode_v29_2019-03-12.db \
+    --a gencode_v29 
+    --o GM12878
+```
+
 ## RNA-PET analysis
 ```
 mkdir -p RNA-PET
@@ -198,3 +206,5 @@ Rscript plot_RNA-PET_support.R \
     --novelty ../pipeline/combined_TALON/GM12878/RNA-PET/transcript_beds/GM12878_novelty.csv \
     -o ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878
 ```
+
+
