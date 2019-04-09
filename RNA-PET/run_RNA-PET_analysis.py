@@ -9,6 +9,8 @@ import subprocess
 from pathlib import Path
 script_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.abspath(os.path.join(script_dir, os.pardir)))
+# Add the RNA-PET dir to access scripts there
+print(script_dir)
 
 def getOptions():
     parser = OptionParser()
@@ -33,6 +35,10 @@ def main():
     max_dist = options.maxdist
     outprefix = options.outprefix
     name = outprefix.split("/")[-1]
+
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    print(script_dir)
+    exit()
 
     # Step 0: set up directory structure
     try:

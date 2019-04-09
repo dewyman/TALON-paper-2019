@@ -1,5 +1,5 @@
-mkdir -p data
-cd data
+mkdir -p data/ENCODE
+cd data/ENCODE
 
 # GM12878 CAGE IDR peaks
 wget https://www.encodeproject.org/files/ENCFF853HOH/@@download/ENCFF853HOH.bed.gz
