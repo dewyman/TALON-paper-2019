@@ -200,11 +200,30 @@ python run_RNA-PET_analysis.py \
     --rnapet data/GM12878_hg38.bed \
     --maxdist 100 \
     --o ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878
+Rscript ../../../RNA-PET/plot_RNA-PET_support.R  \
+     --f RNA-PET/GM12878_RNA-PET_results.csv   \
+     --novelty RNA-PET/transcript_beds/GM12878_novelty.csv \
+     --abundance GM12878_talon_abundance.tsv \
+     --d1 D8 --d2 D9 \
+     --as GM12878_antisense_mapping.csv \
+     -o RNA-PET/GM12878
+```
 
-Rscript plot_RNA-PET_support.R \
-    --f ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878_RNA-PET_results.csv \
-    --novelty ../pipeline/combined_TALON/GM12878/RNA-PET/transcript_beds/GM12878_novelty.csv \
-    -o ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878
+## CAGE analysis
+```
+source activate mypython3.7.2
+python ../../../CAGE/run_CAGE_analysis.py \
+        --gtf GM12878_filtered_talon.gtf \
+        --cage ../../../CAGE/data/ENCODE/GM12878_CAGE.bed \
+        --maxdist 100 \
+        --o CAGE/ENCODE/GM12878
+
+Rscript ../../../CAGE/plot_CAGE_support.R \
+    --f CAGE/ENCODE/GM12878_CAGE_results.csv \
+    --novelty CAGE/ENCODE/transcript_beds/GM12878_novelty.csv \
+    --abundance GM12878_talon_abundance.tsv \
+    --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    -o CAGE/ENCODE/GM12878
 ```
 
 
