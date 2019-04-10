@@ -13,10 +13,8 @@ filter_kallisto_illumina_genes <- function(kallisto_file) {
     colnames(extraCols) = c("transcript", "gene", "class")
     gencode.quantitation = cbind(extraCols, gencode.quantitation)
 
-    # Remove transcripts that are < 300 bp in length because PacBio chucks anything that size, and
-    # keep only transcripts that have polyA tails
-    filter_set = c("protein_coding", "lincRNA", "processed_transcript", "macro_lncRNA")
-    gencode_quant_min300 = subset(gencode.quantitation, length >= 300 & class %in% filter_set)
+    # Remove transcripts that are < 300 bp in length because PacBio chucks anything that size
+    gencode_quant_min300 <- subset(gencode.quantitation, length >= 300)
 
     # Aggregate by gene
     gene_gencode_quant_min300 <- aggregate(gencode_quant_min300$tpm, by=list(gencode_quant_min300$gene), FUN=sum)
