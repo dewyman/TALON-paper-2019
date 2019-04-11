@@ -44,7 +44,8 @@ module load R/3.5.1
 Rscript ../../../analysis_scripts/plot_detection_by_TPM_for_datasets.R \
            --db full_gencode_v29_2019-03-12.db \
            --datasets D8,D9 \
-           --ik ../../../Illumina/GM12878/Kallisto/abundance.tsv \
+           --ik1 ../../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
+           --ik2 ../../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
            --color blue \
            -o GM12878_plots
 ```
