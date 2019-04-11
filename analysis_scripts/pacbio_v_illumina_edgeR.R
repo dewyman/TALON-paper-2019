@@ -19,10 +19,16 @@ main <-function() {
     dataset2 <- data_names[2]
 
     # Get genes expressed in the Illumina data from the Kallisto
-    # abundance file
-    illumina_gene_table <- filter_kallisto_illumina_genes(opt$illumina_kallisto)
-    colnames(illumina_gene_table) <- c("annot_gene_name", "illumina_TPM")
-    illumina_gene_table$illumina_TPM <- round(illumina_gene_table$illumina_TPM)
+    # abundance files
+    illumina_1 <- filter_kallisto_illumina_genes(opt$illumina_kallisto_1)
+    illumina_2 <- filter_kallisto_illumina_genes(opt$illumina_kallisto_2)
+    colnames(illumina_1) <- c("annot_gene_name", "illumina_TPM_1")
+    colnames(illumina_2) <- c("annot_gene_name", "illumina_TPM_2")
+    illumina_gene_table <- merge(illumina_1, illumina_2, by = "annot_gene_name",
+                                 all.x = T, all.y = T)
+    illumina_gene_table[is.na(illumina_gene_table)] <- 0
+    illumina_gene_table$illumina_TPM_1 <- round(illumina_gene_table$illumina_TPM_1)
+    illumina_gene_table$illumina_TPM_2 <- round(illumina_gene_table$illumina_TPM_2)
 
     # Read PacBio abundance file
     pb_abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
@@ -36,13 +42,15 @@ main <-function() {
 
     # Aggregate PacBio by gene name to get gene counts
     pb_gene_abundance <- ddply(pb_abundance, c("annot_gene_name"), function(x) colSums(x[c(dataset1, dataset2)]))
-    #pb_gene_abundance$both_pacbio <- pb_gene_abundance[,dataset1] + pb_gene_abundance[,dataset2]
 
     # Merge PacBio with Illumina on annot_gene_name
     merged_illumina_pacbio <- merge(illumina_gene_table, pb_gene_abundance, by = "annot_gene_name",
                                     all.x = T, all.y = T)
     merged_illumina_pacbio[is.na(merged_illumina_pacbio)] <- 0
-    merged_illumina_pacbio <- merged_illumina_pacbio[, c("annot_gene_name", "illumina_TPM", dataset1, dataset2)]
+    merged_illumina_pacbio <- merged_illumina_pacbio[, c("annot_gene_name", 
+                                                         "illumina_TPM_1", 
+                                                         "illumina_TPM_2",  
+                                                         dataset1, dataset2)]
 
     # Now, format table for edgeR by setting the rownames to the gene names
     rownames(merged_illumina_pacbio) <- merged_illumina_pacbio$annot_gene_name
@@ -50,10 +58,9 @@ main <-function() {
 
     # Remove rows that only contain zeros
     merged_illumina_pacbio <- merged_illumina_pacbio[rowSums(merged_illumina_pacbio) > 0, ]
-    print(head(merged_illumina_pacbio))
 
     # edgeR basics: 
-    group <- factor(c("1","2","2")) # Indicate which group each col belongs to
+    group <- factor(c("1","1","2","2")) # Indicate which group each col belongs to
     y <- DGEList(counts=merged_illumina_pacbio, group = group) # Create a DGEList object
     y <- calcNormFactors(y) # Normalize counts in the object
     design <- model.matrix(~group)
@@ -72,6 +79,13 @@ main <-function() {
     # Volcano plot
     volcano_plot(illumina_PB_et, fill_color, opt$outdir)
 
+
+    # Merge the EdgeR table with the other information
+    illumina_PB_et <- cbind(illumina_PB_et, merged_illumina_pacbio)
+    illumina_PB_et <- illumina_PB_et[order(illumina_PB_et$adj_pval),]
+    print(head(subset(illumina_PB_et, logFC > 0)))
+    write.table(illumina_PB_et, paste(opt$outdir, "/edgeR_pacbio_illumina.tsv", sep=""),
+                row.names=F, col.names=T, quote=F)
 }
 
 volcano_plot <- function(data, fillcolor, outdir) {
@@ -82,6 +96,11 @@ volcano_plot <- function(data, fillcolor, outdir) {
     n_sig <- length(data$status[data$status == "Bonf. p-value <= 0.01"])
     n_no_sig <- length(data$status[data$status == "Bonf. p-value > 0.01"])
 
+    # Add labels for most significant p-values
+    data$label <- NA
+    top_diff <- quantile(data$adj_pval, c(.0015))
+    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"] 
+
     fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_volcano_plot.png", sep="")
     xlabel <- "log2-fold change"
     ylabel <- "-log2 adjusted p-value"
@@ -90,9 +109,10 @@ volcano_plot <- function(data, fillcolor, outdir) {
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
 
-    g <- ggplot(data, aes(x=logFC, y=-log2(adj_pval), color = status)) +
+    g <- ggplot(data, aes(x=logFC, y=-log2(adj_pval), color = status, label = label)) +
          geom_point(alpha = 0.4, size = 2) +
          xlab(xlabel) + ylab(ylabel) + theme_bw() +
+         coord_cartesian(xlim = c(-20,20)) +
          scale_color_manual(values = c("orange", fillcolor),
                                   labels = c(paste0("Significant (n = ", n_sig, ")"),
                                              paste0("Not significant (n = ", n_no_sig, ")"))) +
@@ -101,11 +121,12 @@ volcano_plot <- function(data, fillcolor, outdir) {
                      axis.title.x = element_text(color="black", size=16),
                      axis.title.y = element_text(color="black", size=16)) +
                guides(colour = guide_legend(override.aes = list(size=2.5))) +
-               theme(legend.position=c(0.75,0.8),
+               theme(legend.position=c(0.75,0.9),
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 16))
+                     legend.text = element_text(colour = 'black', size = 16)) +
+               geom_text(color = "black", check_overlap = TRUE, size = 4, nudge_x = 0.05)
 
     print(g)
     dev.off()
@@ -124,8 +145,8 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("edgeR"))
 
     # Load my custom functions
-    source("/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
-    source("/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
+    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
+    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
 
     return
 }
@@ -134,11 +155,13 @@ parse_options <- function() {
 
     option_list <- list(
     make_option(c("--f"), action = "store", dest = "infile",
-                    default = NULL, help = "TALON abundance file (filtered)"),
+                    default = NULL, help = "TALON abundance file (not filtered)"),
     make_option(c("--datasets"), action = "store", dest = "datasets",
                     default = NULL, help = "Comma-delimited list of two dataset names to include in the analysis."),
-    make_option(c("--ik"), action = "store", dest = "illumina_kallisto",
-                    default = NULL, help = "Illumina Kallisto file."),
+    make_option(c("--ik1"), action = "store", dest = "illumina_kallisto_1",
+                    default = NULL, help = "Rep1 Illumina Kallisto file."),
+    make_option(c("--ik2"), action = "store", dest = "illumina_kallisto_2",
+                    default = NULL, help = "Rep2 Illumina Kallisto file."),
     make_option(c("--color"), action = "store", dest = "color_scheme",
                     default = NULL, help = "blue, red, or green"),
     make_option(c("-o","--outdir"), action = "store", dest = "outdir",
