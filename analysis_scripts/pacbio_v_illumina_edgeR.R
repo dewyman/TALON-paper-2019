@@ -34,6 +34,9 @@ main <-function() {
     pb_abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
+    # Remove genomic transcripts
+    pb_abundance <- subset(pb_abundance, genomic_transcript == "No")
+
     # Keep known genes only
     pb_abundance <- subset(pb_abundance, gene_status == "KNOWN")
 
