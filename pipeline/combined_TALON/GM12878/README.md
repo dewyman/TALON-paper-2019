@@ -173,6 +173,25 @@ Rscript ../../../analysis_scripts/MA_plot_for_transcripts.R \
     -o GM12878_plots
 ```
 
+## edgeR on Illumina vs PacBio, two bioreps each
+```
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
+    --f GM12878_talon_abundance.tsv \
+    --datasets D8,D9 \
+    --ik1 ../../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
+    --color blue \
+    -o GM12878_plots 
+
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR_transcripts.R \
+    --f GM12878_talon_abundance.tsv \
+    --datasets D8,D9 \
+    --ik1 ../../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
+    --color green \
+    -o GM12878_plots
+```
+
 ## Novelty categories plots
 ```
 Rscript ../../../analysis_scripts/plot_novelty_categories.R \
