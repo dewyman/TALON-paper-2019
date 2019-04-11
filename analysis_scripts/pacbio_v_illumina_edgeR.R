@@ -79,6 +79,8 @@ main <-function() {
     # Volcano plot
     volcano_plot(illumina_PB_et, fill_color, opt$outdir)
 
+    # MA plot
+    ma_plot(illumina_PB_et, fill_color, opt$outdir)
 
     # Merge the EdgeR table with the other information
     illumina_PB_et <- cbind(illumina_PB_et, merged_illumina_pacbio)
@@ -103,13 +105,13 @@ volcano_plot <- function(data, fillcolor, outdir) {
 
     fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_volcano_plot.png", sep="")
     xlabel <- "log2-fold change"
-    ylabel <- "-log2 adjusted p-value"
+    ylabel <- "-log10 adjusted p-value"
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
 
-    g <- ggplot(data, aes(x=logFC, y=-log2(adj_pval), color = status, label = label)) +
+    g <- ggplot(data, aes(x=logFC, y=-log10(adj_pval), color = status, label = label)) +
          geom_point(alpha = 0.4, size = 2) +
          xlab(xlabel) + ylab(ylabel) + theme_bw() +
          coord_cartesian(xlim = c(-20,20)) +
@@ -126,7 +128,50 @@ volcano_plot <- function(data, fillcolor, outdir) {
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
                      legend.text = element_text(colour = 'black', size = 16)) +
-               geom_text(color = "black", check_overlap = TRUE, size = 4, nudge_x = 0.05)
+               geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
+
+    print(g)
+    dev.off()
+}
+
+ma_plot <- function(data, fillcolor, outdir) {
+
+    data$status <- as.factor(ifelse(abs(data$logFC) > 1 & data$adj_pval <= 0.01,
+                             "Bonf. p-value <= 0.01", "Bonf. p-value > 0.01"))
+
+    n_sig <- length(data$status[data$status == "Bonf. p-value <= 0.01"])
+    n_no_sig <- length(data$status[data$status == "Bonf. p-value > 0.01"])
+
+    # Add labels for most significant p-values
+    data$label <- NA
+    top_diff <- quantile(data$adj_pval, c(.0015))
+    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"]
+
+    fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_MA_plot.png", sep="")
+    xlabel <- "logCPM"
+    ylabel <- "logFC"
+
+    png(filename = fname,
+        width = 2500, height = 2500, units = "px",
+        bg = "white",  res = 300)
+
+    g <- ggplot(data, aes(x=logCPM, y=logFC, color = status, label = label)) +
+         geom_point(alpha = 0.4, size = 2) +
+         xlab(xlabel) + ylab(ylabel) + theme_bw() +
+         scale_color_manual(values = c("orange", fillcolor),
+                                  labels = c(paste0("Significant (n = ", n_sig, ")"),
+                                             paste0("Not significant (n = ", n_no_sig, ")"))) +
+         theme(axis.text.x = element_text(color="black", size=20),
+                     axis.text.y = element_text(color="black", size=20),
+                     axis.title.x = element_text(color="black", size=16),
+                     axis.title.y = element_text(color="black", size=16)) +
+               guides(colour = guide_legend(override.aes = list(size=2.5))) +
+               theme(legend.position=c(0.25,0.1),
+                     legend.title = element_blank(),
+                     legend.background = element_rect(fill="white", color = "black"),
+                     legend.key = element_rect(fill="transparent"),
+                     legend.text = element_text(colour = 'black', size = 16)) +
+               geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
 
     print(g)
     dev.off()
