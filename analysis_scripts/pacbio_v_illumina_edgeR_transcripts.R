@@ -10,7 +10,7 @@ main <-function() {
     } else if (opt$color_scheme == "blue") {
         fill_color <- "navy"
     } else if (opt$color_scheme == "green") {
-        fill_color <- "springgreen4"
+        fill_color <- "#009E73"
     }
 
     # Get the names of the first and second dataset that we will be working with
@@ -18,46 +18,46 @@ main <-function() {
     dataset1 <- data_names[1]
     dataset2 <- data_names[2]
 
-    # Get genes expressed in the Illumina data from the Kallisto
+    # Get transcripts expressed in the Illumina data from the Kallisto
     # abundance files
-    illumina_1 <- filter_kallisto_illumina_genes(opt$illumina_kallisto_1)
-    illumina_2 <- filter_kallisto_illumina_genes(opt$illumina_kallisto_2)
-    colnames(illumina_1) <- c("annot_gene_name", "illumina_TPM_1")
-    colnames(illumina_2) <- c("annot_gene_name", "illumina_TPM_2")
-    illumina_gene_table <- merge(illumina_1, illumina_2, by = "annot_gene_name",
+    illumina_1 <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto_1)[,c("t_ID","tpm", "length")]
+    illumina_2 <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto_2)[,c("t_ID","tpm", "length")]
+    colnames(illumina_1)[1:2] <- c("annot_transcript_id", "illumina_TPM_1")
+    colnames(illumina_2)[1:2] <- c("annot_transcript_id", "illumina_TPM_2")
+    illumina_transcript_table <- merge(illumina_1, illumina_2, by = "annot_transcript_id",
                                  all.x = T, all.y = T)
-    illumina_gene_table[is.na(illumina_gene_table)] <- 0
-    illumina_gene_table$illumina_TPM_1 <- round(illumina_gene_table$illumina_TPM_1)
-    illumina_gene_table$illumina_TPM_2 <- round(illumina_gene_table$illumina_TPM_2)
+
+    illumina_transcript_table[is.na(illumina_transcript_table)] <- 0
+    illumina_transcript_table$length <- pmax(illumina_transcript_table$length.x, 
+                                             illumina_transcript_table$length.y)
+    illumina_transcript_table$length.x <- NULL
+    illumina_transcript_table$length.y <- NULL
+    illumina_transcript_table$illumina_TPM_1 <- round(illumina_transcript_table$illumina_TPM_1)
+    illumina_transcript_table$illumina_TPM_2 <- round(illumina_transcript_table$illumina_TPM_2)
+
 
     # Read PacBio abundance file
-    pb_abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
+    abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
-    # Remove genomic transcripts
-    pb_abundance <- subset(pb_abundance, genomic_transcript == "No")
-
-    # Keep known genes only
-    pb_abundance <- subset(pb_abundance, gene_status == "KNOWN")
+    # Keep known transcripts only
+    pb_transcript_abundance <- subset(abundance, transcript_status == "KNOWN")
 
     # Cut out unnecessary cols
-    pb_abundance <- pb_abundance[, c("annot_gene_name", dataset1, dataset2)]
+    pb_transcript_abundance <- pb_transcript_abundance[, c("annot_transcript_id", dataset1, dataset2)]
 
-    # Aggregate PacBio by gene name to get gene counts
-    pb_gene_abundance <- ddply(pb_abundance, c("annot_gene_name"), function(x) colSums(x[c(dataset1, dataset2)]))
-
-    # Merge PacBio with Illumina on annot_gene_name
-    merged_illumina_pacbio <- merge(illumina_gene_table, pb_gene_abundance, by = "annot_gene_name",
+    # Merge PacBio with Illumina on annot_transcript_id
+    merged_illumina_pacbio <- merge(illumina_transcript_table, pb_transcript_abundance, by = "annot_transcript_id",
                                     all.x = T, all.y = T)
     merged_illumina_pacbio[is.na(merged_illumina_pacbio)] <- 0
-    merged_illumina_pacbio <- merged_illumina_pacbio[, c("annot_gene_name", 
+    merged_illumina_pacbio <- merged_illumina_pacbio[, c("annot_transcript_id", 
                                                          "illumina_TPM_1", 
                                                          "illumina_TPM_2",  
                                                          dataset1, dataset2)]
 
-    # Now, format table for edgeR by setting the rownames to the gene names
-    rownames(merged_illumina_pacbio) <- merged_illumina_pacbio$annot_gene_name
-    merged_illumina_pacbio$annot_gene_name <- NULL
+    # Now, format table for edgeR by setting the rownames to the transcript names
+    rownames(merged_illumina_pacbio) <- merged_illumina_pacbio$annot_transcript_id
+    merged_illumina_pacbio$annot_transcript_id <- NULL
 
     # Remove rows that only contain zeros
     merged_illumina_pacbio <- merged_illumina_pacbio[rowSums(merged_illumina_pacbio) > 0, ]
@@ -74,7 +74,11 @@ main <-function() {
 
     # Extract exact test table for plotting
     illumina_PB_et <- et$table
-    illumina_PB_et$gene_name <- rownames(illumina_PB_et)
+    illumina_PB_et$annot_transcript_id <- rownames(illumina_PB_et)
+    illumina_PB_et <- merge(illumina_PB_et, 
+                            abundance[, c("annot_transcript_id", "annot_transcript_name")], 
+                            by = "annot_transcript_id", all.x = T, all.y = F)
+    
 
     # Adjust p-values
     illumina_PB_et$adj_pval <- p.adjust(illumina_PB_et$PValue, method = "bonferroni")
@@ -89,7 +93,7 @@ main <-function() {
     illumina_PB_et <- cbind(illumina_PB_et, merged_illumina_pacbio)
     illumina_PB_et <- illumina_PB_et[order(illumina_PB_et$adj_pval),]
     print(head(subset(illumina_PB_et, logFC > 0)))
-    write.table(illumina_PB_et, paste(opt$outdir, "/edgeR_pacbio_illumina_genes.tsv", sep=""),
+    write.table(illumina_PB_et, paste(opt$outdir, "/edgeR_pacbio_illumina_transcripts.tsv", sep=""),
                 row.names=F, col.names=T, quote=F)
 }
 
@@ -104,9 +108,9 @@ volcano_plot <- function(data, fillcolor, outdir) {
     # Add labels for most significant p-values
     data$label <- NA
     top_diff <- quantile(data$adj_pval, c(.0015))
-    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"] 
+    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "annot_transcript_name"] 
 
-    fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_volcano_plot.png", sep="")
+    fname <- paste(outdir, "/edgeR_pacbio_illumina_transcript_volcano_plot.png", sep="")
     xlabel <- "log2-fold change"
     ylabel <- "-log10 adjusted p-value"
 
@@ -126,7 +130,7 @@ volcano_plot <- function(data, fillcolor, outdir) {
                      axis.title.x = element_text(color="black", size=16),
                      axis.title.y = element_text(color="black", size=16)) +
                guides(colour = guide_legend(override.aes = list(size=2.5))) +
-               theme(legend.position=c(0.75,0.9),
+               theme(legend.position=c(0.75,0.8),
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
@@ -148,9 +152,9 @@ ma_plot <- function(data, fillcolor, outdir) {
     # Add labels for most significant p-values
     data$label <- NA
     top_diff <- quantile(data$adj_pval, c(.0015))
-    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"]
+    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "annot_transcript_name"]
 
-    fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_MA_plot.png", sep="")
+    fname <- paste(outdir, "/edgeR_pacbio_illumina_transcript_MA_plot.png", sep="")
     xlabel <- "logCPM"
     ylabel <- "logFC"
 
@@ -193,7 +197,6 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("edgeR"))
 
     # Load my custom functions
-    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
     source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
 
     return
