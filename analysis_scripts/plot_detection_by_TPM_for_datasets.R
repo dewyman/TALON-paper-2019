@@ -16,15 +16,26 @@ main <-function() {
 
     # Get genes and transcripts expressed in the Illumina data from the Kallisto
     # abundance file
-    illumina_gene_table <- filter_kallisto_illumina_genes(opt$illumina_kallisto) 
-    illumina_transcript_table <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto)
+    illumina_1 <- filter_kallisto_illumina_genes(opt$illumina_kallisto_1)
+    illumina_2 <- filter_kallisto_illumina_genes(opt$illumina_kallisto_2)
+    colnames(illumina_1) <- c("gene", "illumina_TPM_1")
+    colnames(illumina_2) <- c("gene", "illumina_TPM_2")
+    illumina_gene_table <- merge(illumina_1, illumina_2, by = "gene",
+                                 all.x = T, all.y = T)
+
+    # Remove genes only detected in one Illumina rep, then average the TPMS
+    illumina_gene_table <- illumina_gene_table[complete.cases(illumina_gene_table), ]
+    illumina_gene_table$tpm <- (illumina_gene_table$illumina_TPM_1 +
+                                illumina_gene_table$illumina_TPM_2) / 2
+
+    #illumina_transcript_table <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto)
     
     # Add a column to the Illumina table mapping the names to TALON IDs
     gene_name_mapping <- get_name_table(opt$database, "gene") 
-    transcript_name_mapping <- get_name_table(opt$database, "transcript")
+    #transcript_name_mapping <- get_name_table(opt$database, "transcript")
     
     illumina_gene_table_with_IDs <- merge(illumina_gene_table, gene_name_mapping, by = "gene", all.x = T, all.y = F)
-    illumina_transcript_table_with_IDs <- merge(illumina_transcript_table, transcript_name_mapping, by = "transcript", all.x = T, all.y = F)
+    #illumina_transcript_table_with_IDs <- merge(illumina_transcript_table, transcript_name_mapping, by = "transcript", all.x = T, all.y = F)
 
     # Get the names of the first and second dataset that we will be working with
     data_names <- str_split(opt$datasets, ",")[[1]]
@@ -34,41 +45,41 @@ main <-function() {
     # Read in whitelist file, and get gene and transcript whitelists from that
     if (is.null(opt$whitelist)) {
         whitelisted_gene_IDs = NULL
-        whitelisted_transcript_IDs = NULL
+        #whitelisted_transcript_IDs = NULL
     } else {
         whitelist <- as.data.frame(read_delim(opt$whitelist, ",", escape_double = FALSE,
                                   col_names = FALSE, trim_ws = TRUE, na = "NA"))
         whitelisted_gene_IDs <- unique(whitelist[,1])
-        whitelisted_transcript_IDs <- whitelist[,2]
+        #whitelisted_transcript_IDs <- whitelist[,2]
     }
 
-    full_transcript_table <- get_database_transcript_table(opt$database)
+    #full_transcript_table <- get_database_transcript_table(opt$database)
 
     # Now get filtered genes/transcripts detected in the datasets
     d1_genes <- get_detected_genes_for_dataset(dataset_1, whitelisted_gene_IDs, opt$database)
     d2_genes <- get_detected_genes_for_dataset(dataset_2, whitelisted_gene_IDs, opt$database)
 
-    d1_transcripts <- get_detected_transcripts_for_dataset(dataset_1, whitelisted_transcript_IDs, opt$database)
-    d2_transcripts <- get_detected_transcripts_for_dataset(dataset_2, whitelisted_transcript_IDs, opt$database)
+    #d1_transcripts <- get_detected_transcripts_for_dataset(dataset_1, whitelisted_transcript_IDs, opt$database)
+    #d2_transcripts <- get_detected_transcripts_for_dataset(dataset_2, whitelisted_transcript_IDs, opt$database)
 
     # Combine the Illumina tables with information about which genes/transcripts are observed in Pacbio
     illumina_gene_detection <- get_detection(illumina_gene_table_with_IDs, d1_genes, d2_genes, "gene_ID")
-    illumina_transcript_detection <- get_detection(illumina_transcript_table_with_IDs, d1_transcripts, d2_transcripts, "transcript_ID")
+    #illumina_transcript_detection <- get_detection(illumina_transcript_table_with_IDs, d1_transcripts, d2_transcripts, "transcript_ID")
 
     # Group into buckets
     illumina_gene_detection_buckets <- get_buckets(illumina_gene_detection)    
-    illumina_transcript_detection_buckets <- get_buckets(illumina_transcript_detection)
+    #illumina_transcript_detection_buckets <- get_buckets(illumina_transcript_detection)
 
     # Plot detection by TPM
     plot_detection(illumina_gene_detection_buckets$illumina, illumina_gene_detection_buckets$interval_labels, "gene", color_vec, opt$outdir)
     print ("--------------------------")
-    plot_detection(illumina_transcript_detection_buckets$illumina, illumina_transcript_detection_buckets$interval_labels, "transcript", color_vec, opt$outdir)
+    #plot_detection(illumina_transcript_detection_buckets$illumina, illumina_transcript_detection_buckets$interval_labels, "transcript", color_vec, opt$outdir)
 
 
 
     # For highly expressed transcripts, plot the length distributions of transcripts we detect vs the ones we don't
-   highly_expressed <- subset(illumina_transcript_detection_buckets$illumina, tpm >= 100)
-   plot_length_hists_by_detection(highly_expressed, opt$outdir)
+   #highly_expressed <- subset(illumina_transcript_detection_buckets$illumina, tpm >= 100)
+   #plot_length_hists_by_detection(highly_expressed, opt$outdir)
 }
 
 get_buckets <- function(illumina) {
@@ -227,8 +238,8 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("data.table"))
 
     # Load my custom functions
-    source("/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
-    source("/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
+    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
+    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
     source("/pub/dwyman/TALON-paper-2019/analysis_scripts/get_database_transcript_table.R")
     
     return
@@ -244,8 +255,10 @@ parse_options <- function() {
                     default = NULL, help = "File of whitelisted transcripts for the Pacbio data"),
         make_option(c("--datasets"), action = "store", dest = "datasets",
                     default = NULL, help = "Comma-delimited list of two dataset names to include in the analysis."),
-        make_option(c("--ik"), action = "store", dest = "illumina_kallisto",
-                    default = NULL, help = "Illumina Kallisto file."),
+        make_option(c("--ik1"), action = "store", dest = "illumina_kallisto_1",
+                    default = NULL, help = "Rep1 Illumina Kallisto file."),
+        make_option(c("--ik2"), action = "store", dest = "illumina_kallisto_2",
+                    default = NULL, help = "Rep2 Illumina Kallisto file."),
         make_option(c("--color"), action = "store", dest = "color_scheme",
                     default = NULL, help = "blue, red, or green"),
         make_option(c("-o","--outdir"), action = "store", dest = "outdir",
