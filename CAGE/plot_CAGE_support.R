@@ -200,18 +200,19 @@ plot_support <- function(data, color, min_TPM, outprefix) {
     freqs$novelty <- factor(freqs$novelty,
                            levels = rev(c("Known", "ISM", "NIC", "NNC",
                                          "Antisense", "Intergenic")))
+    freqs$percent <- round(freqs$freq*100)
 
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
                 "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7")
     fname <- paste(outprefix, "_CAGE_support_minTPM-", min_TPM, ".png", sep="")
     xlabel <- "Transcript category"
-    ylabel <- "Fraction transcripts with CAGE support"
+    ylabel <- "Percentage transcripts with CAGE support"
 
     png(filename = fname,
         width = 2500, height = 2000, units = "px",
         bg = "white",  res = 300)
 
-    g = ggplot(freqs, aes(x = novelty, y = freq, fill = novelty)) + 
+    g = ggplot(freqs, aes(x = novelty, y = percent, fill = novelty)) + 
                geom_bar(stat="identity") +
                xlab(xlabel) + ylab(ylabel) +
                theme(legend.text = element_text(color="black", size = rel(1)), 
@@ -225,8 +226,8 @@ plot_support <- function(data, color, min_TPM, outprefix) {
                      axis.text.y = element_text(color="black", size = rel(1.5)),
                      axis.title.x = element_text(color="black", size=rel(1.25)),
                      axis.title.y = element_text(color="black", size=rel(1.25))) +
-                coord_flip(ylim = c(0, 1)) + guides(fill=FALSE) +
-                geom_text(aes(y = freq - 0.12, label = paste0(round(freq*100), '%')), 
+                coord_flip(ylim = c(0, 100)) + guides(fill=FALSE) +
+                geom_text(aes(y = percent - 12, label = paste0(percent, '%')), 
                   position = position_dodge(0.9),
                   color = "white", size = 10)
     print(g)

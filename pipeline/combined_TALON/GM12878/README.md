@@ -229,7 +229,7 @@ Rscript ../../../RNA-PET/plot_RNA-PET_support.R  \
      -o RNA-PET/GM12878
 ```
 
-## CAGE analysis
+## CAGE analysis, ENCODE
 ```
 source activate mypython3.7.2
 python ../../../CAGE/run_CAGE_analysis.py \
@@ -245,5 +245,20 @@ Rscript ../../../CAGE/plot_CAGE_support.R \
     --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
     -o CAGE/ENCODE/GM12878
 ```
+## CAGE analysis, FANTOM
+```
+source activate mypython3.7.2
+python ../../../CAGE/run_CAGE_analysis.py \
+        --gtf GM12878_filtered_talon.gtf \
+        --cage ../../../CAGE/data/FANTOM5/hg38_CAGE.bed \
+        --maxdist 100 \
+        --o CAGE/FANTOM5/GM12878
 
+Rscript ../../../CAGE/plot_CAGE_support.R \
+    --f CAGE/FANTOM5/GM12878_CAGE_results.csv \
+    --novelty CAGE/FANTOM5/transcript_beds/GM12878_novelty.csv \
+    --abundance GM12878_talon_abundance.tsv \
+    --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    -o CAGE/FANTOM5/GM12878
+```
 
