@@ -1,5 +1,5 @@
 mkdir -p data/FANTOM5
-cd data/ENCODE
+cd data/FANTOM5
 
 # hg19 robust CAGE peaks
 wget http://fantom.gsc.riken.jp/5/datafiles/latest/extra/CAGE_peaks/hg19.cage_peak_phase1and2combined_coord.bed.gz
