@@ -51,11 +51,11 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
                                             "other_ISM_transcript"="ISM",
                                             "NIC_transcript"= "NIC",
                                             "NNC_transcript"= "NNC",
-                                            "antisense_transcript"= "antisense",
-                                            "intergenic_transcript"= "intergenic"))
+                                            "antisense_transcript"= "Antisense",
+                                            "intergenic_transcript"= "Intergenic"))
     distinct_transcripts$novelty <- factor(distinct_transcripts$novelty, levels = c("Known", "ISM", 
                                                                                     "NIC", "NNC", 
-                                                                                    "antisense", "intergenic"))    
+                                                                                    "Antisense", "Intergenic"))    
     
     # Plotting
     fname <- paste(outdir, "/distinct_isoforms_by_category.png", sep="")
@@ -63,10 +63,12 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
     ylabel <- "Number of distinct isoforms"
     ymax <- 1.02*(max(count(distinct_transcripts,"novelty")$freq))
 
-    colors <- c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7")
+    colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
+                "NNC" = "#E69F00", "Antisense" = "#000000", 
+                "Intergenic" = "#CC79A7")
 
     png(filename = fname,
-        width = 3000, height = 3500, units = "px",
+        width = 3100, height = 3500, units = "px",
         bg = "white",  res = 300)
     g = ggplot(distinct_transcripts, aes(x = novelty, width=.6,
                fill = as.factor(novelty))) + 
@@ -77,10 +79,16 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
                      axis.text.x = element_text(color="black", size = rel(1.5)),
-                     axis.text.y = element_text(color="black", size = rel(1.5)),
+                     axis.text.y = element_text(color="black", size = rel(2)),
                      axis.title.x = element_text(color="black", size=rel(1.75)),
                      axis.title.y = element_text(color="black", size=rel(1.75))) +
-               guides(fill = FALSE) + coord_cartesian(ylim = c(0, ymax))
+               guides(fill = FALSE) + 
+               coord_cartesian(ylim = c(0, ymax)) 
+               #theme(legend.position=c(0.8,0.7),
+               #      legend.title = element_blank(),
+               #      legend.background = element_rect(fill="white", color = "black"),
+               #      legend.key = element_rect(fill="transparent"),
+               #      legend.text = element_text(colour = 'black', size = rel(2)))
 
     print(g)
     dev.off()
@@ -99,11 +107,11 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                                             "other_ISM_transcript"="ISM",
                                             "NIC_transcript"= "NIC",
                                             "NNC_transcript"= "NNC",
-                                            "antisense_transcript"= "antisense",
-                                            "intergenic_transcript"= "intergenic"))
+                                            "antisense_transcript"= "Antisense",
+                                            "intergenic_transcript"= "Intergenic"))
     observed_transcripts$novelty <- factor(observed_transcripts$novelty, levels = c("Known", "ISM",
                                                                                     "NIC", "NNC",
-                                                                                    "antisense", "intergenic"))
+                                                                                    "Antisense", "Intergenic"))
 
     # Compute percentages
     freqs_by_dataset <- count(observed_transcripts, c("dataset","novelty"))
@@ -120,11 +128,14 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
     fname <- paste(outdir, "/reads_by_isoform_category.png", sep="")
     xlabel <- "Dataset"
     ylabel <- "log2(read count)"
-    colors <- c("#009E73","#0072B2", "#D55E00", "#E69F00", "#000000", "#CC79A7")
+    colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00",
+                "NNC" = "#E69F00", "Antisense" = "#000000",
+                "Intergenic" = "#CC79A7")
     ymax <- 0.9*nrow(observed_transcripts)
 
+    n_datasets <- length(unique(observed_transcripts$dataset))
     png(filename = fname,
-        width = 4000, height = 2500, units = "px",
+        width = 2000*n_datasets + 500, height = 2500, units = "px",
         bg = "white",  res = 300)
     g = ggplot(observed_transcripts, aes(x = dataset,
                fill = as.factor(novelty))) + #factor(ERCC, levels = novelty)) +
@@ -138,7 +149,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
                      axis.text.x = element_text(color="black", size = rel(1.5)),
-                     axis.text.y = element_text(color="black", size = rel(1.5)),
+                     axis.text.y = element_text(color="black", size = rel(2)),
                      axis.title.x = element_text(color="black", size=rel(1.5)),
                      axis.title.y = element_text(color="black", size=rel(1.5))) +
                theme(legend.text = element_text(color="black", size = rel(1)),
@@ -149,7 +160,8 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                   label = paste0(percent, '%')), 
                   stat = 'count', 
                   position = position_dodge(.9), 
-                  size = 7, vjust=-0.25)
+                  size = rel(7), vjust=-0.25) 
+                #guides(fill = FALSE)
                 
 
 
