@@ -198,7 +198,7 @@ Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR_transcripts.R \
 Rscript ../../../analysis_scripts/plot_novelty_categories.R \
         --db full_gencode_v29_2019-03-12.db \
         --w GM12878_whitelist.csv \
-        --datasets D8,D9 \
+        --datasets D8 \
         -o GM12878_plots
 ```
 
@@ -261,4 +261,12 @@ Rscript ../../../CAGE/plot_CAGE_support.R \
     --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
     -o CAGE/FANTOM5/GM12878
 ```
-
+## PAS analysis, GENCODE manual PolyA annotation
+```
+source activate mypython3.7.2
+python ../../../PAS-seq/run_GENCODE_PAS-seq_analysis.py \
+        --gtf GM12878_filtered_talon.gtf \
+        --pas ../../../PAS-seq/gencode.v29.metadata.PolyA_feature.bed \
+        --maxdist 50 \
+        --o PAS-annot/GM12878
+```

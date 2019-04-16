@@ -7,7 +7,9 @@ import sys
 import subprocess
 from pathlib import Path
 script_dir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.abspath(os.path.join(script_dir, os.pardir)))
+utils_dir = "/".join(script_dir.split("/")[0:-1] + ["RNA-PET"])
+sys.path.append(script_dir)
+sys.path.append(utils_dir)
 import create_intervals as cI
 
 def getOptions():
@@ -24,7 +26,7 @@ def getOptions():
     (options, args) = parser.parse_args()
     return options
 
-def make_end_intervals(entry, dist):
+def make_end_interval(entry, dist):
     """ Extract end position of entry and return interval of size dist
     """
     strand = entry[5]
@@ -56,7 +58,7 @@ def main():
             if chromosome in ["chrM", "chrEBV"]:
                 continue
 
-            interval_start, interval_end = make_intervals(entry, dist)
+            interval_start, interval_end = make_end_interval(entry, dist)
 
             # Write BED entry for the end
             end_entry = [ chromosome, str(interval_start),
