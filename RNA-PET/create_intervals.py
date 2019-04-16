@@ -1,4 +1,18 @@
 
+def create_end_piece(pos, strand, dist):
+    """ Creates a zero based interval of length 'dist' that starts inside the
+        transcript and ends with the transcript end."""
+
+    if strand == "+":
+        interval_start = pos - dist
+        interval_end = pos
+    elif strand == "-":
+        interval_start = pos
+        interval_end = pos + dist
+    else:
+        raise ValueError("Strand must be '+' or '-'.")
+
+    return interval_start, interval_end
 
 def create_interval(pos, pos_type, dist):
     """ Creates a zero-based interval around the provided position (must also be 

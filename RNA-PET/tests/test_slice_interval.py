@@ -42,3 +42,24 @@ class TestSliceInterval(object):
                                                           "right", dist)
         assert interval_start == 105
         assert interval_end == 110
+
+class TestCreateEndPieces(object):
+    def test_dist_plus_strand(self):
+        """ Test plus-strand behavior """
+        pos = 110
+        strand = "+"
+        dist = 2
+        interval_start, interval_end = cI.create_end_piece(pos, strand, dist)
+
+        assert interval_start == 108
+        assert interval_end == 110
+
+    def test_dist_minus_strand(self):
+        """ Test minus-strand behavior """
+        pos = 100
+        strand = "-"
+        dist = 2
+        interval_start, interval_end = cI.create_end_piece(pos, strand, dist)
+
+        assert interval_start == 100
+        assert interval_end == 102
