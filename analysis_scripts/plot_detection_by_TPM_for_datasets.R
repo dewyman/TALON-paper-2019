@@ -28,14 +28,11 @@ main <-function() {
     illumina_gene_table$tpm <- (illumina_gene_table$illumina_TPM_1 +
                                 illumina_gene_table$illumina_TPM_2) / 2
 
-    #illumina_transcript_table <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto)
     
     # Add a column to the Illumina table mapping the names to TALON IDs
     gene_name_mapping <- get_name_table(opt$database, "gene") 
-    #transcript_name_mapping <- get_name_table(opt$database, "transcript")
     
     illumina_gene_table_with_IDs <- merge(illumina_gene_table, gene_name_mapping, by = "gene", all.x = T, all.y = F)
-    #illumina_transcript_table_with_IDs <- merge(illumina_transcript_table, transcript_name_mapping, by = "transcript", all.x = T, all.y = F)
 
     # Get the names of the first and second dataset that we will be working with
     data_names <- str_split(opt$datasets, ",")[[1]]
@@ -50,21 +47,15 @@ main <-function() {
         whitelist <- as.data.frame(read_delim(opt$whitelist, ",", escape_double = FALSE,
                                   col_names = FALSE, trim_ws = TRUE, na = "NA"))
         whitelisted_gene_IDs <- unique(whitelist[,1])
-        #whitelisted_transcript_IDs <- whitelist[,2]
     }
-
-    #full_transcript_table <- get_database_transcript_table(opt$database)
 
     # Now get filtered genes/transcripts detected in the datasets
     d1_genes <- get_detected_genes_for_dataset(dataset_1, whitelisted_gene_IDs, opt$database)
     d2_genes <- get_detected_genes_for_dataset(dataset_2, whitelisted_gene_IDs, opt$database)
 
-    #d1_transcripts <- get_detected_transcripts_for_dataset(dataset_1, whitelisted_transcript_IDs, opt$database)
-    #d2_transcripts <- get_detected_transcripts_for_dataset(dataset_2, whitelisted_transcript_IDs, opt$database)
 
     # Combine the Illumina tables with information about which genes/transcripts are observed in Pacbio
     illumina_gene_detection <- get_detection(illumina_gene_table_with_IDs, d1_genes, d2_genes, "gene_ID")
-    #illumina_transcript_detection <- get_detection(illumina_transcript_table_with_IDs, d1_transcripts, d2_transcripts, "transcript_ID")
 
     # Group into buckets
     illumina_gene_detection_buckets <- get_buckets(illumina_gene_detection)    
@@ -73,12 +64,9 @@ main <-function() {
     # Plot detection by TPM
     plot_detection(illumina_gene_detection_buckets$illumina, illumina_gene_detection_buckets$interval_labels, "gene", color_vec, opt$outdir)
     print ("--------------------------")
-    #plot_detection(illumina_transcript_detection_buckets$illumina, illumina_transcript_detection_buckets$interval_labels, "transcript", color_vec, opt$outdir)
 
 
 
-    # For highly expressed transcripts, plot the length distributions of transcripts we detect vs the ones we don't
-   #highly_expressed <- subset(illumina_transcript_detection_buckets$illumina, tpm >= 100)
    #plot_length_hists_by_detection(highly_expressed, opt$outdir)
 }
 
@@ -127,10 +115,10 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
     # Plot the curves
     fname <- paste(outdir, "/", cat_type, "_detection_by_TPM.png", sep="")
     xlabel <- paste(capitalize(cat_type), "expression level in Illumina data (TPM)")
-    ylabel <- paste("Proportion of ", cat_type, "s", sep="")
+    ylabel <- paste("Fraction of ", cat_type, "s", sep="")
 
     png(filename = fname,
-        width = 2000, height = 2500, units = "px",
+        width = 2100, height = 2500, units = "px",
         bg = "white",  res = 300)
     g = ggplot(illumina, aes(x = group, fill = factor(detection, levels = c("Not detected in PacBio", "Detected in one PacBio rep", "Detected in both PacBio reps")))) +
        geom_bar(position = "fill", col = "black") + 
@@ -138,14 +126,16 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
        theme_bw() + 
        scale_y_continuous(breaks=c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1)) + 
        theme(axis.text.x = element_text(angle = 30, hjust = 1, color = "black", size=20)) + 
-       xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=20)) + 
-       theme(axis.text.y = element_text(color = "black", size=20)) + 
+       xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=22)) + 
+       theme(axis.text.x = element_text(color = "black", size=21),
+             axis.text.y = element_text(color = "black", size=21)) + 
        scale_x_discrete(labels=cIntervals) + 
-       theme(legend.position=c(0.65,0.2),
+       theme(legend.position=c(0.6,0.2),
               legend.title = element_blank(),
               legend.background = element_rect(fill="white", color = "black"),
               legend.key = element_rect(fill="transparent"),
-              legend.text = element_text(colour = 'black', size = 16))
+              legend.text = element_text(colour = 'black', size = 20),
+              plot.margin = margin(t = 0.5, r = 1.5, l = 0.5, b = 0.5, "cm"))
 
     print(g)
     dev.off()
