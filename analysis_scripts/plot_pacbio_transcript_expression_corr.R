@@ -46,7 +46,7 @@ main <-function() {
     merged_abundances <- merge(merged_abundances, transcript_novelty, by = "transcript_ID", 
                                all.x = T, all.y = F)
     merged_abundances$novelty <- NA
-    print(nrow(merged_abundances))
+    #print(nrow(merged_abundances))
 
     merged_abundances[merged_abundances$transcript_status == "KNOWN", "novelty"] <- "Known"
     merged_abundances[merged_abundances$ISM_transcript == "ISM_transcript", "novelty"] <- "ISM"
@@ -58,7 +58,7 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = t_levels)
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec, opt$celltype)
+    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec, opt$celltype, opt$lsr)
 }
 
 filter_transcripts_on_options <- function(abundance_table, opt) {
@@ -143,7 +143,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     return(filtered)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype) {
+expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype, lsr) {
 
     # Take log2(TPM + 1)
     merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
@@ -157,10 +157,10 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
 
     # Least-Square Regression Line
     mod<-lm(data2.TPM~data1.TPM, data=merged_abundances)
-    print(lm(data2.TPM~data1.TPM, data=merged_abundances))
-    print(lm(data1.TPM~data2.TPM, data=merged_abundances))
-    print(summary(merged_abundances$data1.TPM))
-    print(summary(merged_abundances$data2.TPM))   
+    #print(lm(data2.TPM~data1.TPM, data=merged_abundances))
+    #print(lm(data1.TPM~data2.TPM, data=merged_abundances))
+    #print(summary(merged_abundances$data1.TPM))
+    #print(summary(merged_abundances$data2.TPM))   
  
     nov_types <- paste(t_levels, collapse = '-')
     joined_names <- paste(outdir, "/", d1, "-", d2, "_", nov_types, sep = "")
@@ -168,6 +168,16 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     fname <- paste(joined_names, "transcript", "correlationPlot.png", sep="_")
     xlabel <- paste("log2(TPM+1) in ", celltype, " Rep1", sep="")
     ylabel <- paste("log2(TPM+1) in ", celltype, " Rep2", sep="")
+    if (lsr == T) {
+        corr_label <- paste("Pearson r: ",
+                            round(pearsonCorr, 2), "\nSpearman rho: ",
+                            round(spearmanCorr, 2), "\nLSR slope: ",
+                            round(mod$coefficients[2], 2), sep="")
+    } else {
+         corr_label <- paste("Pearson r: ",
+                            round(pearsonCorr, 2), "\nSpearman rho: ",
+                            round(spearmanCorr, 2), sep="")
+    }
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
@@ -179,10 +189,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
-        annotate("text", x = 5, y = 14, label = paste("Pearson r: ",
-                 round(pearsonCorr, 2), "\nSpearman rho: ",
-                 round(spearmanCorr, 2), "\nLSR slope: ",
-                 round(mod$coefficients[2], 2), sep=""),  color="black", size = 8) +
+        annotate("text", x = 5, y = 14, label = corr_label,
+                 color="black", size = 10) +
         coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("Transcript status", values=color_vec) +
         theme(legend.position=c(0.75,0.25),
@@ -208,7 +216,10 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
                         theme(legend.position = "none",
                               axis.title.x=element_blank(),
                               axis.text.x=element_blank(),
-                              axis.ticks.x=element_blank())
+                              axis.ticks.x=element_blank(),
+                              axis.text.y=element_text(color = "black", size=14),
+                              axis.title.y=element_text(color = "black", size=20),
+                              plot.margin = margin(0.75, 0, 0, 0, "cm"))
 
     # Marginal density plot of y (right panel)
     ydensity <- ggplot(merged_abundances, aes(data2.TPM, fill=novelty, color=novelty)) + 
@@ -219,9 +230,12 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
                        theme(legend.position = "none",
                              axis.title.y=element_blank(),
-                              axis.text.y=element_blank(),
-                              axis.ticks.y=element_blank()) +
-                              coord_flip(ylim = c(0, plot_max))
+                             axis.text.y=element_blank(),
+                             axis.ticks.y=element_blank(),
+                             axis.text.x=element_text(color = "black", size=14),
+                             axis.title.x=element_text(color = "black", size=20),
+                             plot.margin = margin(0, 0.75, 0.3, 0, "cm")) +
+                             coord_flip(ylim = c(0, plot_max))
                        
 
     # Blank placeholder plot
@@ -275,6 +289,8 @@ parse_options <- function() {
                     default = NULL, help = "Second dataset name to use in comparison"),
         make_option("--celltype", action = "store", dest = "celltype",
                     default = NULL, help = "Celltype to use in plot labels"),
+        make_option(c("--lsr"), action="store_true", dest="lsr",
+              help="Include this option if you want the LSR label on", default = F),
         make_option("--w", action = "store", dest = "whitelist",
                     default = NULL, help = "Optional: a whitelist for filtering transcripts"),
         make_option(c("--ISM"), action="store_true", dest="ISM",
