@@ -141,8 +141,6 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                fill = as.factor(novelty))) + #factor(ERCC, levels = novelty)) +
                geom_bar(position="dodge") + #custom_theme() +
                xlab(xlabel) + ylab(ylabel) +
-               theme(legend.text = element_text(color="black", size = rel(1)), 
-                     legend.title = element_text(color="black", size=rel(1))) +
                theme_bw(base_family = "Helvetica", base_size = 18) +
                scale_fill_manual("Isoform Type", values = colors) +
                theme_bw(base_family = "Helvetica", base_size = 18) +
@@ -153,16 +151,19 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                      axis.title.x = element_text(color="black", size=rel(1.5)),
                      axis.title.y = element_text(color="black", size=rel(1.5))) +
                theme(legend.text = element_text(color="black", size = rel(1)),
-                     legend.title = element_text(color="black", size=rel(1))) +
+                     legend.title = element_text(color="black", size=rel(1.25)),
+                     legend.position=c(0.8,0.8),
+                     legend.background = element_rect(fill="white", color = "black"),
+                     legend.key = element_rect(fill="transparent")) +
                 yscale("log2", .format = TRUE) +
                 coord_cartesian(ylim = c(1, ymax)) +
                 geom_text(aes(y = ..count.., 
                   label = paste0(percent, '%')), 
                   stat = 'count', 
                   position = position_dodge(.9), 
-                  size = rel(7), vjust=-0.25) 
+                  size = rel(7.5), vjust=-0.25) +
+                expand_limits(x = 2)
                 #guides(fill = FALSE)
-                
 
 
     print(g)
