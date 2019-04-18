@@ -8,6 +8,7 @@
 #$ -cwd
 #$ -j y
 
+module load STAR/2.6.0c
 cd /dfs2/pub/dwyman/TALON-paper-2019/PAS-seq/data
 mkdir mapped_PAS
 
