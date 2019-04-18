@@ -107,7 +107,7 @@ volcano_plot <- function(data, fillcolor, outdir) {
     data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"] 
 
     fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_volcano_plot.png", sep="")
-    xlabel <- "log2-fold change"
+    xlabel <- "PacBio to Illumina log2-fold change"
     ylabel <- "-log10 adjusted p-value"
 
     png(filename = fname,
@@ -151,8 +151,8 @@ ma_plot <- function(data, fillcolor, outdir) {
     data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"]
 
     fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_MA_plot.png", sep="")
-    xlabel <- "logCPM"
-    ylabel <- "logFC"
+    xlabel <- "log(Counts per million)"
+    ylabel <- "PacBio to Illumina log2-fold change"
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
@@ -164,16 +164,16 @@ ma_plot <- function(data, fillcolor, outdir) {
          scale_color_manual(values = c("orange", fillcolor),
                                   labels = c(paste0("Significant (n = ", n_sig, ")"),
                                              paste0("Not significant (n = ", n_no_sig, ")"))) +
-         theme(axis.text.x = element_text(color="black", size=20),
-                     axis.text.y = element_text(color="black", size=20),
-                     axis.title.x = element_text(color="black", size=16),
-                     axis.title.y = element_text(color="black", size=16)) +
-               guides(colour = guide_legend(override.aes = list(size=2.5))) +
-               theme(legend.position=c(0.25,0.1),
+         theme(axis.text.x = element_text(color="black", size=22),
+               axis.text.y = element_text(color="black", size=22),
+               axis.title.x = element_text(color="black", size=22),
+               axis.title.y = element_text(color="black", size=22)) +
+         guides(colour = guide_legend(override.aes = list(size=2.5))) +
+         theme(legend.position=c(0.25,0.1),
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 16)) +
+                     legend.text = element_text(colour = 'black', size = 18)) +
                geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
 
     print(g)
