@@ -20,7 +20,7 @@ time python /pub/dwyman/TALON/initialize_talon_database.py \
     --a gencode_v29 \
     --g hg38 \
     --l 300 \
-    --idprefix ENChum \
+    --idprefix ENCODEH \
     --5p 500 \
     --3p 300 \
     --o unmodified_full_gencode_v29_${DATE}

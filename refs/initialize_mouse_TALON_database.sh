@@ -15,13 +15,13 @@ mkdir -p TALON
 cd TALON
 
 time python /pub/dwyman/TALON/initialize_talon_database.py \
-    --f ../gencode.vM20.annotation.gtf \
-    --a gencode_vM20 \
+    --f ../gencode.vM21.annotation.gtf \
+    --a gencode_vM21 \
     --g mm10 \
     --l 300 \
-    --idprefix ENCODE-human \
+    --idprefix ENCODEM \
     --5p 500 \
     --3p 300 \
-    --o unmodified_full_gencode_vM20_${DATE}
+    --o unmodified_full_gencode_vM21_${DATE}
 
 source deactivate
