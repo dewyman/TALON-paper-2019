@@ -37,13 +37,13 @@ main <-function() {
         message("Removing antisense genes")
         color_vec <- c(color_vec[1], color_vec[3])
         abundance_table <- subset(abundance_table, 
-                                  antisense_gene != "antisense_gene")
+                                  gene_novelty != "Antisense")
     }
     if (opt$intergenic == F) {
         message("Removing intergenic genes")
         color_vec <- color_vec[-length(color_vec)]
         abundance_table <- subset(abundance_table, 
-                                  intergenic_gene != "intergenic_gene")
+                                  gene_novelty != "Intergenic")
     } 
 
     # Compute gene TPMs for each dataset
@@ -64,16 +64,12 @@ main <-function() {
     colnames(merged_abundances) <- c("gene_ID", "data1.TPM", "data2.TPM")
     merged_abundances[is.na(merged_abundances)] <- 0   
 
-    # Merge in gene novelty information
-    gene_novelty <- unique(abundance_table[, c("gene_ID", "gene_status", "antisense_gene", 
-                                        "intergenic_gene")])
+    # Merge in gene novelty information that was lost in aggregate
+    gene_novelty <- unique(abundance_table[, c("gene_ID", "gene_novelty")])
     merged_abundances <- merge(merged_abundances, gene_novelty, by = "gene_ID", 
                                all.x = T, all.y = F)
-    merged_abundances$novelty <- NA
-    merged_abundances[merged_abundances$gene_status == "KNOWN", "novelty"] <- "Known"
-    merged_abundances[merged_abundances$antisense_gene == "antisense_gene", "novelty"] <- "Antisense"
-    merged_abundances[merged_abundances$intergenic_gene == "intergenic_gene", "novelty"] <- "Intergenic"
-    merged_abundances$novelty <- factor(merged_abundances$novelty, levels = c("Known", "Antisense", "Intergenic"))
+    merged_abundances$novelty <- merged_abundances$gene_novelty
+    merged_abundances$gene_novelty <- NULL
 
     # Plot expression scatterplots
     expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr)
