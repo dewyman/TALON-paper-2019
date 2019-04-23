@@ -70,6 +70,7 @@ main <-function() {
                                all.x = T, all.y = F)
     merged_abundances$novelty <- merged_abundances$gene_novelty
     merged_abundances$gene_novelty <- NULL
+    merged_abundances$novelty <- factor(merged_abundances$novelty, levels = c("Known", "Antisense", "Intergenic"))
 
     # Plot expression scatterplots
     expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr)

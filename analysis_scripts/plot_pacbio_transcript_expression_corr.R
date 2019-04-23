@@ -36,25 +36,13 @@ main <-function() {
 
     # Merge in transcript novelty information
     transcript_novelty <- abundance_table[, c("transcript_ID", 
-                                              "transcript_status", 
-                                              "ISM_transcript",
-                                              "NIC_transcript",
-                                              "NNC_transcript",
-                                              "antisense_transcript", 
-                                              "intergenic_transcript",
-                                              "genomic_transcript")]
+                                              "transcript_novelty")] 
     merged_abundances <- merge(merged_abundances, transcript_novelty, by = "transcript_ID", 
                                all.x = T, all.y = F)
-    merged_abundances$novelty <- NA
+    merged_abundances$novelty <- merged_abundances$transcript_novelty
+    merged_abundances$transcript_novelty <- NULL
     #print(nrow(merged_abundances))
 
-    merged_abundances[merged_abundances$transcript_status == "KNOWN", "novelty"] <- "Known"
-    merged_abundances[merged_abundances$ISM_transcript == "ISM_transcript", "novelty"] <- "ISM"
-    merged_abundances[merged_abundances$NIC_transcript == "NIC_transcript", "novelty"] <- "NIC"
-    merged_abundances[merged_abundances$NNC_transcript == "NNC_transcript", "novelty"] <- "NNC"
-    merged_abundances[merged_abundances$antisense_transcript == "antisense_transcript", "novelty"] <- "Antisense"
-    merged_abundances[merged_abundances$intergenic_transcript == "intergenic_transcript", "novelty"] <- "Intergenic"
-    merged_abundances[merged_abundances$genomic_transcript == "genomic_transcript", "novelty"] <- "Genomic"
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = t_levels)
 
     # Plot expression scatterplots
