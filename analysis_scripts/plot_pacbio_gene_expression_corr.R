@@ -26,7 +26,7 @@ main <-function() {
     }
 
     # Remove genomic transcripts
-    abundance_table <- subset(abundance_table, genomic_transcript == "No")
+    abundance_table <- subset(abundance_table, transcript_novelty != "Genomic")
 
     # Restrict to genes that were observed in at least one of the datasets
     abundance_table <- abundance_table[abundance_table[,d1] +
