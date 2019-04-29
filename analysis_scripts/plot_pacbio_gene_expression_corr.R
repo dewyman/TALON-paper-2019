@@ -26,7 +26,7 @@ main <-function() {
     }
 
     # Remove genomic transcripts
-    abundance_table <- subset(abundance_table, genomic_transcript == "No")
+    abundance_table <- subset(abundance_table, transcript_novelty != "Genomic")
 
     # Restrict to genes that were observed in at least one of the datasets
     abundance_table <- abundance_table[abundance_table[,d1] +
@@ -131,7 +131,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                              legend.title = element_text(colour = 'black', size = 21),
                              legend.background = element_rect(fill="white", color = "black"),
                              legend.key = element_rect(fill="transparent"),
-                             legend.text = element_text(colour = 'black', size = 20))
+                             legend.text = element_text(colour = 'black', size = 20))+
+                         guides(colour = guide_legend(override.aes = list(alpha=1)))
 
      # Find max density y value across both datasets
      vars <- unique(merged_abundances$novelty)

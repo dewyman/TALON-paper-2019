@@ -76,7 +76,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     if (opt$ISM == F) {
         message("Removing ISM transcripts...")
         abundance_table <- subset(abundance_table,
-                                  ISM_transcript == "No")
+                                  transcript_novelty != "ISM")
     } else {
         color_vec <- c(color_vec, blue)
         t_levels <- c(t_levels, "ISM")
@@ -84,7 +84,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     if (opt$NIC == F) {
         message("Removing NIC transcripts...")
         abundance_table <- subset(abundance_table,
-                                  NIC_transcript == "No")
+                                  transcript_novelty != "NIC")
     } else {
         color_vec <- c(color_vec, orange)
         t_levels <- c(t_levels, "NIC")
@@ -92,7 +92,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     if (opt$NNC == F) {
         message("Removing NNC transcripts...")
         abundance_table <- subset(abundance_table,
-                                  NNC_transcript == "No")
+                                  transcript_novelty != "NNC")
     } else {
         color_vec <- c(color_vec, gold)
         t_levels <- c(t_levels, "NNC")
@@ -100,7 +100,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     if (opt$antisense == F) {
         message("Removing antisense transcripts...")
         abundance_table <- subset(abundance_table,
-                                  antisense_transcript == "No")
+                                  transcript_novelty != "Antisense")
     }
     else {
         color_vec <- c(color_vec, black)
@@ -109,7 +109,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     if (opt$intergenic == F) {
         message("Removing intergenic transcripts")
         abundance_table <- subset(abundance_table,
-                                  intergenic_transcript == "No")
+                                  transcript_novelty != "Intergenic")
     }
     else {
         color_vec <- c(color_vec, pink)
@@ -118,7 +118,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     if (opt$genomic == F) {
         message("Removing genomic transcripts")
         abundance_table <- subset(abundance_table,
-                                  genomic_transcript == "No")
+                                  transcript_novelty != "Genomic")
     }
     else {
         color_vec <- c(color_vec, yellow)
@@ -185,7 +185,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
               legend.title = element_text(colour = 'black', size = 21),
               legend.background = element_rect(fill="white", color = "black"),
               legend.key = element_rect(fill="transparent"),
-              legend.text = element_text(colour = 'black', size = 20))
+              legend.text = element_text(colour = 'black', size = 20))+
+        guides(colour = guide_legend(override.aes = list(alpha=1)))
 
 
      # Find max density y value across both datasets
