@@ -125,7 +125,7 @@ volcano_plot <- function(data, fillcolor, outdir) {
                      axis.text.y = element_text(color="black", size=20),
                      axis.title.x = element_text(color="black", size=16),
                      axis.title.y = element_text(color="black", size=16)) +
-               guides(colour = guide_legend(override.aes = list(size=2.5))) +
+               guides(colour = guide_legend(override.aes = list(alpha=1,size=2.5))) +
                theme(legend.position=c(0.75,0.9),
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
@@ -168,7 +168,7 @@ ma_plot <- function(data, fillcolor, outdir) {
                axis.text.y = element_text(color="black", size=22),
                axis.title.x = element_text(color="black", size=22),
                axis.title.y = element_text(color="black", size=22)) +
-         guides(colour = guide_legend(override.aes = list(size=2.5))) +
+         guides(colour = guide_legend(override.aes = list(alpha=1,size=2.5))) +
          theme(legend.position=c(0.25,0.1),
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
