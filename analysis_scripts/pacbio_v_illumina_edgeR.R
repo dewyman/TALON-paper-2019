@@ -158,7 +158,8 @@ ma_plot <- function(data, fillcolor, outdir) {
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
 
-    g <- ggplot(data, aes(x=logCPM, y=logFC, color = status, label = label)) +
+    #g <- ggplot(data, aes(x=logCPM, y=logFC, color = status, label = label)) +
+    g <- ggplot(data, aes(x=logCPM, y=logFC, color = status)) +
          geom_point(alpha = 0.4, size = 2) +
          xlab(xlabel) + ylab(ylabel) + theme_bw() +
          scale_color_manual(values = c("orange", fillcolor),
@@ -173,8 +174,8 @@ ma_plot <- function(data, fillcolor, outdir) {
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 18)) +
-               geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
+                     legend.text = element_text(colour = 'black', size = 18)) #+
+               #geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
 
     print(g)
     dev.off()
