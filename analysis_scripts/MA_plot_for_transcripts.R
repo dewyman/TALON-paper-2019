@@ -48,7 +48,7 @@ main <-function() {
     merged_illumina_pacbio[is.na(merged_illumina_pacbio)] <- 0
     print(nrow(merged_illumina_pacbio))
 
-    final_table <- merged_illumina_pacbio[, c("both_pacbio", "illumina_TPM")]
+    final_table <- merged_illumina_pacbio[, c("both_pacbio", "illumina_TPM")]z
 
     # Compute the p-values
     final_table$illumina_TPM <- round(final_table$illumina_TPM)
@@ -103,7 +103,7 @@ plot_MA_observed_expected <- function(data, fillcolor, outdir) {
                scale_color_manual(values = c("orange", fillcolor),
                                   labels = c("Significant", "Not significant")) +
                                   #labels = c("Bonf. p-value <= 0.01 \nor log2 fold change > 1", "Bonf. p-value > 0.01")) +
-               guides(colour = guide_legend(override.aes = list(size=2.5))) +
+               guides(colour = guide_legend(override.aes = list(alpha=1, size=2.5))) +
                theme(axis.text.x = element_text(color="black", size=20),
                      axis.text.y = element_text(color="black", size=20),
                      axis.title.x = element_text(color="black", size=16),
