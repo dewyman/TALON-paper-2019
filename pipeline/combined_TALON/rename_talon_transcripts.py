@@ -63,6 +63,7 @@ def update_gene_names(cursor, genes, prefix, n_places):
                              AND "attribute" = ? 
                              AND "source" = ? """
         cursor.execute(update_query, [gene_name, gene, "gene_name", "TALON"])
+        cursor.execute(update_query, [gene_name, gene, "gene_id", "TALON"])
 
     return
 
@@ -79,6 +80,7 @@ def update_transcript_names(cursor, transcripts, prefix, n_places):
                              AND "attribute" = ?
                              AND "source" = ? """
         cursor.execute(update_query, [transcript_name, transcript, "transcript_name", "TALON"])
+        cursor.execute(update_query, [transcript_name, transcript, "transcript_id", "TALON"])
 
     return
 
