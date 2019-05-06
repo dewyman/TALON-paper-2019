@@ -31,7 +31,7 @@ python /pub/dwyman/TALON/post-TALON_tools/create_GTF_from_database.py \
 ## Make a filtered abundance matrix  
 ```
 python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-           --db ../full_gencode_v29_2019-03-12.db \
+           --db full_gencode_v29_2019-03-12.db \
            -a gencode_v29 \
            --filter \
            -p pairings.csv \
@@ -162,4 +162,20 @@ python run_RNA-PET_analysis.py \
     --f ../pipeline/combined_TALON/HepG2/RNA-PET/HepG2_RNA-PET_results.csv \
     --novelty ../pipeline/combined_TALON/HepG2/RNA-PET/transcript_beds/HepG2_novelty.csv \
     -o ../pipeline/combined_TALON/HepG2/RNA-PET/HepG2
+```
+
+## Compare long read HepG2 splice jns to HepG2 short reads
+```
+module load dwyman/anaconda/3
+source activate runTC
+python /data/users/dwyman/TranscriptClean-1.0.7/accessory_scripts/get_SJs_from_gtf.py \
+    --f HepG2_filtered_talon.gtf \
+    --g ../../../refs/hg38/hg38.fa \
+    --o HepG2_filtered_talon_spliceJns.txt
+source deactivate
+
+python ../../../analysis_scripts/compare_sjs/compare_sjs.py \
+    --short ../../../Illumina/HepG2/STAR/SJ.out.tab \
+    --long HepG2_filtered_talon_spliceJns.txt \
+    --o HepG2_filtered_talon
 ```

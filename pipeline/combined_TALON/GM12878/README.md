@@ -153,27 +153,6 @@ Rscript ../../../analysis_scripts/plot_simplified_corr_fig1.R \
           -o GM12878_plots
 ```
 
-
-## MA plot for known genes
-```
-Rscript ../../../analysis_scripts/plot_TPM_chisquare_pvalues.R \
-    --f GM12878_talon_abundance.tsv \
-    --datasets D8,D9 \
-    --ik ../../../Illumina/GM12878/Kallisto/abundance.tsv \
-    --color blue \
-    -o GM12878_plots
-```
-
-## MA plot for known transcripts
-```
-Rscript ../../../analysis_scripts/MA_plot_for_transcripts.R \
-    --f GM12878_talon_abundance.tsv \
-    --datasets D8,D9 \
-    --ik ../../../Illumina/GM12878/Kallisto/abundance.tsv \
-    --color green \
-    -o GM12878_plots
-```
-
 ## edgeR on Illumina vs PacBio, two bioreps each
 ```
 Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
@@ -267,6 +246,22 @@ source activate mypython3.7.2
 python ../../../PAS-seq/run_GENCODE_PAS-seq_analysis.py \
         --gtf GM12878_filtered_talon.gtf \
         --pas ../../../PAS-seq/gencode.v29.metadata.PolyA_feature.bed \
-        --maxdist 50 \
+        --maxdist 35 \
         --o PAS-annot/GM12878
+```
+
+## Compare long read GM12878 splice jns to GM12878 short reads
+```
+module load dwyman/anaconda/3
+source activate runTC
+python /data/users/dwyman/TranscriptClean-1.0.7/accessory_scripts/get_SJs_from_gtf.py \
+    --f GM12878_filtered_talon.gtf \
+    --g ../../../refs/hg38/hg38.fa \
+    --o GM12878_filtered_talon_spliceJns.txt
+source deactivate
+
+python ../../../analysis_scripts/compare_sjs/compare_sjs.py \
+    --short ../../../Illumina/GM12878/STAR/SJ.out.tab \
+    --long GM12878_filtered_talon_spliceJns.txt \
+    --o GM12878_filtered_talon
 ```

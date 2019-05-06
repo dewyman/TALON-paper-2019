@@ -173,3 +173,19 @@ Rscript plot_RNA-PET_support.R \
     --novelty ../pipeline/combined_TALON/K562/RNA-PET/transcript_beds/K562_novelty.csv \
     -o ../pipeline/combined_TALON/K562/RNA-PET/K562
 ```
+
+## Compare long read K562 splice jns to K562 short reads
+```
+module load dwyman/anaconda/3
+source activate runTC
+python /data/users/dwyman/TranscriptClean-1.0.7/accessory_scripts/get_SJs_from_gtf.py \
+    --f K562_filtered_talon.gtf \
+    --g ../../../refs/hg38/hg38.fa \
+    --o K562_filtered_talon_spliceJns.txt
+source deactivate
+
+python ../../../analysis_scripts/compare_sjs/compare_sjs.py \
+    --short ../../../Illumina/K562/STAR/SJ.out.tab \
+    --long K562_filtered_talon_spliceJns.txt \
+    --o K562_filtered_talon
+```
