@@ -20,5 +20,5 @@ STAR --runThreadN 16 --genomeDir /pub/dwyman/TALON-paper-2019/refs/hg38/STAR_hg3
      --outFilterType BySJout --outFilterMultimapNmax 20 --alignSJoverhangMin 8 \
      --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 --outFilterMismatchNoverLmax 0.04 \
      --alignIntronMin 20 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \
-     --outFileNamePrefix /pub/dwyman/TALON-paper-2019/Illumina/HepG2/STAR \
+     --outFileNamePrefix /pub/dwyman/TALON-paper-2019/Illumina/HepG2/STAR/ \
      --outSAMattributes NH HI NM MD jM jI --outSAMtype SAM --readFilesCommand zcat
