@@ -7,11 +7,11 @@ main <-function() {
 
     # Get colors
     if (opt$color_scheme == "red") {
-        color_vec <- c("white", "orange", "red2")
+        color_vec <- rev(c("white", "orange", "red2"))
     } else if (opt$color_scheme == "blue") {
-        color_vec <- c("white", "skyblue", "navy")
+        color_vec <- rev(c("white", "skyblue", "navy"))
     } else if (opt$color_scheme == "green") {
-        color_vec <- c("white", "olivedrab3", "springgreen4")
+        color_vec <- rev(c("white", "olivedrab3", "springgreen4"))
     }
 
     # Now, compute mean, median, and max transcript lengths for each gene
@@ -69,27 +69,34 @@ main <-function() {
                                     all.y = F)
     plot_length_by_detection(detection_with_lengths, 
                              illumina_gene_detection_buckets$interval_labels, 
-                             "Median", color_vec, options$outdir)
+                             "Median", color_vec, opt$outdir)
 }
 
 plot_length_by_detection  <- function(data, cIntervals, len_type, colors, outdir) {
-    data <- data[data$length_type == "Median",]
-    #fname <- paste(outdir, "/length_by_detection_and_TPM_", len_type, ".png", sep="")
-    #xlabel <- "Gene expression level in Illumina data (TPM)"
-    #ylabel <- paste("Gene length (", len_type, " length of known transcripts)", sep="") 
+    data <- data[data$length_type == len_type,]
 
-    #png(filename = fname,
-    #    width = 3500, height = 2500, units = "px",
-    #    bg = "white",  res = 300)
+    # Compute number of genes per bucket
+    #genes_per_bucket <- data %>% group
 
-    quit()
-    g = ggplot(data, aes(x = group, y = tpm, fill = detection)) +
+    fname <- paste(outdir, "/length_by_detection_and_TPM_", len_type, ".png", sep="")
+    xlabel <- "Gene expression level in Illumina data (TPM)"
+    ylabel <- paste("log2 gene length in kb (", len_type, " of transcripts)", sep="") 
+
+    png(filename = fname,
+        width = 5500, height = 2500, units = "px",
+        bg = "white",  res = 300)
+
+    g = ggplot(data, 
+               aes(x = group, y = log2(length/1000), 
+                   position=position_dodge(.9), fill = detection)) +
             geom_violin(alpha = 0.8) +
-            geom_boxplot(width=0.1, fill="white", outlier.size=-1) +
-            genom_point(size = 0.5) +
+            geom_boxplot(width=0.05, fill="white", outlier.size=-1) +
+            #geom_point(alpha = 0.8, size = rel(0.7), position=position_dodge(1)) +
+            #geom_dotplot(binaxis='y', stackdir='center',
+            #     position=position_dodge(1), color = "black") +
             xlab(xlabel) + ylab(ylabel) +
             theme_bw(base_family = "Helvetica", base_size = 18) +
-            scale_fill_manual("", values = color_vec) +
+            scale_fill_manual("", values = colors) +
             theme_bw(base_family = "Helvetica", base_size = 18) +
             theme(axis.line.x = element_line(color="black", size = 0.5),
                   axis.line.y = element_line(color="black", size = 0.5),
@@ -97,7 +104,12 @@ plot_length_by_detection  <- function(data, cIntervals, len_type, colors, outdir
                   axis.text.y = element_text(color="black", size = rel(1.5)),
                   axis.title.x = element_text(color="black", size=rel(1.25)),
                   axis.title.y = element_text(color="black", size=rel(1.25))) +
-            scale_x_discrete(labels=cIntervals)  
+            scale_x_discrete(labels=cIntervals) +
+            theme(legend.position=c(0.8,0.9),
+              legend.title = element_blank(),
+              legend.background = element_rect(fill="white", color = "black"),
+              legend.key = element_rect(fill="transparent"),
+              legend.text = element_text(colour = 'black', size = 22)) 
     print(g)
     dev.off()
 }
@@ -111,9 +123,7 @@ compute_lengths <- function(ik1, ik2) {
     all_ik$length <- (all_ik$length.x + all_ik$length.y)/2
         
     # Aggregate by gene: mean length
-    print(head(all_ik))
     mean_gene_lens <- aggregate(all_ik$length, by=list(all_ik$gene.x), FUN=mean)
-    print(head(mean_gene_lens))
     colnames(mean_gene_lens) <- c("gene", "length")
     mean_gene_lens$length_type <- "Mean"
 
@@ -203,25 +213,6 @@ get_detected_genes_for_dataset <- function(dataset, whitelisted_genes, database)
     }
 }
 
-get_detected_transcripts_for_dataset <- function(dataset, whitelisted_transcripts, database) {
-    # Connect to the database
-    con <- dbConnect(SQLite(), dbname=database)
-
-    # Fetch observed transcript IDs
-    query <- dbSendQuery(con, paste("SELECT transcript_ID FROM abundance WHERE dataset = '", dataset, "'", sep=""))
-    transcriptIDs <- as.data.frame(dbFetch(query, n = -1))[,1]
-
-    dbClearResult(query)
-    dbDisconnect(con)
-
-    # Filter transcripts if a whetelist was provided
-    if (!(is.null(whitelisted_transcripts))) {
-        filtered_transcriptIDs <- transcriptIDs[transcriptIDs %in% whitelisted_transcripts]
-        return(filtered_transcriptIDs)
-    } else {
-        return(transcriptIDs)
-    }
-}
 
 load_packages <- function() {
     suppressPackageStartupMessages(library("DBI"))
@@ -236,8 +227,8 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("data.table"))
 
     # Load my custom functions
-    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
-    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
+    source("/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
+    source("/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
     source("/pub/dwyman/TALON-paper-2019/analysis_scripts/get_database_transcript_table.R")
     
     return
