@@ -70,6 +70,12 @@ main <-function() {
     plot_length_by_detection(detection_with_lengths, 
                              illumina_gene_detection_buckets$interval_labels, 
                              "Median", color_vec, opt$outdir)
+    plot_length_by_detection(detection_with_lengths,
+                             illumina_gene_detection_buckets$interval_labels,
+                             "Mean", color_vec, opt$outdir)
+    plot_length_by_detection(detection_with_lengths,
+                             illumina_gene_detection_buckets$interval_labels,
+                             "Max", color_vec, opt$outdir)
 }
 
 plot_length_by_detection  <- function(data, cIntervals, len_type, colors, outdir) {
@@ -86,14 +92,11 @@ plot_length_by_detection  <- function(data, cIntervals, len_type, colors, outdir
         width = 5500, height = 2500, units = "px",
         bg = "white",  res = 300)
 
+    dodge = position_dodge(width = .9)
     g = ggplot(data, 
                aes(x = group, y = log2(length/1000), 
-                   position=position_dodge(.9), fill = detection)) +
-            geom_violin(alpha = 0.8) +
-            geom_boxplot(width=0.05, fill="white", outlier.size=-1) +
-            #geom_point(alpha = 0.8, size = rel(0.7), position=position_dodge(1)) +
-            #geom_dotplot(binaxis='y', stackdir='center',
-            #     position=position_dodge(1), color = "black") +
+                   fill = detection)) +
+            geom_violin(alpha = 0.8, position=dodge) +
             xlab(xlabel) + ylab(ylabel) +
             theme_bw(base_family = "Helvetica", base_size = 18) +
             scale_fill_manual("", values = colors) +
@@ -109,7 +112,7 @@ plot_length_by_detection  <- function(data, cIntervals, len_type, colors, outdir
               legend.title = element_blank(),
               legend.background = element_rect(fill="white", color = "black"),
               legend.key = element_rect(fill="transparent"),
-              legend.text = element_text(colour = 'black', size = 22)) 
+              legend.text = element_text(colour = 'black', size = 24)) 
     print(g)
     dev.off()
 }
