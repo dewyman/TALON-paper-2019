@@ -9,7 +9,7 @@ main <-function() {
     } else if (opt$color_scheme == "blue") {
         color_vec <- c("navy", "black", "orange")
     } else if (opt$color_scheme == "green") {
-        color_vec <- c("springgreen4", "black", "orange")
+        color_vec <- c("yellowgreen", "black", "orange")
     }
 
     # Read abundance table
@@ -132,7 +132,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                              legend.background = element_rect(fill="white", color = "black"),
                              legend.key = element_rect(fill="transparent"),
                              legend.text = element_text(colour = 'black', size = 20))+
-                         guides(colour = guide_legend(override.aes = list(alpha=1)))
+                         guides(colour = guide_legend(override.aes = list(alpha=1, size=3)))
 
      # Find max density y value across both datasets
      vars <- unique(merged_abundances$novelty)
