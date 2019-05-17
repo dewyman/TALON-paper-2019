@@ -147,7 +147,7 @@ plot_expression_levels_by_support <- function(data, outprefix) {
 compute_gene_TPMs <- function(abundance_table, d1, d2) {
 
     # Remove genomic transcripts
-    abundance_table <- subset(abundance_table, genomic_transcript == "No")
+    abundance_table <- subset(abundance_table, transcript_novelty == "Genomic")
 
     # Restrict to genes that were observed in at least one of the datasets
     abundance_table <- abundance_table[abundance_table[,d1] +
