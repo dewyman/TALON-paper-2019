@@ -46,14 +46,30 @@ main <-function() {
     # Reformat the novelty information
     rna_pet <- rna_pet %>% mutate(novelty = "")
     rna_pet[rna_pet$known == 1, "novelty"] <- "Known"
-    rna_pet[rna_pet$ISM == 1, "novelty"] <- "ISM"
+    if (opt$splitISM == F) {
+        rna_pet[rna_pet$ISM == 1, "novelty"] <- "ISM"
+    } else {
+        rna_pet[rna_pet$ISM == 1, "novelty"] <- "other ISM"
+        rna_pet[rna_pet$prefix_ISM == 1, "novelty"] <- "prefix ISM"
+        rna_pet[rna_pet$suffix_ISM == 1, "novelty"] <- "suffix ISM"
+        rna_pet[rna_pet$prefix_ISM == 1 & rna_pet$suffix_ISM == 1, "novelty"] <- "other ISM"
+    }
     rna_pet[rna_pet$NIC == 1, "novelty"] <- "NIC"
     rna_pet[rna_pet$NNC == 1, "novelty"] <- "NNC"
     rna_pet[rna_pet$antisense == 1, "novelty"] <- "Antisense"
     rna_pet[rna_pet$intergenic == 1, "novelty"] <- "Intergenic"
-    rna_pet$novelty <- factor(rna_pet$novelty, 
-                              levels = rev(c("Known", "ISM", "NIC", "NNC", 
-                                         "Antisense", "Intergenic")))
+
+    if (opt$splitISM == F) {
+        rna_pet$novelty <- factor(rna_pet$novelty, 
+                                  levels = rev(c("Known", "ISM", "NIC", "NNC", 
+                                                 "Antisense", "Intergenic")))
+    } else {
+        rna_pet$novelty <- factor(rna_pet$novelty,
+                                  levels = rev(c("Known", "prefix ISM", "suffix ISM", 
+                                                 "other ISM", "NIC", "NNC",
+                                                 "Antisense", "Intergenic")))
+    }
+
 
     # Compute gene TPMs
     abundances <- compute_gene_TPMs(abundance_table, d1, d2)
@@ -84,7 +100,7 @@ main <-function() {
 
 
     # Plot gene expression level by support
-    plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
+    #plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
 }
 
 plot_expression_levels_by_support <- function(data, outprefix) {
@@ -196,14 +212,15 @@ plot_support <- function(data, color, min_TPM, outprefix) {
              group_by(novelty) %>%
              mutate(freq = n / sum(n), total = sum(n)) #%>% filter(support == "yes")
     freqs$novelty <- factor(freqs$novelty,
-                           levels = rev(c("Known", "ISM", "NIC", "NNC",
-                                         "Antisense", "Intergenic")))
+                            levels = levels(data$novelty))
+
     freqs$percent <- round(freqs$freq*100)
     freqs[freqs$support == "no", "percent"] <- NA
     freqs$tcolor_grp <- as.factor(ifelse(freqs$percent > 20, "white", "black"))
 
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
-                "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7")
+                "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7",
+                "prefix ISM" = "#56B4E9", "suffix ISM" = "#698bac", "other ISM" = "#003366")
     fname <- paste(outprefix, "_RNA-PET_support_minTPM-", min_TPM, ".png", sep="")
     xlabel <- "Transcript category"
     ylabel <- "Number of transcript models"
@@ -268,6 +285,8 @@ parse_options <- function() {
                     default = NULL, help = "Second dataset name to use in comparison"),
         make_option("--as", action = "store", dest = "antisense",
                     default = NULL, help = "File mapping antisense TALON IDs to the sense TALON gene IDs"),
+        make_option(c("--splitISM"), action="store_true", dest="splitISM",
+              help="Set this option to plot prefix and suffix ISMs separately", default = F),
         make_option(c("-o","--outdir"), action = "store", dest = "outprefix",
                     default = NULL, help = "Output prefix")
         )
