@@ -10,7 +10,7 @@ main <-function() {
     } else if (opt$color_scheme == "blue") {
         fill_color <- "navy"
     } else if (opt$color_scheme == "green") {
-        fill_color <- "springgreen4"
+        fill_color <- "yellowgreen"
     }
 
     # Get the names of the first and second dataset that we will be working with
@@ -35,10 +35,10 @@ main <-function() {
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
     # Remove genomic transcripts
-    pb_abundance <- subset(pb_abundance, genomic_transcript == "No")
+    pb_abundance <- subset(pb_abundance, transcript_status == "Genomic")
 
     # Keep known genes only
-    pb_abundance <- subset(pb_abundance, gene_status == "KNOWN")
+    pb_abundance <- subset(pb_abundance, gene_novelty == "Known")
 
     # Cut out unnecessary cols
     pb_abundance <- pb_abundance[, c("annot_gene_name", dataset1, dataset2)]

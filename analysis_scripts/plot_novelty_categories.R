@@ -121,9 +121,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
 
     observed_transcripts <- merge(observed_transcripts, freqs_by_dataset, 
                                   by = c("dataset","novelty"), all.x = T, all.y = F)
-   
-    print(head(observed_transcripts)) 
-    
+       
     # Plotting
     fname <- paste(outdir, "/reads_by_isoform_category.png", sep="")
     xlabel <- "Dataset"
@@ -152,7 +150,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                      axis.title.y = element_text(color="black", size=rel(1.5))) +
                theme(legend.text = element_text(color="black", size = rel(1)),
                      legend.title = element_text(color="black", size=rel(1.25)),
-                     legend.position=c(0.8,0.8),
+                     legend.position=c(0.92,0.85),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent")) +
                 yscale("log2", .format = TRUE) +

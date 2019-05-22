@@ -41,7 +41,7 @@ main <-function() {
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
     # Keep known transcripts only
-    pb_transcript_abundance <- subset(abundance, transcript_status == "KNOWN")
+    pb_transcript_abundance <- subset(abundance, transcript_novelty == "Known")
 
     # Cut out unnecessary cols
     pb_transcript_abundance <- pb_transcript_abundance[, c("annot_transcript_id", dataset1, dataset2)]

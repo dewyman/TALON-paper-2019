@@ -77,8 +77,6 @@ main <-function() {
     # Plot all transcripts
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 0, opt$outprefix)
 
-    #print(rna_pet[rna_pet$gene_TPM_max > 30000,])
-
     # Make the same support plot, but apply a TPM cutoff
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 50, opt$outprefix)
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 100, opt$outprefix)
@@ -244,24 +242,6 @@ plot_support <- function(data, color, min_TPM, outprefix) {
                 theme(panel.grid.major = element_blank(),
                       panel.grid.minor = element_blank())
 
-    #g = ggplot(freqs, aes(x = novelty, y = percent, fill = novelty)) + 
-    #           geom_bar(stat="identity") +
-    #           xlab(xlabel) + ylab(ylabel) +
-    #           theme(legend.text = element_text(color="black", size = rel(1)), 
-    #                 legend.title = element_text(color="black", size=rel(1))) +
-    #           theme_bw(base_family = "Helvetica", base_size = 18) +
-    #           scale_fill_manual("Isoform Type", values = colors) +
-    #           theme_bw(base_family = "Helvetica", base_size = 18) +
-    #           theme(axis.line.x = element_line(color="black", size = 0.5),
-    #                 axis.line.y = element_line(color="black", size = 0.5),
-    #                 axis.text.x = element_text(color="black", size = rel(1.5)),
-    #                 axis.text.y = element_text(color="black", size = rel(1.5)),
-    #                 axis.title.x = element_text(color="black", size=rel(1.25)),
-    #                 axis.title.y = element_text(color="black", size=rel(1.25))) +
-    #            coord_flip(ylim = c(0, 100)) + guides(fill=FALSE) +
-    #            geom_text(aes(y = percent - 12, label = paste0(percent, '%')), 
-    #              position = position_dodge(0.9),
-    #              color = "white", size = 10)
     print(g)
     dev.off()
 } 
