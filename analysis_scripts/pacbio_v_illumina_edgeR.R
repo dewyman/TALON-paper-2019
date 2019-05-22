@@ -38,7 +38,7 @@ main <-function() {
     pb_abundance <- subset(pb_abundance, transcript_status == "Genomic")
 
     # Keep known genes only
-    pb_abundance <- subset(pb_abundance, gene_status == "KNOWN")
+    pb_abundance <- subset(pb_abundance, gene_novelty == "Known")
 
     # Cut out unnecessary cols
     pb_abundance <- pb_abundance[, c("annot_gene_name", dataset1, dataset2)]
