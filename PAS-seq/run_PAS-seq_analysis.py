@@ -75,7 +75,7 @@ def main():
         transcript_ends = outdir + "/transcript_beds/" + name + \
                             "_transcript_ends.bed"
         out = outdir + "/intersection_files/transcript_ends_PAS.tsv"
-        os.system("bedtools coverage -a %s -b %s -s > %s" %
+        os.system("bedtools coverage -a %s -b %s -S > %s" %
                   (transcript_ends, pas_file, out))
     except Exception as e:
         print(e)
