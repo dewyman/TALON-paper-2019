@@ -6,11 +6,11 @@ main <-function() {
     opt <- parse_options()
 
     # Read RNA-PET summary file
-    rna_pet <- as.data.frame(read_delim(opt$infile, delim = ",",
+    support_data <- as.data.frame(read_delim(opt$infile, delim = ",",
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
     # Rename column for plotting convernience
-    colnames(rna_pet)[2] <- "support"
+    colnames(support_data)[2] <- "support"
     
 
     # Read in novelty metadata file
@@ -41,30 +41,30 @@ main <-function() {
     abundance_table[!is.na(abundance_table$sense_talon_ID), "gene_ID"] <- abundance_table[!is.na(abundance_table$sense_talon_ID), "sense_talon_ID"]
 
     # Merge RNA-PET support with the novelty labels
-    rna_pet <- merge(rna_pet, novelty, by = "transcript_ID", all.x = T, all.y = F)
+    support_data <- merge(support_data, novelty, by = "transcript_ID", all.x = T, all.y = F)
 
     # Reformat the novelty information
-    rna_pet <- rna_pet %>% mutate(novelty = "")
-    rna_pet[rna_pet$known == 1, "novelty"] <- "Known"
+    support_data <- support_data %>% mutate(novelty = "")
+    support_data[support_data$known == 1, "novelty"] <- "Known"
     if (opt$splitISM == F) {
-        rna_pet[rna_pet$ISM == 1, "novelty"] <- "ISM"
+        support_data[support_data$ISM == 1, "novelty"] <- "ISM"
     } else {
-        rna_pet[rna_pet$ISM == 1, "novelty"] <- "other ISM"
-        rna_pet[rna_pet$prefix_ISM == 1, "novelty"] <- "prefix ISM"
-        rna_pet[rna_pet$suffix_ISM == 1, "novelty"] <- "suffix ISM"
-        rna_pet[rna_pet$prefix_ISM == 1 & rna_pet$suffix_ISM == 1, "novelty"] <- "other ISM"
+        support_data[support_data$ISM == 1, "novelty"] <- "other ISM"
+        support_data[support_data$prefix_ISM == 1, "novelty"] <- "prefix ISM"
+        support_data[support_data$suffix_ISM == 1, "novelty"] <- "suffix ISM"
+        support_data[support_data$prefix_ISM == 1 & support_data$suffix_ISM == 1, "novelty"] <- "other ISM"
     }
-    rna_pet[rna_pet$NIC == 1, "novelty"] <- "NIC"
-    rna_pet[rna_pet$NNC == 1, "novelty"] <- "NNC"
-    rna_pet[rna_pet$antisense == 1, "novelty"] <- "Antisense"
-    rna_pet[rna_pet$intergenic == 1, "novelty"] <- "Intergenic"
+    support_data[support_data$NIC == 1, "novelty"] <- "NIC"
+    support_data[support_data$NNC == 1, "novelty"] <- "NNC"
+    support_data[support_data$antisense == 1, "novelty"] <- "Antisense"
+    support_data[support_data$intergenic == 1, "novelty"] <- "Intergenic"
 
     if (opt$splitISM == F) {
-        rna_pet$novelty <- factor(rna_pet$novelty, 
+        support_data$novelty <- factor(support_data$novelty, 
                                   levels = rev(c("Known", "ISM", "NIC", "NNC", 
                                                  "Antisense", "Intergenic")))
     } else {
-        rna_pet$novelty <- factor(rna_pet$novelty,
+        support_data$novelty <- factor(support_data$novelty,
                                   levels = rev(c("Known", "prefix ISM", "suffix ISM", 
                                                  "other ISM", "NIC", "NNC",
                                                  "Antisense", "Intergenic")))
@@ -74,38 +74,43 @@ main <-function() {
     abundances <- compute_gene_TPMs(abundance_table, d1, d2)
 
     # Now merge in the TPMs
-    rna_pet <- merge(rna_pet, abundances, by = "transcript_ID", all.x = T, all.y = F)
-    rna_pet$gene_TPM_max <- pmax(rna_pet$gene_TPM.1, rna_pet$gene_TPM.2)
+    support_data <- merge(support_data, abundances, by = "transcript_ID", all.x = T, all.y = F)
+    support_data$gene_TPM_max <- pmax(support_data$gene_TPM.1, support_data$gene_TPM.2)
 
     # Compute median TPM of gene by novelty category
-    median_TPM_by_novelty <- aggregate(rna_pet$gene_TPM_max, 
-                                     by=list(rna_pet$novelty), FUN=median)
+    median_TPM_by_novelty <- aggregate(support_data$gene_TPM_max, 
+                                     by=list(support_data$novelty), FUN=median)
     colnames(median_TPM_by_novelty)[2] <- "Median_gene_TPM"
 
     # Compute mean TPM of gene by novelty category
-    mean_TPM_by_novelty <- aggregate(rna_pet$gene_TPM_max,
-                                     by=list(rna_pet$novelty), FUN=mean)
+    mean_TPM_by_novelty <- aggregate(support_data$gene_TPM_max,
+                                     by=list(support_data$novelty), FUN=mean)
     colnames(mean_TPM_by_novelty)[2] <- "Mean_gene_TPM"
 
     # Plot all transcripts
-    plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 0, opt$outprefix)
+    plot_support(support_data[,c("support", "novelty", "gene_TPM_max")], opt$data_type, 
+                 color_vec, 0, opt$outprefix)
 
     # Make the same support plot, but apply a TPM cutoff
-    plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 50, opt$outprefix)
-    plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 100, opt$outprefix)
-    plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 500, opt$outprefix) 
+    plot_support(support_data[,c("support", "novelty", "gene_TPM_max")], opt$data_type, 
+                 color_vec, 50, opt$outprefix)
+    plot_support(support_data[,c("support", "novelty", "gene_TPM_max")], opt$data_type,
+                 color_vec, 100, opt$outprefix)
+    plot_support(support_data[,c("support", "novelty", "gene_TPM_max")], opt$data_type,
+                 color_vec, 500, opt$outprefix) 
 
 
     # Plot gene expression level by support
-    plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
+    plot_expression_levels_by_support(support_data[,c("support", "novelty", "gene_TPM_max")], 
+                                      opt$data_type, opt$outprefix)
 }
 
-plot_expression_levels_by_support <- function(data, outprefix) {
+plot_expression_levels_by_support <- function(data, data_type, outprefix) {
     # Create a violin plot showing the gene expression level of transcripts
     # with and without support
 
-    fname <- paste(outprefix, "_RNA-PET_support_by_gene_expression_level.png", sep="")
-    xlabel <- "RNA-PET support for transcript"
+    fname <- paste(outprefix, "_", data_type, "_support_by_gene_expression_level.png", sep="")
+    xlabel <- paste(data_type, " support for transcript", sep="")
     ylabel <- "Log2 gene expression level"
 
     color_vec <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00",
@@ -189,7 +194,7 @@ compute_gene_TPMs <- function(abundance_table, d1, d2) {
     return(transcripts_with_gene_TPMs)
 }
 
-plot_support <- function(data, color, min_TPM, outprefix) {
+plot_support <- function(data, data_type, color, min_TPM, outprefix) {
 
     # Filter data
     data <- subset(data, gene_TPM_max >= min_TPM)
@@ -212,7 +217,7 @@ plot_support <- function(data, color, min_TPM, outprefix) {
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
                 "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7",
                 "prefix ISM" = "#56B4E9", "suffix ISM" = "#698bac", "other ISM" = "#003366")
-    fname <- paste(outprefix, "_RNA-PET_support_minTPM-", min_TPM, ".png", sep="")
+    fname <- paste(outprefix, "_", data_type, "_support_minTPM-", min_TPM, ".png", sep="")
     xlabel <- "Transcript category"
     ylabel <- "Number of transcript models"
 
@@ -266,6 +271,8 @@ parse_options <- function() {
     option_list <- list(
         make_option(c("--f"), action = "store", dest = "infile",
                     default = NULL, help = "RNA-PET support summary file"),
+        make_option(c("--t"), action = "store", dest = "data_type",
+                    default = NULL, help = "Supporting data type (will be uesd to label plots)"),
         make_option(c("--novelty"), action = "store", dest = "novelty",
                     default = NULL, help = "File mapping transcript IDs to novelty types"),
         make_option(c("--abundance"), action = "store", dest = "abundance",

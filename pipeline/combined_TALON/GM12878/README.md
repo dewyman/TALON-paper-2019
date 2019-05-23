@@ -12,7 +12,7 @@ python /pub/dwyman/TALON/post-TALON_tools/filter_talon_transcripts.py \
 ## Make a GTF file using the GM12878 whitelist
 ```
 python /pub/dwyman/TALON/post-TALON_tools/create_GTF_from_database.py \
-          --db full_gencode_v29_2019-03-12.db \
+          --db ../full_gencode_v29_2019-03-12.db \
           -a gencode_v29 \
           -b hg38 \
           --whitelist GM12878_whitelist.csv \
@@ -23,8 +23,9 @@ python /pub/dwyman/TALON/post-TALON_tools/create_GTF_from_database.py \
 ## Make a filtered abundance matrix
 ```
 python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-           --db full_gencode_v29_2019-03-12.db \
+           --db ../full_gencode_v29_2019-03-12.db \
            -a gencode_v29 \
+           --build hg38 \
            --filter \
            -p pairings.csv \
            --o GM12878
@@ -33,8 +34,9 @@ python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py
 ## Make an abundance matrix without filtering
 ```
 python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-           --db full_gencode_v29_2019-03-12.db \
+           --db ../full_gencode_v29_2019-03-12.db \
            -a gencode_v29 \
+           --build hg38 \
            --o GM12878
 ```
 
@@ -42,7 +44,17 @@ python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py
 ```
 module load R/3.5.1
 Rscript ../../../analysis_scripts/plot_detection_by_TPM_for_datasets.R \
-           --db full_gencode_v29_2019-03-12.db \
+           --db ../full_gencode_v29_2019-03-12.db \
+           --datasets D8,D9 \
+           --ik1 ../../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
+           --ik2 ../../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
+           --color blue \
+           -o GM12878_plots
+```
+## Gene length by detection
+```
+Rscript ../../../analysis_scripts/plot_gene_length_by_detection_for_datasets.R \
+           --db ../full_gencode_v29_2019-03-12.db \
            --datasets D8,D9 \
            --ik1 ../../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
            --ik2 ../../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
@@ -199,12 +211,15 @@ python run_RNA-PET_analysis.py \
     --rnapet data/GM12878_hg38.bed \
     --maxdist 100 \
     --o ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878
-Rscript ../../../RNA-PET/plot_RNA-PET_support.R  \
+cd ../pipeline/combined_TALON/GM12878
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R  \
      --f RNA-PET/GM12878_RNA-PET_results.csv   \
+     --t RNA-PET \
      --novelty RNA-PET/transcript_beds/GM12878_novelty.csv \
      --abundance GM12878_talon_abundance.tsv \
      --d1 D8 --d2 D9 \
      --as GM12878_antisense_mapping.csv \
+     --splitISM \
      -o RNA-PET/GM12878
 ```
 
@@ -217,11 +232,13 @@ python ../../../CAGE/run_CAGE_analysis.py \
         --maxdist 100 \
         --o CAGE/ENCODE/GM12878
 
-Rscript ../../../CAGE/plot_CAGE_support.R \
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R  \
     --f CAGE/ENCODE/GM12878_CAGE_results.csv \
+    --t CAGE \
     --novelty CAGE/ENCODE/transcript_beds/GM12878_novelty.csv \
     --abundance GM12878_talon_abundance.tsv \
     --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    --splitISM \
     -o CAGE/ENCODE/GM12878
 ```
 ## CAGE analysis, FANTOM
@@ -233,11 +250,13 @@ python ../../../CAGE/run_CAGE_analysis.py \
         --maxdist 100 \
         --o CAGE/FANTOM5/GM12878
 
-Rscript ../../../CAGE/plot_CAGE_support.R \
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
     --f CAGE/FANTOM5/GM12878_CAGE_results.csv \
+    --t CAGE \
     --novelty CAGE/FANTOM5/transcript_beds/GM12878_novelty.csv \
     --abundance GM12878_talon_abundance.tsv \
     --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    --splitISM \
     -o CAGE/FANTOM5/GM12878
 ```
 ## PAS analysis, GENCODE manual PolyA annotation
@@ -246,8 +265,17 @@ source activate mypython3.7.2
 python ../../../PAS-seq/run_GENCODE_PAS-seq_analysis.py \
         --gtf GM12878_filtered_talon.gtf \
         --pas ../../../PAS-seq/gencode.v29.metadata.PolyA_feature.bed \
-        --maxdist 35 \
+        --maxdist 50 \
         --o PAS-annot/GM12878
+
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
+    --f PAS-annot/GM12878_PAS_results.csv \
+    --t PAS-annot \
+    --novelty PAS-annot/transcript_beds/GM12878_novelty.csv \
+    --abundance GM12878_talon_abundance.tsv \
+    --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    --splitISM \
+    -o PAS-annot/GM12878
 ```
 
 ## Compare long read GM12878 splice jns to GM12878 short reads
