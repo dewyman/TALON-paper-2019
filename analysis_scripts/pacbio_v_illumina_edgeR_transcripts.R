@@ -197,8 +197,7 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("edgeR"))
 
     # Load my custom functions
-    # source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
-    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
+    source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
 
     return
 }
