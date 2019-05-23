@@ -38,7 +38,6 @@ def main():
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
     print(script_dir)
-    exit()
 
     # Step 0: set up directory structure
     try:

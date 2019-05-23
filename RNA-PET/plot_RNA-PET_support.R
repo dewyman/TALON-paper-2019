@@ -46,14 +46,30 @@ main <-function() {
     # Reformat the novelty information
     rna_pet <- rna_pet %>% mutate(novelty = "")
     rna_pet[rna_pet$known == 1, "novelty"] <- "Known"
-    rna_pet[rna_pet$ISM == 1, "novelty"] <- "ISM"
+    if (opt$splitISM == F) {
+        rna_pet[rna_pet$ISM == 1, "novelty"] <- "ISM"
+    } else {
+        rna_pet[rna_pet$ISM == 1, "novelty"] <- "other ISM"
+        rna_pet[rna_pet$prefix_ISM == 1, "novelty"] <- "prefix ISM"
+        rna_pet[rna_pet$suffix_ISM == 1, "novelty"] <- "suffix ISM"
+        rna_pet[rna_pet$prefix_ISM == 1 & rna_pet$suffix_ISM == 1, "novelty"] <- "other ISM"
+    }
     rna_pet[rna_pet$NIC == 1, "novelty"] <- "NIC"
     rna_pet[rna_pet$NNC == 1, "novelty"] <- "NNC"
     rna_pet[rna_pet$antisense == 1, "novelty"] <- "Antisense"
     rna_pet[rna_pet$intergenic == 1, "novelty"] <- "Intergenic"
-    rna_pet$novelty <- factor(rna_pet$novelty, 
-                              levels = rev(c("Known", "ISM", "NIC", "NNC", 
-                                         "Antisense", "Intergenic")))
+
+    if (opt$splitISM == F) {
+        rna_pet$novelty <- factor(rna_pet$novelty, 
+                                  levels = rev(c("Known", "ISM", "NIC", "NNC", 
+                                                 "Antisense", "Intergenic")))
+    } else {
+        rna_pet$novelty <- factor(rna_pet$novelty,
+                                  levels = rev(c("Known", "prefix ISM", "suffix ISM", 
+                                                 "other ISM", "NIC", "NNC",
+                                                 "Antisense", "Intergenic")))
+    }
+
 
     # Compute gene TPMs
     abundances <- compute_gene_TPMs(abundance_table, d1, d2)
@@ -77,8 +93,6 @@ main <-function() {
     # Plot all transcripts
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 0, opt$outprefix)
 
-    #print(rna_pet[rna_pet$gene_TPM_max > 30000,])
-
     # Make the same support plot, but apply a TPM cutoff
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 50, opt$outprefix)
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 100, opt$outprefix)
@@ -86,7 +100,7 @@ main <-function() {
 
 
     # Plot gene expression level by support
-    plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
+    #plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
 }
 
 plot_expression_levels_by_support <- function(data, outprefix) {
@@ -147,7 +161,7 @@ plot_expression_levels_by_support <- function(data, outprefix) {
 compute_gene_TPMs <- function(abundance_table, d1, d2) {
 
     # Remove genomic transcripts
-    abundance_table <- subset(abundance_table, transcript_novelty == "Genomic")
+    abundance_table <- subset(abundance_table, transcript_novelty != "Genomic")
 
     # Restrict to genes that were observed in at least one of the datasets
     abundance_table <- abundance_table[abundance_table[,d1] +
@@ -196,40 +210,55 @@ plot_support <- function(data, color, min_TPM, outprefix) {
     data$support <- as.factor(data$support)
     freqs <- data %>% count(support, novelty) %>%
              group_by(novelty) %>%
-             mutate(freq = n / sum(n)) %>% filter(support == "yes")
+             mutate(freq = n / sum(n), total = sum(n)) #%>% filter(support == "yes")
     freqs$novelty <- factor(freqs$novelty,
-                           levels = rev(c("Known", "ISM", "NIC", "NNC",
-                                         "Antisense", "Intergenic")))
+                            levels = levels(data$novelty))
+
     freqs$percent <- round(freqs$freq*100)
+    freqs[freqs$support == "no", "percent"] <- NA
+    freqs$tcolor_grp <- as.factor(ifelse(freqs$percent > 20, "white", "black"))
 
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
-                "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7")
+                "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7",
+                "prefix ISM" = "#56B4E9", "suffix ISM" = "#698bac", "other ISM" = "#003366")
     fname <- paste(outprefix, "_RNA-PET_support_minTPM-", min_TPM, ".png", sep="")
     xlabel <- "Transcript category"
-    ylabel <- "Percent transcripts with RNA-PET support"
+    ylabel <- "Number of transcript models"
 
     png(filename = fname,
-        width = 2500, height = 2000, units = "px",
+        width = 2000, height = 1500, units = "px",
         bg = "white",  res = 300)
 
-    g = ggplot(freqs, aes(x = novelty, y = percent, fill = novelty)) + 
-               geom_bar(stat="identity") +
+    g = ggplot(freqs, aes(x = novelty, y = n, fill = novelty,
+                          alpha = support)) +
+               geom_bar(stat="identity", color = "black") +
                xlab(xlabel) + ylab(ylabel) +
-               theme(legend.text = element_text(color="black", size = rel(1)), 
+               theme(legend.text = element_text(color="black", size = rel(1)),
                      legend.title = element_text(color="black", size=rel(1))) +
                theme_bw(base_family = "Helvetica", base_size = 18) +
-               scale_fill_manual("Isoform Type", values = colors) +
+               scale_fill_manual("", values = colors) +
+               scale_alpha_manual(values=c(0,1), name = "CAGE support") +
                theme_bw(base_family = "Helvetica", base_size = 18) +
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
                      axis.text.x = element_text(color="black", size = rel(1.5)),
                      axis.text.y = element_text(color="black", size = rel(1.5)),
                      axis.title.x = element_text(color="black", size=rel(1.25)),
-                     axis.title.y = element_text(color="black", size=rel(1.25))) +
-                coord_flip(ylim = c(0, 100)) + guides(fill=FALSE) +
-                geom_text(aes(y = percent - 12, label = paste0(percent, '%')), 
-                  position = position_dodge(0.9),
-                  color = "white", size = 10)
+                     axis.title.y = element_blank()) +
+                coord_flip(ylim=c(0,22000)) + guides(fill=FALSE, alpha = FALSE) +
+                geom_text(aes(y = ifelse(percent > 20, total + 2000, total + 2000),
+                          label = paste0(percent, "%"), color = novelty),
+                          position = position_dodge(0.2), size = 8) +
+                scale_color_manual(values = colors) +
+                guides(colour=FALSE, fill=FALSE) +
+                theme(legend.position=c(0.8,0.2),
+                     legend.title = element_blank(),
+                     legend.background = element_rect(fill="white", color = "black"),
+                     legend.key = element_rect(fill="transparent"),
+                     legend.text = element_text(colour = 'black', size = 16)) +
+                theme(panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank())
+
     print(g)
     dev.off()
 } 
@@ -256,6 +285,8 @@ parse_options <- function() {
                     default = NULL, help = "Second dataset name to use in comparison"),
         make_option("--as", action = "store", dest = "antisense",
                     default = NULL, help = "File mapping antisense TALON IDs to the sense TALON gene IDs"),
+        make_option(c("--splitISM"), action="store_true", dest="splitISM",
+              help="Set this option to plot prefix and suffix ISMs separately", default = F),
         make_option(c("-o","--outdir"), action = "store", dest = "outprefix",
                     default = NULL, help = "Output prefix")
         )
