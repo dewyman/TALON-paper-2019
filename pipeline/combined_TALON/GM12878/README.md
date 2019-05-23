@@ -212,12 +212,14 @@ python run_RNA-PET_analysis.py \
     --maxdist 100 \
     --o ../pipeline/combined_TALON/GM12878/RNA-PET/GM12878
 cd ../pipeline/combined_TALON/GM12878
-Rscript ../../../RNA-PET/plot_RNA-PET_support.R  \
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R  \
      --f RNA-PET/GM12878_RNA-PET_results.csv   \
+     --t RNA-PET \
      --novelty RNA-PET/transcript_beds/GM12878_novelty.csv \
      --abundance GM12878_talon_abundance.tsv \
      --d1 D8 --d2 D9 \
      --as GM12878_antisense_mapping.csv \
+     --splitISM \
      -o RNA-PET/GM12878
 ```
 
@@ -230,11 +232,13 @@ python ../../../CAGE/run_CAGE_analysis.py \
         --maxdist 100 \
         --o CAGE/ENCODE/GM12878
 
-Rscript ../../../CAGE/plot_CAGE_support.R \
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R  \
     --f CAGE/ENCODE/GM12878_CAGE_results.csv \
+    --t CAGE \
     --novelty CAGE/ENCODE/transcript_beds/GM12878_novelty.csv \
     --abundance GM12878_talon_abundance.tsv \
     --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    --splitISM \
     -o CAGE/ENCODE/GM12878
 ```
 ## CAGE analysis, FANTOM
@@ -246,11 +250,13 @@ python ../../../CAGE/run_CAGE_analysis.py \
         --maxdist 100 \
         --o CAGE/FANTOM5/GM12878
 
-Rscript ../../../CAGE/plot_CAGE_support.R \
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
     --f CAGE/FANTOM5/GM12878_CAGE_results.csv \
+    --t CAGE \
     --novelty CAGE/FANTOM5/transcript_beds/GM12878_novelty.csv \
     --abundance GM12878_talon_abundance.tsv \
     --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    --splitISM \
     -o CAGE/FANTOM5/GM12878
 ```
 ## PAS analysis, GENCODE manual PolyA annotation
@@ -259,8 +265,17 @@ source activate mypython3.7.2
 python ../../../PAS-seq/run_GENCODE_PAS-seq_analysis.py \
         --gtf GM12878_filtered_talon.gtf \
         --pas ../../../PAS-seq/gencode.v29.metadata.PolyA_feature.bed \
-        --maxdist 35 \
+        --maxdist 50 \
         --o PAS-annot/GM12878
+
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
+    --f PAS-annot/GM12878_PAS_results.csv \
+    --t PAS-annot \
+    --novelty PAS-annot/transcript_beds/GM12878_novelty.csv \
+    --abundance GM12878_talon_abundance.tsv \
+    --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    --splitISM \
+    -o PAS-annot/GM12878
 ```
 
 ## Compare long read GM12878 splice jns to GM12878 short reads
