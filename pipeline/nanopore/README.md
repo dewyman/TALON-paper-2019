@@ -58,6 +58,27 @@ Rscript ../../analysis_scripts/plot_support_by_novelty_type.R  \
      -o RNA-PET/GM12878
 ```
 
+## CAGE analysis, ENCODE
+```
+source activate mypython3.7.2
+mkdir -p CAGE/ENCODE/
+python ../../CAGE/run_CAGE_analysis.py \
+        --gtf GM12878_filtered_talon.gtf \
+        --cage ../../CAGE/data/ENCODE/GM12878_CAGE.bed \
+        --maxdist 100 \
+        --o CAGE/ENCODE/GM12878
+
+Rscript ../../analysis_scripts/plot_support_by_novelty_type.R  \
+     --f CAGE/ENCODE/GM12878_CAGE_results.csv   \
+     --t CAGE \
+     --novelty CAGE/ENCODE/transcript_beds/GM12878_novelty.csv \
+     --abundance GM12878_talon_abundance.tsv \
+     --d1 ONT24 --d2 ONT25 \
+     --as GM12878_antisense_mapping.csv \
+     --splitISM \
+     -o CAGE/ENCODE/GM12878
+```
+
 ## CAGE analysis, FANTOM
 ```
 source activate mypython3.7.2
@@ -77,4 +98,23 @@ Rscript ../../analysis_scripts/plot_support_by_novelty_type.R  \
      --as GM12878_antisense_mapping.csv \
      --splitISM \
      -o CAGE/FANTOM5/GM12878
+```
+## PAS analysis, GENCODE manual PolyA annotation
+```
+source activate mypython3.7.2
+mkdir -p PAS-annot
+python ../../PAS-seq/run_GENCODE_PAS-seq_analysis.py \
+        --gtf GM12878_filtered_talon.gtf \
+        --pas ../../PAS-seq/gencode.v29.metadata.PolyA_feature.bed \
+        --maxdist 50 \
+        --o PAS-annot/GM12878
+
+Rscript ../../analysis_scripts/plot_support_by_novelty_type.R \
+    --f PAS-annot/GM12878_PAS_results.csv \
+    --t PAS-annot \
+    --novelty PAS-annot/transcript_beds/GM12878_novelty.csv \
+    --abundance GM12878_talon_abundance.tsv \
+    --d1 ONT24 --d2 ONT25 --as GM12878_antisense_mapping.csv \
+    --splitISM \
+    -o PAS-annot/GM12878
 ```
