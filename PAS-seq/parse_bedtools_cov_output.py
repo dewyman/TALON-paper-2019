@@ -36,7 +36,7 @@ def main():
             entry = line.split("\t")
 
             transcript_ID = entry[3]
-            coverage = entry[-4]
+            coverage = int(entry[-4])
 
             if transcript_ID in transcript_seen:
                 continue
