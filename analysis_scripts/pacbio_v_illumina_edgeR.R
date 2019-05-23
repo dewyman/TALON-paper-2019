@@ -35,7 +35,7 @@ main <-function() {
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
     # Remove genomic transcripts
-    pb_abundance <- subset(pb_abundance, transcript_novelty == "Genomic")
+    pb_abundance <- subset(pb_abundance, transcript_novelty != "Genomic")
 
     # Keep known genes only
     pb_abundance <- subset(pb_abundance, gene_novelty == "Known")

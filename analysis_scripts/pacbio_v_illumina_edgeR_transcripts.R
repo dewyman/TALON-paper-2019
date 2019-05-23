@@ -10,7 +10,7 @@ main <-function() {
     } else if (opt$color_scheme == "blue") {
         fill_color <- "navy"
     } else if (opt$color_scheme == "green") {
-        fill_color <- "yellowgreen"
+        fill_color <- "#009E73"
     }
 
     # Get the names of the first and second dataset that we will be working with
