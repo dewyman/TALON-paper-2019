@@ -9,9 +9,10 @@ filter_kallisto_illumina_transcripts <- function(kallisto_file) {
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
     # Split GENCODE transcript multi-id by '|'
-    extraCols <- str_split_fixed(gencode.quantitation$target_id, "\\|",9)[,c(5,6,8)]
-    colnames(extraCols) <- c("transcript", "gene", "class")
+    extraCols <- str_split_fixed(gencode.quantitation$target_id, "\\|",9)[,c(1,5,6,8)]
+    colnames(extraCols) <- c("transcript", "transcript_name", "gene", "class")
     gencode.quantitation <- cbind(extraCols, gencode.quantitation)
+    print(head(gencode.quantitation))
 
     # Remove transcripts that are < 300 bp in length because PacBio chucks anything that size, and
     # keep only transcripts that have polyA tails. Also require TPM > 1
