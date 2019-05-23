@@ -70,7 +70,6 @@ main <-function() {
                                                  "Antisense", "Intergenic")))
     }
 
-
     # Compute gene TPMs
     abundances <- compute_gene_TPMs(abundance_table, d1, d2)
 
@@ -82,13 +81,11 @@ main <-function() {
     median_TPM_by_novelty <- aggregate(rna_pet$gene_TPM_max, 
                                      by=list(rna_pet$novelty), FUN=median)
     colnames(median_TPM_by_novelty)[2] <- "Median_gene_TPM"
-    print(median_TPM_by_novelty) 
 
     # Compute mean TPM of gene by novelty category
     mean_TPM_by_novelty <- aggregate(rna_pet$gene_TPM_max,
                                      by=list(rna_pet$novelty), FUN=mean)
     colnames(mean_TPM_by_novelty)[2] <- "Mean_gene_TPM"
-    print(mean_TPM_by_novelty)
 
     # Plot all transcripts
     plot_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], color_vec, 0, opt$outprefix)
@@ -100,7 +97,7 @@ main <-function() {
 
 
     # Plot gene expression level by support
-    #plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
+    plot_expression_levels_by_support(rna_pet[,c("support", "novelty", "gene_TPM_max")], opt$outprefix)
 }
 
 plot_expression_levels_by_support <- function(data, outprefix) {
@@ -110,28 +107,21 @@ plot_expression_levels_by_support <- function(data, outprefix) {
     fname <- paste(outprefix, "_RNA-PET_support_by_gene_expression_level.png", sep="")
     xlabel <- "RNA-PET support for transcript"
     ylabel <- "Log2 gene expression level"
-    data$novelty <- factor(data$novelty,
-                           levels = c("Known", "ISM", "NIC", "NNC",
-                                         "Antisense", "Intergenic"))
 
-    # Set colors: novelty color for supported transcripts, and grey for unsupported
-    data$subcat <- paste(data$novelty, data$support, sep='_')
-    data$subcat <- factor(data$subcat, levels = c("Known_yes", "Known_no", 
-                                                "ISM_yes", "ISM_no",
-                                                "NIC_yes", "NIC_no", 
-                                                "NNC_yes", "NNC_no",
-                                                "Antisense_yes", "Antisense_no", 
-                                                "Intergenic_yes", "Intergenic_no"))
-    values = c("A" = "#E08214", "B" = "#E08214")
     color_vec <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00",
-                "NNC" = "#E69F00", "Antisense" = "#1A1A1A", "Intergenic" = "#CC79A7")
+                "NNC" = "#E69F00", "Antisense" = "#000000", "Intergenic" = "#CC79A7",
+                "prefix ISM" = "#56B4E9", "suffix ISM" = "#698bac", "other ISM" = "#003366")
 
     png(filename = fname,
         width = 2500, height = 2000, units = "px",
         bg = "white",  res = 300)
 
     # Get summary stats for labels
-    data %>%  group_by(novelty, support) %>% summarise(n=n(), max = max(log2(gene_TPM_max + 1))) ->Summary.data
+    #print(head(data))
+    #quit()
+    Summary.data <- data %>%  group_by(novelty, support) %>% 
+                    summarise(n=n(), max = max(log2(gene_TPM_max + 1))) %>%
+                    ungroup()
     print(Summary.data)
 
     g = ggplot(data, aes(x = factor(support, levels = c("yes", "no")),
@@ -195,6 +185,7 @@ compute_gene_TPMs <- function(abundance_table, d1, d2) {
                                                                 "gene_TPM.1", 
                                                                 "gene_TPM.2")]
     colnames(transcripts_with_gene_TPMs)[1] <- c("transcript_ID")
+
     return(transcripts_with_gene_TPMs)
 }
 
@@ -210,7 +201,7 @@ plot_support <- function(data, color, min_TPM, outprefix) {
     data$support <- as.factor(data$support)
     freqs <- data %>% count(support, novelty) %>%
              group_by(novelty) %>%
-             mutate(freq = n / sum(n), total = sum(n)) #%>% filter(support == "yes")
+             mutate(freq = n / sum(n), total = sum(n))
     freqs$novelty <- factor(freqs$novelty,
                             levels = levels(data$novelty))
 
