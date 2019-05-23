@@ -10,7 +10,7 @@ main <-function() {
     } else if (opt$color_scheme == "blue") {
         fill_color <- "navy"
     } else if (opt$color_scheme == "green") {
-        fill_color <- "#009E73"
+        fill_color <- "yellowgreen"
     }
 
     # Get the names of the first and second dataset that we will be working with
@@ -20,8 +20,8 @@ main <-function() {
 
     # Get transcripts expressed in the Illumina data from the Kallisto
     # abundance files
-    illumina_1 <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto_1)[,c("t_ID","tpm", "length")]
-    illumina_2 <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto_2)[,c("t_ID","tpm", "length")]
+    illumina_1 <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto_1)[,c("transcript","tpm", "length")]
+    illumina_2 <- filter_kallisto_illumina_transcripts(opt$illumina_kallisto_2)[,c("transcript","tpm", "length")]
     colnames(illumina_1)[1:2] <- c("annot_transcript_id", "illumina_TPM_1")
     colnames(illumina_2)[1:2] <- c("annot_transcript_id", "illumina_TPM_2")
     illumina_transcript_table <- merge(illumina_1, illumina_2, by = "annot_transcript_id",
@@ -76,7 +76,7 @@ main <-function() {
     illumina_PB_et <- et$table
     illumina_PB_et$annot_transcript_id <- rownames(illumina_PB_et)
     illumina_PB_et <- merge(illumina_PB_et, 
-                            abundance[, c("annot_transcript_id", "annot_transcript_name")], 
+                            abundance[, c("annot_transcript_id", "annot_transcript_id")], 
                             by = "annot_transcript_id", all.x = T, all.y = F)
     
 
@@ -108,7 +108,7 @@ volcano_plot <- function(data, fillcolor, outdir) {
     # Add labels for most significant p-values
     data$label <- NA
     top_diff <- quantile(data$adj_pval, c(.0015))
-    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "annot_transcript_name"] 
+    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "annot_transcript_id"] 
 
     fname <- paste(outdir, "/edgeR_pacbio_illumina_transcript_volcano_plot.png", sep="")
     xlabel <- "log2-fold change"
@@ -134,8 +134,8 @@ volcano_plot <- function(data, fillcolor, outdir) {
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 18)) +
-               geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
+                     legend.text = element_text(colour = 'black', size = 18))
+               # geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
 
     print(g)
     dev.off()
@@ -152,7 +152,7 @@ ma_plot <- function(data, fillcolor, outdir) {
     # Add labels for most significant p-values
     data$label <- NA
     top_diff <- quantile(data$adj_pval, c(.0015))
-    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "annot_transcript_name"]
+    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "annot_transcript_id"]
 
     fname <- paste(outdir, "/edgeR_pacbio_illumina_transcript_MA_plot.png", sep="")
     xlabel <- "log(Counts per million)"
@@ -177,8 +177,8 @@ ma_plot <- function(data, fillcolor, outdir) {
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 16)) +
-               geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
+                     legend.text = element_text(colour = 'black', size = 16))
+                # geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
 
     print(g)
     dev.off()
@@ -197,7 +197,7 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("edgeR"))
 
     # Load my custom functions
-    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
+    source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
 
     return
 }

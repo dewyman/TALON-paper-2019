@@ -35,7 +35,7 @@ main <-function() {
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
 
     # Remove genomic transcripts
-    pb_abundance <- subset(pb_abundance, transcript_status == "Genomic")
+    pb_abundance <- subset(pb_abundance, transcript_novelty == "Genomic")
 
     # Keep known genes only
     pb_abundance <- subset(pb_abundance, gene_novelty == "Known")
@@ -130,8 +130,8 @@ volcano_plot <- function(data, fillcolor, outdir) {
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 16)) +
-               geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
+                     legend.text = element_text(colour = 'black', size = 16))
+            #   geom_text(color = "black", check_overlap = TRUE, size = 6, nudge_x = 0.05)
 
     print(g)
     dev.off()
@@ -194,8 +194,8 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("edgeR"))
 
     # Load my custom functions
-    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
-    source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
+    source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
+    source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
 
     return
 }
