@@ -121,9 +121,6 @@ plot_expression_levels_by_support <- function(data, data_type, outprefix) {
         width = 2500, height = 2000, units = "px",
         bg = "white",  res = 300)
 
-    # Get summary stats for labels
-    #print(head(data))
-    #quit()
     Summary.data <- data %>%  group_by(novelty, support) %>% 
                     summarise(n=n(), max = max(log2(gene_TPM_max + 1))) %>%
                     ungroup()
@@ -241,7 +238,7 @@ plot_support <- function(data, data_type, color, min_TPM, outprefix) {
                      axis.text.y = element_text(color="black", size = rel(1.5)),
                      axis.title.x = element_text(color="black", size=rel(1.25)),
                      axis.title.y = element_blank()) +
-                coord_flip(ylim=c(0,22000)) + guides(fill=FALSE, alpha = FALSE) +
+                coord_flip(ylim=c(0,26000)) + guides(fill=FALSE, alpha = FALSE) +
                 geom_text(aes(y = ifelse(percent > 20, total + 2000, total + 2000),
                           label = paste0(percent, "%"), color = novelty),
                           position = position_dodge(0.2), size = 8) +
