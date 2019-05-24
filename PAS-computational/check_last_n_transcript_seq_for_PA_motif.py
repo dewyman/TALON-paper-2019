@@ -66,7 +66,8 @@ def main():
     genome = Fasta(genome_file)
 
     # Open bed files
-    support_file = open(outprefix + "_polyA_motif.csv", 'w')
+    o = open(outprefix + "_polyA_motif.csv", 'w')
+    o.write(",".join(["transcript_ID","PAS_motif_support"]) + "\n")
 
     # Iterate over BED file
     with open(bed_file, 'r') as f:
@@ -97,8 +98,12 @@ def main():
                          or "GATAAA" in seq \
                          or "TATAAA" in seq \
                          or "TTTAAA" in seq)
-
-            o.write(",".join([name,any_motif]) + "\n")      
+            if any_motif:
+                support = "yes"
+            else:
+                support = "no"
+             
+            o.write(",".join([name,support]) + "\n")      
 
     o.close()
 
