@@ -32,7 +32,7 @@ main <-function() {
                                all.x = F, all.y = F)
     
     plot_distinct_novelty(transcript_table, outdir)
-    plot_novelty_on_reads(transcript_table, outdir)
+    plot_novelty_on_reads(transcript_table, outdir, datasets)
 }
 
 plot_distinct_novelty <- function(observed_transcripts, outdir){
@@ -95,7 +95,7 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
 
 }
 
-plot_novelty_on_reads <- function(observed_transcripts, outdir){
+plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
     # This function plots the number of reads per dataset that got assigned to
     # each novelty type.
 
@@ -123,7 +123,9 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir){
                                   by = c("dataset","novelty"), all.x = T, all.y = F)
        
     # Plotting
-    fname <- paste(outdir, "/reads_by_isoform_category.png", sep="")
+    str_datasets <- paste(datasets, collapse='-')
+    fname <- paste(outdir, "/", str_datasets, "_reads_by_isoform_category.png", sep="")
+    # fname <- paste(outdir, "/reads_by_isoform_category.png", sep="")
     xlabel <- "Dataset"
     ylabel <- "log2(read count)"
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00",

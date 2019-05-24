@@ -46,7 +46,7 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = t_levels)
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec, opt$celltype, opt$lsr)
+    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs)
 }
 
 filter_transcripts_on_options <- function(abundance_table, opt) {
@@ -131,7 +131,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     return(filtered)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype, lsr) {
+expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype, lsr, corr_labs) {
 
     # Take log2(TPM + 1)
     merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
@@ -154,18 +154,29 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     joined_names <- paste(outdir, "/", d1, "-", d2, "_", nov_types, sep = "")
     
     fname <- paste(joined_names, "transcript", "correlationPlot.png", sep="_")
+    corr_fname <- paste(joined_names, "gene", "correlations.txt", sep="_")
+
     xlabel <- paste("log2(TPM+1) in ", celltype, " Rep1", sep="")
     ylabel <- paste("log2(TPM+1) in ", celltype, " Rep2", sep="")
-    if (lsr == T) {
-        corr_label <- paste("Pearson r: ",
+    corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
                             round(mod$coefficients[2], 2), sep="")
-    } else {
-         corr_label <- paste("Pearson r: ",
+    if (lsr == T) {
+        plot_label <- paste("Pearson r: ",
+                            round(pearsonCorr, 2), "\nSpearman rho: ",
+                            round(spearmanCorr, 2), "\nLSR slope: ",
+                            round(mod$coefficients[2], 2), sep="")
+    } else if (corr_labs == T) {
+         plot_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), sep="")
+    } else {
+        plot_label <- ""
     }
+
+    # write correlation numbers to outfile
+    write(corr_label, corr_fname)
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
@@ -177,7 +188,7 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
-        annotate("text", x = 5, y = 14, label = corr_label,
+        annotate("text", x = 5, y = 14, label = plot_label,
                  color="black", size = 10) +
         coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("Transcript status", values=color_vec) +
@@ -295,7 +306,9 @@ parse_options <- function() {
         make_option(c("--genomic"), action="store_true", dest="genomic",
               help="Set this option to include genomic transcripts", default = F),
         make_option(c("-o","--outdir"), action = "store", dest = "outdir",
-                    default = NULL, help = "Output directory for plots and outfiles")
+                    default = NULL, help = "Output directory for plots and outfiles"),
+        make_option("--correlations", action = "store_true", dest = "corr_labs",
+              help="Add correlation labels to plot", default = F)
         )
 
     opt <- parse_args(OptionParser(option_list=option_list))
