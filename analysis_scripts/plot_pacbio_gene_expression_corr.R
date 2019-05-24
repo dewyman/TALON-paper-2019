@@ -73,10 +73,10 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = c("Known", "Antisense", "Intergenic"))
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr)
+    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr) {
+expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs) {
 
     # Take log2(TPM + 1)
     merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
@@ -97,18 +97,29 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
         joined_names <- paste(joined_names, "withIntergenic", sep="_")
     }
     fname <- paste(joined_names, "gene", "correlationPlot.png", sep="_")
+    corr_fname <- paste(joined_names, "gene", "correlations.txt", sep="_")
+
     xlabel <- paste("log2(TPM+1) in ", celltype, " Rep1", sep="")
     ylabel <- paste("log2(TPM+1) in ", celltype, " Rep2", sep="")
-    if (lsr == T) {
-        corr_label <- paste("Pearson r: ",
+    corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
                             round(mod$coefficients[2], 2), sep="")
-    } else {
-         corr_label <- paste("Pearson r: ",
+    if (lsr == T) {
+        plot_label <- paste("Pearson r: ",
+                            round(pearsonCorr, 2), "\nSpearman rho: ",
+                            round(spearmanCorr, 2), "\nLSR slope: ",
+                            round(mod$coefficients[2], 2), sep="")
+    } else if (corr_labs == T) {
+         plot_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), sep="")
+    } else {
+        plot_label <- ""
     }
+
+    # write correlation numbers to outfile
+    write(corr_label, corr_fname)
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
@@ -123,7 +134,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                          theme(text= element_text(size=24)) +
                          theme(axis.text.x = element_text(color = "black", size=24),
                                axis.text.y = element_text(color = "black", size=24)) +
-                         annotate("text", x = 5, y = 14, label = corr_label,
+                         annotate("text", x = 5, y = 14, label = plot_label,
                                   color="black", size = 10) +
                          coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
                          scale_colour_manual("Gene status", values=color_vec) +
@@ -230,7 +241,9 @@ parse_options <- function() {
         make_option(c("--intergenic"), action="store_true", dest="intergenic",
               help="Set this option to include intergenic genes", default = F),
         make_option(c("-o","--outdir"), action = "store", dest = "outdir",
-                    default = NULL, help = "Output directory for plots and outfiles")
+                    default = NULL, help = "Output directory for plots and outfiles"),
+        make_option("--correlations", action = "store_true", dest = "corr_labs",
+              help="Add correlation labels to plot", default = F)
         )
 
     opt <- parse_args(OptionParser(option_list=option_list))

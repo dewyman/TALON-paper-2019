@@ -228,6 +228,10 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("data.table"))
 
     # Load my custom functions
+    # source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
+    # source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
+    # source("/dfs2/pub/dwyman/TALON-paper-2019/analysis_scripts/get_database_transcript_table.R")
+    
     source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_genes.R")
     source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/filter_kallisto_illumina_transcripts.R")
     source("/data/users/freese/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/get_database_transcript_table.R")
