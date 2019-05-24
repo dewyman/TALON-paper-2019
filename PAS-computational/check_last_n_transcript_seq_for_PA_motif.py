@@ -1,5 +1,5 @@
 # Given a transcript bed file, select the last n positions of the sequence and
-# orient from 5' to 3'
+# determine whether they contain a poly(A) motif
 
 from optparse import OptionParser
 import os
@@ -36,7 +36,11 @@ def make_end_interval(entry, dist):
     """ Extract end position of entry and return interval of size dist
     """
     strand = entry[5]
-    transcript_end = int(entry[2])
+
+    if strand == "+":
+       transcript_end = int(entry[2])
+    else:
+       transcript_end = int(entry[1])
 
     interval_start, interval_end = cI.create_end_piece(transcript_end, strand, dist)
     return interval_start, interval_end
@@ -48,6 +52,7 @@ def fetch_sequence(chrom, start, end, strand, genome):
 
     seq = genome.sequence({'chr': chrom, 'start': start, 'stop': end, 
                       'strand': strand}, one_based=False)
+
     return seq 
 
 def main():
@@ -61,7 +66,7 @@ def main():
     genome = Fasta(genome_file)
 
     # Open bed files
-    #end_bed = open(outprefix + "_transcript_ends.bed", 'w')
+    support_file = open(outprefix + "_polyA_motif.csv", 'w')
 
     # Iterate over BED file
     with open(bed_file, 'r') as f:
@@ -77,26 +82,26 @@ def main():
                 continue
 
             interval_start, interval_end = make_end_interval(entry, dist)
-            seq = fetch_sequence(chromosome, interval_start, interval_end, strand, genome)
-            # print(seq)
-            print("AATAAA" in seq \
-               or "ATTAAA" in seq \
-               or "AAGAAA" in seq \
-               or "AATACA" in seq \
-               or "AATAGA" in seq \
-               or "AATATA" in seq \
-               or "AATGAA" in seq \
-               or "ACTAAA" in seq \
-               or "AGTAAA" in seq \
-               or "CATAAA" in seq \
-               or "GATAAA" in seq \
-               or "TATAAA" in seq \
-               or "TTTAAA" in seq)
+            seq = fetch_sequence(chromosome, interval_start, interval_end, strand, genome).upper()
 
-            # Write BED entry for the end
-            #end_entry = [ chromosome, str(interval_start),
-            #              str(interval_end), name, "0", strand ]
-            #end_bed.write("\t".join(end_entry) + "\n")
+            any_motif = ("AATAAA" in seq \
+                         or "ATTAAA" in seq \
+                         or "AAGAAA" in seq \
+                         or "AATACA" in seq \
+                         or "AATAGA" in seq \
+                         or "AATATA" in seq \
+                         or "AATGAA" in seq \
+                         or "ACTAAA" in seq \
+                         or "AGTAAA" in seq \
+                         or "CATAAA" in seq \
+                         or "GATAAA" in seq \
+                         or "TATAAA" in seq \
+                         or "TTTAAA" in seq)
+
+            o.write(",".join([name,any_motif]) + "\n")      
+
+    o.close()
+
 
 if __name__ == '__main__':
     main()

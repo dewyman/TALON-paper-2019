@@ -8,7 +8,7 @@ utils_dir = "/".join(script_dir.split("/")[0:-2] + ["RNA-PET"])
 sys.path.append(script_dir)
 sys.path.append(utils_dir)
 import create_intervals as cI
-import get_last_n_transcript_seq as glt 
+import check_last_n_transcript_seq_for_PA_motif as glt 
 
 class TestGetEndSeq(object):
     def test_plus_strand(self):
