@@ -3,15 +3,15 @@
 ## Summary
 ```
 python /pub/dwyman/TALON/post-TALON_tools/summarize_datasets.py \
-          --db full_gencode_v29_2019-03-12.db \
+          --db ../full_gencode_v29_2019-03-12.db \
           --v \
           --o K562
 ```
 
 ## Make a whitelist file of filtered K562 transcripts
 ```
-python /dfs2/pub/dwyman/TALON/post-TALON_tools/filter_talon_transcripts.py \
-          --db full_gencode_v29_2019-03-12.db \
+python /pub/dwyman/TALON/post-TALON_tools/filter_talon_transcripts.py \
+          --db ../full_gencode_v29_2019-03-12.db \
           -a gencode_v29 \
           -p pairings.csv \
           --o K562_whitelist.csv
@@ -19,8 +19,8 @@ python /dfs2/pub/dwyman/TALON/post-TALON_tools/filter_talon_transcripts.py \
 
 ## Make a GTF file using the K562 whitelist
 ```
-python /dfs2/pub/dwyman/TALON/post-TALON_tools/create_GTF_from_database.py \
-          --db full_gencode_v29_2019-03-12.db \
+python /pub/dwyman/TALON/post-TALON_tools/create_GTF_from_database.py \
+          --db ../full_gencode_v29_2019-03-12.db \
           -a gencode_v29 \
           -b hg38 \
           --whitelist K562_whitelist.csv \
@@ -30,18 +30,20 @@ python /dfs2/pub/dwyman/TALON/post-TALON_tools/create_GTF_from_database.py \
 
 ## Make a filtered abundance matrix  
 ```
-python /dfs2/pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-           --db full_gencode_v29_2019-03-12.db \
+python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
+           --db ../full_gencode_v29_2019-03-12.db \
            -a gencode_v29 \
            --filter \
            -p pairings.csv \
+           --build hg38 \
            --o K562 
 ```
 ## Unfiltered abundance matrix
 ```
-python /dfs2/pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-           --db full_gencode_v29_2019-03-12.db \
+python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py \
+           --db ../full_gencode_v29_2019-03-12.db \
            -a gencode_v29 \
+           --build hg38 \
            --o K562
 ```
 
@@ -157,6 +159,14 @@ Rscript ../../../analysis_scripts/plot_novelty_categories.R \
         -o K562_plots
 ```
 
+## Map antisense TALON genes to their sense counterparts
+```
+python /pub/dwyman/TALON/post-TALON_tools/map_antisense_genes_to_sense.py \
+    --db ../full_gencode_v29_2019-03-12.db \
+    --a gencode_v29 \
+    --o K562
+```
+
 ## RNA-PET analysis
 ```
 mkdir -p RNA-PET
@@ -188,4 +198,45 @@ python ../../../analysis_scripts/compare_sjs/compare_sjs.py \
     --short ../../../Illumina/K562/STAR/SJ.out.tab \
     --long K562_filtered_talon_spliceJns.txt \
     --o K562_filtered_talon
+```
+
+## PAS analysis, PolyA-seq data
+```
+source activate mypython3.7.2
+mkdir PAS-seq
+python ../../../PAS-seq/run_PAS-seq_analysis.py \
+        --gtf K562_filtered_talon.gtf \
+        --pas ../../../PAS-seq/data/mapped_PAS/PAS_Aligned.out.bam \
+        --maxdist 35 \
+        --n 10 \
+        --o PAS-seq/K562
+
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
+    --f PAS-seq/K562_PAS_results.csv \
+    --t PAS-seq \
+    --novelty PAS-seq/transcript_beds/K562_novelty.csv \
+    --abundance K562_talon_abundance.tsv \
+    --d1 D10 --d2 D11 --as K562_antisense_mapping.csv \
+    --splitISM \
+    -o PAS-seq/K562
+```
+
+## Computational PAS analysis
+```
+source activate mypython3.7.2
+mkdir PAS-comp
+python ../../../PAS-computational/run_computational_PAS_analysis.py \
+        --gtf K562_filtered_talon.gtf \
+        --genome ../../../refs/hg38/hg38.fa \
+        --maxdist 35 \
+        --o PAS-comp/K562
+
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
+    --f PAS-comp/K562_polyA_motif.csv \
+    --t PAS-comp \
+    --novelty PAS-comp/transcript_beds/K562_novelty.csv \
+    --abundance K562_talon_abundance.tsv \
+    --d1 D10 --d2 D11 --as K562_antisense_mapping.csv \
+    --splitISM \
+    -o PAS-comp/K562
 ```
