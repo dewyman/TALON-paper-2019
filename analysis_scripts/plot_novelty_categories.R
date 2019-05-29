@@ -31,11 +31,11 @@ main <-function() {
                                by = "transcript_ID",
                                all.x = F, all.y = F)
     
-    plot_distinct_novelty(transcript_table, outdir)
+    plot_distinct_novelty(transcript_table, outdir, datasets)
     plot_novelty_on_reads(transcript_table, outdir, datasets)
 }
 
-plot_distinct_novelty <- function(observed_transcripts, outdir){
+plot_distinct_novelty <- function(observed_transcripts, outdir, datasets){
     # This function plots the number of whitelist items that belong to each 
     # transcript novelty class. So it amounts to the number of unique transcripts
     # of each type that were identified in each dataset
@@ -58,7 +58,8 @@ plot_distinct_novelty <- function(observed_transcripts, outdir){
                                                                                     "Antisense", "Intergenic"))    
     
     # Plotting
-    fname <- paste(outdir, "/distinct_isoforms_by_category.png", sep="")
+    str_datasets <- paste(datasets, collapse='-')
+    fname <- paste(outdir, "/", str_datasets, "_distinct_isoforms_by_category.png", sep="")
     xlabel <- "Isoform category"
     ylabel <- "Number of distinct isoforms"
     ymax <- 1.02*(max(count(distinct_transcripts,"novelty")$freq))
@@ -152,7 +153,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
                      axis.title.y = element_text(color="black", size=rel(1.5))) +
                theme(legend.text = element_text(color="black", size = rel(1)),
                      legend.title = element_text(color="black", size=rel(1.25)),
-                     legend.position=c(0.92,0.85),
+                     legend.position=c(0.85,0.85),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent")) +
                 yscale("log2", .format = TRUE) +
