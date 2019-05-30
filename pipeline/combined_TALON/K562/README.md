@@ -170,7 +170,7 @@ python /pub/dwyman/TALON/post-TALON_tools/map_antisense_genes_to_sense.py \
 ## RNA-PET analysis
 ```
 mkdir -p RNA-PET
-module load bedtools
+source activate mypython3.7.2
 cd ../../../RNA-PET
 python run_RNA-PET_analysis.py \
     --gtf ../pipeline/combined_TALON/K562/K562_filtered_talon.gtf \
@@ -183,7 +183,7 @@ Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R  \
      --t RNA-PET \
      --novelty RNA-PET/transcript_beds/K562_novelty.csv \
      --abundance K562_talon_abundance.tsv \
-     --d1 D8 --d2 D9 \
+     --d1 D10 --d2 D11 \
      --as K562_antisense_mapping.csv \
      --splitISM \
      -o RNA-PET/K562
@@ -219,7 +219,7 @@ Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
     --t CAGE \
     --novelty CAGE/FANTOM5/transcript_beds/K562_novelty.csv \
     --abundance K562_talon_abundance.tsv \
-    --d1 D8 --d2 D9 --as K562_antisense_mapping.csv \
+    --d1 D10 --d2 D11 --as K562_antisense_mapping.csv \
     --splitISM \
     -o CAGE/FANTOM5/K562
 ```
