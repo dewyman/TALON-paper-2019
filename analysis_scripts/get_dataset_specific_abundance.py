@@ -4,12 +4,22 @@ import argparse
 parser = argparse.ArgumentParser(description=\
 		  'From an exisiting abundance file, cut out\
 		   input dataset fields')
-parser.add_argument('--f', help='abundance file')
-parser.add_argument('--d', help='comma-separated string of desired dataset names')
+parser.add_argument('--infile', help='input abundance file')
+parser.add_argument('--outfile', help='output abundance file', default=False)
+parser.add_argument('--d', help='list of datasets to include, one on each line')
 args = parser.parse_args()
 
-infile = args.f
-datasets = args.d.split(',')
+infile = args.infile
+if args.outfile:
+	ofile = args.outfile
+else:
+	ofile = infile
+
+dfile = open(args.d, 'r')
+datasets = []
+for line in dfile:
+	line = line.replace('\n', '')
+	datasets.append(line)
 
 fields = ['gene_ID','transcript_ID','annot_gene_id',\
 		  'annot_transcript_id', 'annot_gene_name', \
@@ -21,8 +31,5 @@ df = pd.read_csv(infile, sep='\t')
 
 df = df[fields]
 
-infile = infile.split('talon_abundance')
-print(infile)
-
-df.to_csv(infile, index=False, sep='\t')
+df.to_csv(ofile, index=False, sep='\t')
 
