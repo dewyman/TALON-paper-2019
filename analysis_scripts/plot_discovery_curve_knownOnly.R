@@ -49,6 +49,13 @@ main <-function() {
     # Remove rows from abundance file that are not in the Illumina file
     pb_gene_abundance <- subset(pb_gene_abundance, annot_gene_name %in% illumina_genes)
 
+
+    # Create an output file indicating which Illumina genes were and were not detected overall
+    out <- data.frame(gene = illumina_genes)
+    out$detection <- out$gene %in% pb_gene_abundance$annot_gene_name
+    write.table(out, paste(opt$outdir, "/gene_detection.csv", sep=""), sep=",",
+                row.names=F, col.names=F, quote=F)
+
     # Now, find the genes detected in each dataset
     genes_detected_by_dataset <- lapply(X=read_counts_by_dataset$dataset, FUN=get_detected_genes_for_dataset, pb_gene_abundance)
     names(genes_detected_by_dataset) <- read_counts_by_dataset$dataset
