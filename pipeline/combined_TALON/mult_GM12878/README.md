@@ -28,3 +28,9 @@ python /pub/dwyman/TALON/post-TALON_tools/create_abundance_file_from_database.py
 ```
 Rscript ../../../analysis_scripts/plot_discovery_curve_knownOnly.R --f mult_GM12878_talon_abundance.tsv --color blue --rc read_counts.csv --ik1 ../../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv --ik2 ../../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv -o .
 ```
+This command also outputs a file, gene_detection.csv, that lists each Illumina gene name and whether it was detected in any of the 4 PacBio replicates or not.
+
+## GC content analysis: detected genes vs undetected
+```
+python ../../../GC-content/run_GC_analysis.py --genes gene_detection.csv --fasta ../../../refs/gencode.v29.transcripts.fa.gz --o .
+```
