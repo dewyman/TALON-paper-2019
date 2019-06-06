@@ -3,5 +3,8 @@ This repository contains custom scripts and instructions for obtaining reference
 
 You can find the paper here: 
 
-## Reference files
-Contains instructions for downloading reference genomes, GENCODE annotations, etc. Also includes scripts we used to prepare input files for TranscriptClean and TALON initializations.
+## refs
+Contains instructions for downloading reference genomes, GENCODE annotations, and variant files. Also includes scripts we used to prepare input files for TranscriptClean and TALON initializations.
+
+## analysis_scripts
+Mostly visualization scripts for plotting things like gene/transcript expression correlations etc.
