@@ -3,6 +3,9 @@ This repository contains custom scripts and instructions for obtaining reference
 
 You can find the paper here: 
 
+To download the TALON program, please visit https://github.com/dewyman/TALON
+To download the ENCODE DCC deployment of the TALON pipeline, please visit https://github.com/ENCODE-DCC/long-read-rna-pipeline
+
 ## refs
 Contains instructions for downloading reference genomes, GENCODE annotations, and variant files. Also includes scripts we used to prepare input files for TranscriptClean and TALON initializations.
 
