@@ -73,10 +73,10 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = c("Known", "Antisense", "Intergenic"))
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs)
+    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs, opt$regression_line)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs) {
+expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs, regression_line) {
 
     # Take log2(TPM + 1)
     merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
@@ -99,8 +99,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
     fname <- paste(joined_names, "gene", "correlationPlot.png", sep="_")
     corr_fname <- paste(joined_names, "gene", "correlations.txt", sep="_")
 
-    xlabel <- paste("log2(TPM+1) in ", celltype, " Rep1", sep="")
-    ylabel <- paste("log2(TPM+1) in ", celltype, " Rep2", sep="")
+    xlabel <- paste("log2(TPM+1) in ", celltype, " PacBio", sep="")
+    ylabel <- paste("log2(TPM+1) in ", celltype, " ONT", sep="")
     corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
@@ -110,12 +110,10 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
                             round(mod$coefficients[2], 2), sep="")
-    } else if (corr_labs == T) {
-         plot_label <- paste("Pearson r: ",
-                            round(pearsonCorr, 2), "\nSpearman rho: ",
-                            round(spearmanCorr, 2), sep="")
     } else {
-        plot_label <- ""
+        plot_label <- paste("Pearson r: ",
+                    round(pearsonCorr, 2), "\nSpearman rho: ",
+                    round(spearmanCorr, 2), "\nLSR slope: ", sep="")
     }
 
     # write correlation numbers to outfile
@@ -127,15 +125,11 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
 
     # Main scatterplot
     scatterplot = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
-                         geom_abline(slope = mod$coefficients[2], intercept = mod$coefficients[1],
-                    color = "gray", lwd=1, lty=2) +
                          geom_jitter(alpha = 0.5) + theme_bw() +
                          xlab(xlabel)  + ylab(ylabel) + 
                          theme(text= element_text(size=24)) +
                          theme(axis.text.x = element_text(color = "black", size=24),
                                axis.text.y = element_text(color = "black", size=24)) +
-                         annotate("text", x = 5, y = 14, label = plot_label,
-                                  color="black", size = 10) +
                          coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
                          scale_colour_manual("Gene status", values=color_vec) +
                          theme(legend.position=c(0.8,0.2),
@@ -144,6 +138,19 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                              legend.key = element_rect(fill="transparent"),
                              legend.text = element_text(colour = 'black', size = 20))+
                          guides(colour = guide_legend(override.aes = list(alpha=1, size=3)))
+
+    # add regression line
+    if (regression_line) {
+        scatterplot <- scatterplot+
+              geom_abline(slope = mod$coefficients[2], intercept = mod$coefficients[1],
+                   color = "gray", lwd=1, lty=2)
+    }
+
+    if (corr_labs) {
+        scatterplot <- scatterplot+
+              annotate("text", x = 5, y = 14, label = plot_label,
+                   color="black", size = 10) 
+    }
 
      # Find max density y value across both datasets
      vars <- unique(merged_abundances$novelty)
@@ -225,7 +232,7 @@ parse_options <- function() {
 
     option_list <- list(
         make_option(c("--f"), action = "store", dest = "infile",
-                    default = NULL, help = "TALON abundance output file"),
+                    default = NULL, help = "UNFILTERED TALON abundance output file"),
         make_option(c("--color"), action = "store", dest = "color_scheme",
                     default = NULL, help = "blue, red, or green"),
         make_option("--d1", action = "store", dest = "d1",
@@ -243,7 +250,9 @@ parse_options <- function() {
         make_option(c("-o","--outdir"), action = "store", dest = "outdir",
                     default = NULL, help = "Output directory for plots and outfiles"),
         make_option("--correlations", action = "store_true", dest = "corr_labs",
-              help="Add correlation labels to plot", default = F)
+              help="Add correlation labels to plot", default = F),
+        make_option("--regression_line", action = "store_true", dest = "regression_line",
+              help="Add regression line to plot", default = F)
         )
 
     opt <- parse_args(OptionParser(option_list=option_list))
