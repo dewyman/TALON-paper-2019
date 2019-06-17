@@ -170,18 +170,23 @@ python /pub/dwyman/TALON/post-TALON_tools/map_antisense_genes_to_sense.py \
 ## RNA-PET analysis
 ```
 mkdir -p RNA-PET
-module load bedtools
+source activate mypython3.7.2
 cd ../../../RNA-PET
 python run_RNA-PET_analysis.py \
     --gtf ../pipeline/combined_TALON/K562/K562_filtered_talon.gtf \
     --rnapet data/K562_hg38.bed \
     --maxdist 100 \
     --o ../pipeline/combined_TALON/K562/RNA-PET/K562
-
-Rscript plot_RNA-PET_support.R \
-    --f ../pipeline/combined_TALON/K562/RNA-PET/K562_RNA-PET_results.csv \
-    --novelty ../pipeline/combined_TALON/K562/RNA-PET/transcript_beds/K562_novelty.csv \
-    -o ../pipeline/combined_TALON/K562/RNA-PET/K562
+cd ../pipeline/combined_TALON/K562
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R  \
+     --f RNA-PET/K562_RNA-PET_results.csv   \
+     --t RNA-PET \
+     --novelty RNA-PET/transcript_beds/K562_novelty.csv \
+     --abundance K562_talon_abundance.tsv \
+     --d1 D10 --d2 D11 \
+     --as K562_antisense_mapping.csv \
+     --splitISM \
+     -o RNA-PET/K562
 ```
 
 ## Compare long read K562 splice jns to K562 short reads
@@ -200,6 +205,25 @@ python ../../../analysis_scripts/compare_sjs/compare_sjs.py \
     --o K562_filtered_talon
 ```
 
+## CAGE analysis, FANTOM
+```
+source activate mypython3.7.2
+python ../../../CAGE/run_CAGE_analysis.py \
+        --gtf K562_filtered_talon.gtf \
+        --cage ../../../CAGE/data/FANTOM5/hg38_CAGE.bed \
+        --maxdist 100 \
+        --o CAGE/FANTOM5/K562
+
+Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
+    --f CAGE/FANTOM5/K562_CAGE_results.csv \
+    --t CAGE \
+    --novelty CAGE/FANTOM5/transcript_beds/K562_novelty.csv \
+    --abundance K562_talon_abundance.tsv \
+    --d1 D10 --d2 D11 --as K562_antisense_mapping.csv \
+    --splitISM \
+    -o CAGE/FANTOM5/K562
+```
+
 ## PAS analysis, PolyA-seq data
 ```
 source activate mypython3.7.2
@@ -208,7 +232,7 @@ python ../../../PAS-seq/run_PAS-seq_analysis.py \
         --gtf K562_filtered_talon.gtf \
         --pas ../../../PAS-seq/data/mapped_PAS/PAS_Aligned.out.bam \
         --maxdist 35 \
-        --n 10 \
+        --n 10\
         --o PAS-seq/K562
 
 Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
