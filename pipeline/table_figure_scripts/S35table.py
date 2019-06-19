@@ -12,7 +12,7 @@ from TALONClass import Transcript, Gene, talonResults, writeOutfile
 # sys.argv[2] is a prefix for the several output files
 # sys.argv[3] is the comma-separated list of datasets to analyze 
 if len(sys.argv) < 4:
-	sys.exit('python %s infile outprefix datasetlist' % sys.argv[0])
+	sys.exit('python %s TALONabundancefile outprefix datasetlist' % sys.argv[0])
 
 talonfile = sys.argv[1]
 outprefix = sys.argv[2]
