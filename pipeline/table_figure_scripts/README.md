@@ -19,3 +19,18 @@ bash generate_plots.sh
 ```
 bash rename_abundance_file_datasets.sh
 ```
+
+## TALONclass.py
+```
+Used by scripts S35table.py and S36table.py
+```
+
+## S35table.py
+```
+Generates a table with gene read counts based on novelty category
+```
+
+## S36table.py
+```
+Generate table with genes with higher novelty counts for cortex and hippocampus, also generates a plot to show how many of them are unique or shared between tissues
+```
