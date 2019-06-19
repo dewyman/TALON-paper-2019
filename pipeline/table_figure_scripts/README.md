@@ -28,6 +28,7 @@ Used by scripts S35table.py and S36table.py
 ## S35table.py
 ```
 Generates a table with gene read counts based on novelty category
+python S35table.py TALONabundancefile outprefix datasetlist
 ```
 
 ## S36table.py
