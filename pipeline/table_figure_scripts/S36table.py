@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 from matplotlib_venn import venn2
 from TALONClass import talonResults, writeOutfile
 
+if len(sys.argv) < 2:
+	sys.exit('python %s TALONabundancefile' % sys.argv[0])
+
 talonfile = sys.argv[1]
 outfile = 'noveltyReadCountVenn.tab'
 
