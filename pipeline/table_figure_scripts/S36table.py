@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib_venn import venn2
 from TALONClass import talonResults, writeOutfile
 
-talonfile = 'Brain_length_talon_abundance_filtered.tsv'
+talonfile = sys.argv[1]
 outfile = 'noveltyReadCountVenn.tab'
 
 cortexDatasets = ['Cortex_rep1','Cortex_rep2']
