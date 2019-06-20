@@ -22,19 +22,19 @@ import datetime
 # get and format output directory
 def format_odir(odir):
     cwd = os.getcwd()
-
-    # if first character is not /, use cwd to make this an absolute path
-    if odir[0] != '/' and odir[0] != '~':
-        odir = cwd+odir
-    if odir[-1] != '/':
-        odir += '/'
+    if odir != '':
+        # if first character is not /, use cwd to make this an absolute path
+        if odir[0] != '/' and odir[0] != '~':
+            odir = cwd+odir
+        if odir[-1] != '/':
+            odir += '/'
     return odir
 
 # make a dated output directory for the files used for the tracks
 def make_dated_folder(odir, bname):
     date = datetime.datetime.now()
     date = date.strftime('%y%m%d')
-    odir = odir+date+'_'+bname+'_tracks/'
+    odir = odir+bname+'_tracks/'
 
     if not os.path.isdir(odir):
         print('Making output directory '+odir)
@@ -122,7 +122,7 @@ for ind, line in enumerate(cfile):
     if not ind:
         # custom tracks file    
         tfile = odir+sep_type+'_tracks'
-        print(tfile)
+        # print(tfile)
         tfile = open(tfile, 'w')
 
     # classes to look for and their associated colors
@@ -156,7 +156,7 @@ for ind, line in enumerate(cfile):
         ofiles[c] = open(odir+c+'.gtf', 'w')
 
 infile = open(gtffile, 'r')
-print(infile.name)
+# print(infile.name)
 
 gene_line = []
 trans_line = []
@@ -222,7 +222,7 @@ infile.close()
 for c, fname in ofiles.items():
     s = write_track(c, gtffile, get_basename(fname)+'.gtf', colors_dict, url)
     tfile.write(s+'\n')
-    print(fname)
+    # print(fname)
 
 # move into odir if it exists
 if os.path.isdir(pubdir):
