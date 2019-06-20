@@ -14,3 +14,6 @@ Scripts for downloading short-read Illumina RNA-seq data from the ENCODE consort
 
 ## analysis_scripts
 Mostly visualization scripts for plotting things like gene/transcript expression correlations etc.
+
+## pipeline
+Scripts and accessory files used to analyze and generate figures in our data.
