@@ -25,19 +25,19 @@ import datetime
 # get and format output directory
 def format_odir(odir):
 	cwd = os.getcwd()
-
-	# if first character is not /, use cwd to make this an absolute path
-	if odir[0] != '/' and odir[0] != '~':
-		odir = cwd+odir
-	if odir[-1] != '/':
-		odir += '/'
+	if odir != '':
+		# if first character is not /, use cwd to make this an absolute path
+		if odir[0] != '/' and odir[0] != '~':
+			odir = cwd+odir
+		if odir[-1] != '/':
+			odir += '/'
 	return odir
 
 # make a dated output directory for the files used for the tracks
 def make_dated_folder(odir, bname):
 	date = datetime.datetime.now()
 	date = date.strftime('%y%m%d')
-	odir = odir+date+'_'+bname+'_tracks/'
+	odir = odir+bname+'_tracks/'
 
 	if not os.path.isdir(odir):
 		print('Making output directory '+odir)
