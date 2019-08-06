@@ -2,7 +2,7 @@
 #$ -q sam
 #$ -pe one-node-mpi 4
 #$ -R y
-#$ -N D9_flair_collapse
+#$ -N GM12878_flair_collapse
 #$ -M dwyman@uci.edu
 #$ -m ea
 #$ -cwd
@@ -11,11 +11,11 @@
 module load samtools
 module load bedtools
 
-cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR/D9
+cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR
 
-reads=ENCFF475ORL.fastq
+reads=D8-D9-concat.fastq
 gtf=/pub/dwyman/TALON-paper-2019/refs/gencode.v29.annotation.gtf
-query=flair_all_corrected.psl
+query=D8-D9_flair_all_corrected.psl
 genome=/pub/dwyman/TALON-paper-2019/refs/hg38/hg38.fa
 
 python ~/flair/flair.py collapse -f $gtf \
