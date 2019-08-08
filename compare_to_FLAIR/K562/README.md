@@ -14,7 +14,7 @@ qsub D11/./run_FLAIR_correct.sh
 2. Then, run collapse step on concatenated files from both reps.
 ```
 cat D10/flair_all_corrected.psl D11/flair_all_corrected.psl > D10-D11_flair_all_corrected.psl
-cat D10/ENCFF281TNJ.fastq D11/D11/ENCFF475ORL.fastq > D10-D11-concat.fastq
+cat D10/ENCFF763VZC.fastq D11/ENCFF694INI.fastq > D10-D11-concat.fastq
 qsub ./run_flair_collapse.sh
 ```
 3. Finally, run quantify step. To do this, you need to create a tab-delimited config file with fields dataset name, condition, batch, and fastq reads file. This is what the K562 file looks like:
@@ -33,9 +33,9 @@ python ../format_flair_matrix_like_talon.py counts_matrix.tsv counts_matrix_talo
 Rscript ../plot_detection_by_TPM_for_datasets.R \
       --f counts_matrix_talon_abd.tsv \
       --datasets K562_Rep1_K562_batch1,K562_Rep2_K562_batch1 \
-      --ik1 ../Illumina/K562/Kallisto/Rep1/abundance.tsv \
-      --ik2 ../Illumina/K562/Kallisto/Rep2/abundance.tsv \
-      --color blue \
+      --ik1 ../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+      --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+      --color red \
       -o .
 ```
 <img align="left" width="500" src="FLAIR/gene_detection_by_TPM.png">
