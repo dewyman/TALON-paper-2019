@@ -46,6 +46,24 @@ Rscript ../pacbio_v_illumina_edgeR.R \
     --color blue \
     -o FLAIR
 ```
-<img align="left" width="500" src="FLAIR/gene_detection_by_TPM.png">
-<img align="left" width="500" src="FLAIR/edgeR_pacbio_illumina_gene_MA_plot.png">
 
+5. In order to examine the completeness of the FLAIR transcripts, we ran our FANTOM CAGE analysis as previosuly applied to the TALON results:
+Commands not working right now because of the FLAIR GTF format.
+```
+source activate mypython3.7.2
+mkdir -p CAGE
+python ../../CAGE/run_CAGE_analysis.py \
+        --gtf flair.collapse.isoforms.gtf \
+        --cage ../../CAGE/data/FANTOM5/hg38_CAGE.bed \
+        --maxdist 100 \
+        --o CAGE/GM12878
+
+
+Rscript ../plot_support_no_novelty_type.R \
+    --f CAGE/GM12878_CAGE_results.csv \
+    --t CAGE \
+    --novelty CAGE/transcript_beds/GM12878_novelty.csv \
+    --abundance GM12878_talon_abundance.tsv \
+    --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
+    -o CAGE/GM12878
+```
