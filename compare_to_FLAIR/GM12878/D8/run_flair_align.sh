@@ -11,7 +11,7 @@
 module load samtools
 module load bedtools
 
-cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR/D8
+cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR/GM12878/D8
 
 genome=/pub/dwyman/TALON-paper-2019/refs/hg38/hg38.fa
 reads=ENCFF281TNJ.fastq

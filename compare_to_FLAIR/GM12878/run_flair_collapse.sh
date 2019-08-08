@@ -11,7 +11,7 @@
 module load samtools
 module load bedtools
 
-cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR
+cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR/GM12878
 
 reads=D8-D9-concat.fastq
 gtf=/pub/dwyman/TALON-paper-2019/refs/gencode.v29.annotation.gtf

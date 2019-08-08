@@ -12,7 +12,7 @@ module load samtools
 module load bedtools
 mkdir -p tmp
 
-cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR
+cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR/GM12878
 
 config=config.tsv
 isoforms=flair.collapse.isoforms.fa

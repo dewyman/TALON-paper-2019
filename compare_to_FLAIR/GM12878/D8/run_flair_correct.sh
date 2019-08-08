@@ -10,7 +10,7 @@
 
 module load bedtools
 
-cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR/D8
+cd /pub/dwyman/TALON-paper-2019/compare_to_FLAIR/GM12878/D8
 
 gtf=/pub/dwyman/TALON-paper-2019/refs/gencode.v29.annotation.gtf
 query=flair.aligned.bed
