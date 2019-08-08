@@ -14,7 +14,7 @@ qsub D9/./run_FLAIR_correct.sh
 2. Then, run collapse step on concatenated files from both reps.
 ```
 cat D8/flair_all_corrected.psl D9/flair_all_corrected.psl > D8-D9_flair_all_corrected.psl
-cat D8/ENCFF281TNJ.fastq D9/D9/ENCFF475ORL.fastq > D8-D9-concat.fastq
+cat D8/ENCFF281TNJ.fastq D9/ENCFF475ORL.fastq > D8-D9-concat.fastq
 qsub ./run_flair_collapse.sh
 ```
 3. Finally, run quantify step. To do this, you need to create a tab-delimited config file with fields dataset name, condition, batch, and fastq reads file. This is what the GM12878 file looks like:
