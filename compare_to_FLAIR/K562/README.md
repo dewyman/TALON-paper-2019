@@ -36,6 +36,6 @@ Rscript ../plot_detection_by_TPM_for_datasets.R \
       --ik1 ../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
       --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
       --color red \
-      -o .
+      -o FLAIR
 ```
 <img align="left" width="500" src="FLAIR/gene_detection_by_TPM.png">
