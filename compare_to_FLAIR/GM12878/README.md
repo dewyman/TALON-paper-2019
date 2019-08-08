@@ -35,4 +35,4 @@ Rscript ../plot_detection_by_TPM_for_datasets.R \
       --color blue \
       -o .
 ```
-<img align="left" width="200" src="FLAIR/gene_detection_by_TPM.png">
+<img align="left" width="500" src="FLAIR/gene_detection_by_TPM.png">
