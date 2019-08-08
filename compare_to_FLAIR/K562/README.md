@@ -37,5 +37,14 @@ Rscript ../plot_detection_by_TPM_for_datasets.R \
       --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
       --color red \
       -o FLAIR
+
+Rscript ../pacbio_v_illumina_edgeR.R \
+    --f counts_matrix_talon_abd.tsv \
+    --datasets K562_Rep1_K562_batch1,K562_Rep2_K562_batch1 \
+    --ik1 ../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    --color red \
+    -o FLAIR
 ```
 <img align="left" width="500" src="FLAIR/gene_detection_by_TPM.png">
+<img align="left" width="500" src="FLAIR/edgeR_pacbio_illumina_gene_MA_plot.png">
