@@ -7,10 +7,13 @@ import os
 import sys
 import subprocess
 from pathlib import Path
-script_dir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.abspath(os.path.join(script_dir, os.pardir)))
+#script_dir = os.path.dirname(os.path.realpath(__file__))
+#sys.path.append(os.path.abspath(os.path.join(script_dir, os.pardir)))
 # Add the RNA-PET dir to access scripts there
-print(script_dir)
+script_dir = os.path.dirname(os.path.realpath(__file__))
+utils_dir = "/".join(script_dir.split("/")[0:-1] + ["RNA-PET"])
+sys.path.append(script_dir)
+sys.path.append(utils_dir)
 
 def getOptions():
     parser = OptionParser()
@@ -37,10 +40,11 @@ def main():
     name = outprefix.split("/")[-1]
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    print(script_dir)
+    print(outprefix)
 
     # Step 0: set up directory structure
     try:
+        print("Dir setup...")
         outdir = "/".join(outprefix.split("/")[0:-1])
         subprocess.check_output(["mkdir", "-p", outdir + "/transcript_beds"])
         subprocess.check_output(["mkdir", "-p", outdir + "/RNA-PET_beds"])
@@ -50,9 +54,10 @@ def main():
         sys.exit("Something went wrong while initializing dirs")
 
     # First step: Create a bed file from the transcript GTF along with metadata
-    try:
+    try:    
+        print("Make transcript bed file...")
         out = outdir + "/transcript_beds/" + name
-        subprocess.check_output(["python", "talon_GTF_2_transcript_bed.py",
+        subprocess.check_output(["python", utils_dir +"/talon_GTF_2_transcript_bed.py",
                                  "--gtf", gtf, "--o",  out])
     except Exception as e:    
         print(e)
@@ -61,9 +66,10 @@ def main():
     # Next, take the transcript bed file and create intervals of specified size
     # around the starts and ends. These go into separate files.
     try:
+        print("Make bed intervals for transcript start and end...")
         out = outdir + "/transcript_beds/" + name
         bedfile = outdir + "/transcript_beds/"+ name + ".bed"
-        subprocess.check_output(["python", "get_transcript_start_end_intervals.py",
+        subprocess.check_output(["python", utils_dir +"/get_transcript_start_end_intervals.py",
                                  "--bed", bedfile, "--maxdist", str(max_dist),
                                  "--o",  out])
     except Exception as e:
@@ -73,8 +79,9 @@ def main():
     # Extract the start and end points (len 1) of each RNA-PET cluster. Put them
     # into separate files
     try:
+        print("Extract RNA-PET starts and ends...")
         out = outdir + "/RNA-PET_beds/" + name
-        subprocess.check_output(["python", "get_RNA_PET_starts_and_ends.py",
+        subprocess.check_output(["python", utils_dir +"/get_RNA_PET_starts_and_ends.py",
                                  "--rnapet", rna_pet_file, "--o",  out])
     except Exception as e:
         print(e)
@@ -111,7 +118,7 @@ def main():
     # pair matched with at least one RNA-PET start-end pair or not. 
     try:
         out = outprefix
-        subprocess.check_output(["python", "parse_bedtools_output.py",
+        subprocess.check_output(["python", utils_dir +"/parse_bedtools_output.py",
                                  "--starts", outdir + "/intersection_files/starts.tsv",
                                  "--ends",  outdir + "/intersection_files/ends.tsv",
                                  "--o",  outprefix])
