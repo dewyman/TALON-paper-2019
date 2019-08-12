@@ -30,6 +30,8 @@ qsub ./run_flair_quantify.sh
 ```
 python ../format_flair_matrix_like_talon.py counts_matrix.tsv counts_matrix_talon_abd.tsv
 
+mkdir FLAIR
+
 Rscript ../plot_detection_by_TPM_for_datasets.R \
       --f counts_matrix_talon_abd.tsv \
       --datasets HepG2_ONT_Rep1_HepG2_batch1,HepG2_ONT_Rep2_HepG2_batch1 \
@@ -47,5 +49,5 @@ Rscript ../pacbio_v_illumina_edgeR.R \
     -o FLAIR
 ```
 <img align="left" width="500" src="FLAIR/gene_detection_by_TPM.png">
-<img align="left" width="500" src="FLAIR/edgeR_pacbio_illumina_gene_MA_plot.png">
+<img align="left" width="500" src="FLAIR/edgeR_ont_illumina_gene_MA_plot.png">
 
