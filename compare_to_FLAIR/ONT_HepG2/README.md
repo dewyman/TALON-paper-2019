@@ -1,4 +1,4 @@
-# Running FLAIR on HepG2 Oxford Nanopore data
+i# Running FLAIR on HepG2 PacBio data
 
 FLAIR was cloned from https://github.com/BrooksLabUCSC/flair on 8/5/2019.
 
@@ -47,4 +47,28 @@ Rscript ../pacbio_v_illumina_edgeR.R \
     --ik2 ~/mortazavi_lab/bin/TALON-paper-2019/Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
     --color green \
     -o FLAIR
+```
+
+5. We also want to see how reproducible our datasets are as characterized by FLAIR. Run the following gene and transcript correlations to see: 
+
+```
+Rscript ../plot_pacbio_gene_expression_corr.R \
+    --f counts_matrix_talon_abd.tsv \
+    --color green \
+    --d1 HepG2_ONT_Rep1_HepG2_batch1 \
+    --d2 HepG2_ONT_Rep2_HepG2_batch1 \
+    --celltype HepG2 \
+    --d1_label "ONT Rep1" \
+    --d2_label "ONT Rep2" \
+    -o FLAIR 
+
+Rscript ../plot_pacbio_transcript_expression_corr.R \
+   --f counts_matrix_talon_abd.tsv \ 
+   --color green \
+    --d1 HepG2_ONT_Rep1_HepG2_batch1 \
+    --d2 HepG2_ONT_Rep2_HepG2_batch1 \
+    --celltype HepG2 \
+    --d1_label "ONT Rep1" \
+    --d2_label "ONT Rep2" \
+    --outdir FLAIR 
 ```
