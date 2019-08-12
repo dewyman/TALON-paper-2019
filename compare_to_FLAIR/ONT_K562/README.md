@@ -1,4 +1,4 @@
-# Running FLAIR on K562 PacBio data
+# Running FLAIR on K562 Oxford Nanopore data
 
 FLAIR was cloned from https://github.com/BrooksLabUCSC/flair on 8/5/2019.
 

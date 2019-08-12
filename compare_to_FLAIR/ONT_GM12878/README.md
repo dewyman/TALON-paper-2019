@@ -1,4 +1,4 @@
-# Running FLAIR on GM12878 PacBio data
+# Running FLAIR on GM12878 Oxford Nanopore data
 
 FLAIR was cloned from https://github.com/BrooksLabUCSC/flair on 8/5/2019.
 
