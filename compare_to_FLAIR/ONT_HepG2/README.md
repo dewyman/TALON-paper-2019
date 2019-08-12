@@ -48,6 +48,3 @@ Rscript ../pacbio_v_illumina_edgeR.R \
     --color green \
     -o FLAIR
 ```
-<img align="left" width="500" src="FLAIR/gene_detection_by_TPM.png">
-<img align="left" width="500" src="FLAIR/edgeR_ont_illumina_gene_MA_plot.png">
-
