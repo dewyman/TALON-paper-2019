@@ -10,7 +10,7 @@
 #$ -ckpt restart
 #$ -N ill_STAR
 
-DPATH=~/mortazavi_lab/data/tier1_filtered/
+DPATH=~/mortazavi_lab/data/tier1_filtered/illumina/
 reads="${DPATH}GM12878/GM12878_rep1_illumina_1.fastq.gz,${DPATH}GM12878/GM12878_rep2_illumina_1.fastq.gz,${DPATH}HepG2/HepG2_rep1_illumina_1.fastq.gz,${DPATH}HepG2/HepG2_rep2_illumina_1.fastq.gz,${DPATH}K562/K562_rep1_illumina_1.fastq.gz,${DPATH}K562/K562_rep2_illumina_1.fastq.gz ${DPATH}GM12878/GM12878_rep1_illumina_2.fastq.gz,${DPATH}GM12878/GM12878_rep2_illumina_2.fastq.gz,${DPATH}HepG2/HepG2_rep1_illumina_2.fastq.gz,${DPATH}HepG2/HepG2_rep2_illumina_2.fastq.gz,${DPATH}K562/K562_rep1_illumina_2.fastq.gz,${DPATH}K562/K562_rep2_illumina_2.fastq.gz"
 
 module load STAR/2.5.2a
