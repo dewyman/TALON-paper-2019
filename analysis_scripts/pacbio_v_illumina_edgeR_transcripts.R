@@ -157,7 +157,7 @@ ma_plot <- function(data, fillcolor, outdir, dtype) {
     top_diff <- quantile(data$adj_pval, c(.0015))
     data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "annot_transcript_name"]
 
-    fname <- paste(outdir, "/edgeR_" dtype, "_illumina_transcript_MA_plot.png", sep="")
+    fname <- paste(outdir, "/edgeR_", dtype, "_illumina_transcript_MA_plot.png", sep="")
     xlabel <- "log(Counts per million)"
     ylabel <- paste0(dtype, " to Illumina log2-fold change")
 
@@ -220,7 +220,7 @@ parse_options <- function() {
     make_option(c("--color"), action = "store", dest = "color_scheme",
                     default = NULL, help = "blue, red, or green"),
     make_option(c("-o","--outdir"), action = "store", dest = "outdir",
-                default = NULL, help = "Output directory for plots and outfiles")
+                default = NULL, help = "Output directory for plots and outfiles"),
     make_option(c("--dtype"), action = "store", dest = "dtype",
                 default = "PacBio", help = "Datatype label to display on plot"))
 
