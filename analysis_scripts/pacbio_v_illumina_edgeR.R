@@ -18,6 +18,9 @@ main <-function() {
     dataset1 <- data_names[1]
     dataset2 <- data_names[2]
 
+    # datatype label (ONT or PacBio)
+    dtype <- opt$dtype
+
     # Get genes expressed in the Illumina data from the Kallisto
     # abundance files
     illumina_1 <- filter_kallisto_illumina_genes(opt$illumina_kallisto_1)
@@ -80,20 +83,20 @@ main <-function() {
     illumina_PB_et$adj_pval <- p.adjust(illumina_PB_et$PValue, method = "bonferroni")
 
     # Volcano plot
-    volcano_plot(illumina_PB_et, fill_color, opt$outdir)
+    volcano_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
 
     # MA plot
-    ma_plot(illumina_PB_et, fill_color, opt$outdir)
+    ma_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
 
     # Merge the EdgeR table with the other information
     illumina_PB_et <- cbind(illumina_PB_et, merged_illumina_pacbio)
     illumina_PB_et <- illumina_PB_et[order(illumina_PB_et$adj_pval),]
     print(head(subset(illumina_PB_et, logFC > 0)))
-    write.table(illumina_PB_et, paste(opt$outdir, "/edgeR_pacbio_illumina_genes.tsv", sep=""),
+    write.table(illumina_PB_et, paste(opt$outdir, "/edgeR_", dtype, "_illumina_genes.tsv", sep=""),
                 row.names=F, col.names=T, quote=F)
 }
 
-volcano_plot <- function(data, fillcolor, outdir) {
+volcano_plot <- function(data, fillcolor, outdir, dtype) {
 
     data$status <- as.factor(ifelse(abs(data$logFC) > 1 & data$adj_pval <= 0.01,
                              "Bonf. p-value <= 0.01", "Bonf. p-value > 0.01"))
@@ -106,8 +109,8 @@ volcano_plot <- function(data, fillcolor, outdir) {
     top_diff <- quantile(data$adj_pval, c(.0015))
     data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"] 
 
-    fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_volcano_plot.png", sep="")
-    xlabel <- "PacBio to Illumina log2-fold change"
+    fname <- paste(outdir, "/edgeR_", dtype, "_illumina_gene_volcano_plot.png", sep="")
+    xlabel <- paste0(dtype, " to Illumina log2-fold change")
     ylabel <- "-log10 adjusted p-value"
 
     png(filename = fname,
@@ -137,7 +140,7 @@ volcano_plot <- function(data, fillcolor, outdir) {
     dev.off()
 }
 
-ma_plot <- function(data, fillcolor, outdir) {
+ma_plot <- function(data, fillcolor, outdir, dtype) {
 
     data$status <- as.factor(ifelse(abs(data$logFC) > 1 & data$adj_pval <= 0.01,
                              "Bonf. p-value <= 0.01", "Bonf. p-value > 0.01"))
@@ -150,9 +153,9 @@ ma_plot <- function(data, fillcolor, outdir) {
     top_diff <- quantile(data$adj_pval, c(.0015))
     data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"]
 
-    fname <- paste(outdir, "/edgeR_pacbio_illumina_gene_MA_plot.png", sep="")
+    fname <- paste(outdir, "/edgeR_", dtype, "_illumina_gene_MA_plot.png", sep="")
     xlabel <- "log(Counts per million)"
-    ylabel <- "PacBio to Illumina log2-fold change"
+    ylabel <- paste0(dtype, " to Illumina log2-fold change")
 
     png(filename = fname,
         width = 2500, height = 2500, units = "px",
@@ -217,7 +220,9 @@ parse_options <- function() {
     make_option(c("--color"), action = "store", dest = "color_scheme",
                     default = NULL, help = "blue, red, or green"),
     make_option(c("-o","--outdir"), action = "store", dest = "outdir",
-                default = NULL, help = "Output directory for plots and outfiles"))
+                default = NULL, help = "Output directory for plots and outfiles"),
+    make_option(c("--dtype"), action = "store", dest = "dtype",
+                default = "PacBio", help = "Datatype label to display on plot"))
 
     opt <- parse_args(OptionParser(option_list=option_list))
     return(opt)
