@@ -142,8 +142,7 @@ Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
     --outdir ../HepG2/
 
 # differences in transcript quantification 
-
-Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR_transcripts.R \
     --f all_talon_abundance.tsv \
     --datasets ONT32,ONT33 \
     --ik1 ../../../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \

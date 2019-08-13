@@ -154,8 +154,7 @@ Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
     --outdir ../GM12878/
 
 # differences in transcript quantification 
-
-Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR_transcripts.R \
     --f all_talon_abundance.tsv \
     --datasets ONT24,ONT25 \
     --ik1 ../../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
