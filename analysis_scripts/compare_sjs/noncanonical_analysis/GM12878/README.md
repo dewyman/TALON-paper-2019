@@ -45,3 +45,22 @@ time python ../../extract_SJs_from_sam.py \
 
 
 ### Reproducibility
+
+1) Extract only noncanonical SJs from each file:
+```
+awk '{if($5 == 0) print $0}' PacBio_GM12878_pre-TC_SJs.txt > ncsj_PacBio_GM12878_pre-TC_SJs.txt
+awk '{if($5 == 0) print $0}' ONT_GM12878_pre-TC_SJs.txt > ncsj_ONT_GM12878_pre-TC_SJs.txt
+awk '{if($5 == 0) print $0}' ../../../../Illumina/GM12878/GM12878_alignedSJ.out.tab > ncsj_Illumina_GM12878_pre-TC_SJs.txt
+```
+
+2) Run comparison across platforms
+```
+python ../../compare_sjs_venn.py \
+        -pb ncsj_PacBio_GM12878_pre-TC_SJs.txt \
+	-ont ncsj_ONT_GM12878_pre-TC_SJs.txt \
+	-illumina ncsj_Illumina_GM12878_pre-TC_SJs.txt \
+	-sample GM12878
+```
+
+
+
