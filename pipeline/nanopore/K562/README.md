@@ -120,3 +120,34 @@ Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
     -o PAS-comp/K562
 ```
 
+## ONT vs. Illumina quantification analysis
+```
+# gene detection
+Rscript ../../../compare_to_FLAIR/plot_detection_by_TPM_for_datasets.R \
+    --f all_talon_abundance.tsv \
+    --datasets ONT31,ONT18 \
+    --ik1 ../../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    --color red \
+    --outdir ../K562/
+
+# differences in gene quantification
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
+    --f all_talon_abundance.tsv \
+    --datasets ONT31,ONT18 \
+    --ik1 ../../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    --dtype ONT \
+    --color red \
+    --outdir ../K562/
+
+# differences in transcript quantification
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR_transcripts.R \
+    --f all_talon_abundance.tsv \
+    --datasets ONT18,ONT31 \
+    --ik1 ../../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    --dtype ONT \
+    --color red \
+    --outdir ../K562/
+```

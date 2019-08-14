@@ -1,4 +1,4 @@
-## Make a whitelist file of filtered GM12878 transcripts
+## Make a whitelist file of filtered HepG2 transcripts
 ```
 python /pub/dwyman/TALON/post-TALON_tools/filter_talon_transcripts.py \
           --db ../full_gencode_v29_2019-05-24.db \
@@ -7,7 +7,7 @@ python /pub/dwyman/TALON/post-TALON_tools/filter_talon_transcripts.py \
           --o HepG2_whitelist.csv
 ```
 
-## Make a GTF file using the GM12878 whitelist
+## Make a GTF file using the HepG2 whitelist
 ```
 python /pub/dwyman/TALON/post-TALON_tools/create_GTF_from_database.py \
           --db ../full_gencode_v29_2019-05-24.db \
@@ -120,3 +120,34 @@ Rscript ../../../analysis_scripts/plot_support_by_novelty_type.R \
     -o PAS-comp/HepG2
 ```
 
+## ONT vs. Illumina quantification analysis
+```
+# gene detection
+Rscript ../../../compare_to_FLAIR/plot_detection_by_TPM_for_datasets.R \
+    --f all_talon_abundance.tsv \
+    --datasets ONT33,ONT32 \
+    --ik1 ../../../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
+    --color green \
+    --outdir ../HepG2/
+
+# differences in gene quantification
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR.R \
+    --f all_talon_abundance.tsv \
+    --datasets ONT33,ONT32 \
+    --ik1 ../../../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
+    --dtype ONT \
+    --color green \
+    --outdir ../HepG2/
+
+# differences in transcript quantification 
+Rscript ../../../analysis_scripts/pacbio_v_illumina_edgeR_transcripts.R \
+    --f all_talon_abundance.tsv \
+    --datasets ONT32,ONT33 \
+    --ik1 ../../../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
+    --dtype ONT \
+    --color green \
+    --outdir ../HepG2/
+```
