@@ -1,70 +1,86 @@
-Scripts for comparing long read and short read splice junctions.
+## Splice junction comparison
 
-Input:
-- High-confidence SJ file from STAR (obtained by mapping short reads to the reference genome)
-- SJ file from long reads (achieved by running TranscriptClean utility on TALON-generated GTF)
+1. We will use GM12878 to compare splice junctions across sequencing platforms. We need the GM12878 PacBio and ONT GTFs from the supplement, tables S2 and S17. These will be stored in pb_gtfs and ont_gtfs respectively.
 
-Output: 
-- File listing the number of SJs unique o short reads, unique to long reads, and shared by both. 
-
-1. Generate GTFs from TALON db for all ONT or all PacBio reads (tables S14 and S29 in the supplement)
+2. Extract splice junctions from GM12878 PacBio and ONT gtfs using TranscriptClean
 ```
-TALONPATH=~/mortazavi_lab/bin/TALON/post-TALON_tools/
-DBPATH=~/mortazavi_lab/data/ont_tier1/
-
-printf "D10,D11,D8,D9,D4,D5" > pb_pairings_all
-printf "D4\nD5\nD8\nD9\nD10\nD11" > datasets_pb
-
-python ${TALONPATH}filter_talon_transcripts.py \
-	--db ${DBPATH}full_gencode_v29_2019-05-24.db \
-	-a gencode_v29 \
-	--pairings pb_pairings_all \
-	--o whitelist_pb
-
-python ${TALONPATH}create_GTF_from_database.py \
-	--db ${DBPATH}full_gencode_v29_2019-05-24.db \
-	-a gencode_v29 \
-	--whitelist whitelist_pb \
-	--o full_gencode_v29_pb \
-	-b hg38 \
-	--datasets datasets_pb
-
-printf "ONT21,ONT24,ONT25,ONT32,ONT33,ONT34,ONT18,ONT31" > ont_pairings_all
-printf "ONT21\nONT24\nONT25\nONT32\nONT33\nONT34\nONT18\nONT31" > datasets_ont
-
-python ${TALONPATH}filter_talon_transcripts.py \
-        --db ${DBPATH}full_gencode_v29_2019-05-24.db \
-        -a gencode_v29 \
-        --pairings ont_pairings_all \
-        --o whitelist_ont
-
-python ${TALONPATH}create_GTF_from_database.py \
-        --db ${DBPATH}full_gencode_v29_2019-05-24.db \
-        -a gencode_v29 \
-        --whitelist whitelist_ont \
-        --o full_gencode_v29_ont \
-        -b hg38 \
-        --datasets datasets_ont
-
-```
-
-2. Extract splice junctions from gtfs using TranscriptClean
-```
+conda activate python2.7
 TCPATH=~/mortazavi_lab/bin/TranscriptClean/accessory_scripts/
 REFPATH=~/mortazavi_lab/ref/hg38/
 
 python ${TCPATH}get_SJs_from_gtf.py \
-	--f full_gencode_v29_pb_talon.gtf \
+	--f pb_gtfs/GM12878_talon_observedOnly.gtf \
 	--g ${REFPATH}hg38.fa \
-	--o pb_talon_sjs.bed
+	--o pb_talon_GM12878_sjs.bed
 
 python ${TCPATH}get_SJs_from_gtf.py \
-	--f full_gencode_v29_ont_talon.gtf \
+	--f ont_gtfs/GM12878_ont_talon_observedOnly.gtf \
 	--g ${REFPATH}hg38.fa \
-	--o ont_talon_sjs.bed
+	--o ont_talon_GM12878_sjs.bed
 ```
 
 3. Now, let's get the splice junctions present in the Illumina data by mapping with STAR. 
 ```
-qsub run_STAR_illumina.sh 
+qsub run_STAR_illumina_GM12878.sh
 ```
+
+4. Create a venn diagram demonstrating which splice junctions are present in which dataset.
+```
+conda activate base
+python compare_sjs_venn.py \
+	-pb pb_talon_GM12878_sjs.bed \
+	-ont ont_talon_GM12878_sjs.bed \
+	-illumina GM12878_alignedSJ.out.tab \
+	-sample GM12878
+```
+
+5. We also ran the above analysis for the other 2 cell lines:
+ ```
+# HepG2 (requires tables S5 and S20)
+conda activate python2.7
+TCPATH=~/mortazavi_lab/bin/TranscriptClean/accessory_scripts/
+REFPATH=~/mortazavi_lab/ref/hg38/
+
+python ${TCPATH}get_SJs_from_gtf.py \
+	--f pb_gtfs/HepG2_talon_observedOnly.gtf \
+	--g ${REFPATH}hg38.fa \
+	--o pb_talon_HepG2_sjs.bed
+
+python ${TCPATH}get_SJs_from_gtf.py \
+	--f ont_gtfs/HepG2_ont_talon_observedOnly.gtf \
+	--g ${REFPATH}hg38.fa \
+	--o ont_talon_HepG2_sjs.bed
+
+qsub run_STAR_illumina_HepG2.sh
+
+conda activate base
+python compare_sjs_venn.py \
+	-pb pb_talon_HepG2_sjs.bed \
+	-ont ont_talon_HepG2_sjs.bed \
+	-illumina HepG2_alignedSJ.out.tab \
+	-sample HepG2
+
+# K562 (requires tables S8 and S23)
+conda activate python2.7
+TCPATH=~/mortazavi_lab/bin/TranscriptClean/accessory_scripts/
+REFPATH=~/mortazavi_lab/ref/hg38/
+
+python ${TCPATH}get_SJs_from_gtf.py \
+	--f pb_gtfs/K562_talon_observedOnly.gtf \
+	--g ${REFPATH}hg38.fa \
+	--o pb_talon_K562_sjs.bed
+
+python ${TCPATH}get_SJs_from_gtf.py \
+	--f ont_gtfs/K562_ont_talon_observedOnly.gtf
+	--g ${REFPATH}hg38.fa \
+	--o ont_talon_K562_sjs.bed
+
+qsub run_STAR_illumina_K562.sh
+
+conda activate base
+python compare_sjs_venn.py \
+	-pb pb_talon_K562_sjs.bed \
+	-ont ont_talon_K562_sjs.bed \
+	-illumina K562_alignedSJ.out.tab \
+	-sample K562
+ ```
