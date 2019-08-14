@@ -1,6 +1,6 @@
 ## Splice junction comparison
 
-1. We will use GM12878 to compare splice junctions across sequencing platforms. We need the GM12878 PacBio and ONT GTFs from the supplement, tables S2 and S17. These will be stored in pb_gtfs and ont_gtfs respectively.
+1. We will use GM12878 to compare splice junctions across sequencing platforms. We need the GM12878 PacBio and ONT GTFs from the supplement, tables S2 and S17. These will be stored in pb_gtfs/ and ont_gtfs/ respectively.
 
 2. Extract splice junctions from GM12878 PacBio and ONT gtfs using TranscriptClean
 ```
@@ -27,6 +27,7 @@ qsub run_STAR_illumina_GM12878.sh
 4. Create a venn diagram demonstrating which splice junctions are present in which dataset.
 ```
 conda activate base
+mkdir figures
 python compare_sjs_venn.py \
 	-pb pb_talon_GM12878_sjs.bed \
 	-ont ont_talon_GM12878_sjs.bed \
@@ -84,3 +85,8 @@ python compare_sjs_venn.py \
 	-illumina K562_alignedSJ.out.tab \
 	-sample K562
  ```
+
+<img align="left" width="500" src="figures/GM12878_venn.png">
+<img align="left" width="500" src="figures/HepG2_venn.png">
+<img align="left" width="500" src="figures/K562_venn.png">
+
