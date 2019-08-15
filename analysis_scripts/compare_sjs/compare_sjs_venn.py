@@ -2,6 +2,7 @@ import pandas as pd
 import argparse
 from matplotlib_venn import venn3
 import matplotlib.pyplot as plt
+import math
 
 def get_args():
 	desc = 'Given sj files, see which splice junctions are shared/unique between datasets'
@@ -15,6 +16,8 @@ def get_args():
 		help = 'Splice junction file from illumina')
 	parser.add_argument('-sample', dest='sample_name', 
 		help = 'Sample name ie GM12878')
+	parser.add_argument('--log', dest='log_sizes', default=False,
+		action='store_true', help = 'Log the sizes of the circles')
 
 	args = parser.parse_args()
 	return args
@@ -74,6 +77,11 @@ def main():
 	# get each of the intersection counts that we care about
 	counts, labels = find_intersect_counts(pb_df, ont_df, ill_df)
 
+	# change circle sizes 
+	if args.log_sizes:
+		intersection_labels = tuple([str(i) for i in counts])
+		counts = tuple([math.log2(i) for i in counts])
+
 	print(counts)
 	print(labels)
 
@@ -98,6 +106,15 @@ def main():
 	v.get_label_by_id('101').set_fontsize('x-large')
 	v.get_label_by_id('011').set_fontsize('x-large')
 	v.get_label_by_id('111').set_fontsize('x-large')
+
+	if args.log_sizes:
+		v.get_label_by_id('100').set_text(intersection_labels[0])
+		v.get_label_by_id('010').set_text(intersection_labels[1])
+		v.get_label_by_id('001').set_text(intersection_labels[3])
+		v.get_label_by_id('110').set_text(intersection_labels[2])
+		v.get_label_by_id('101').set_text(intersection_labels[4])
+		v.get_label_by_id('011').set_text(intersection_labels[5])
+		v.get_label_by_id('111').set_text(intersection_labels[6])
 
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.pdf')
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.png')
