@@ -99,8 +99,8 @@ def main():
 	v.get_label_by_id('011').set_fontsize('x-large')
 	v.get_label_by_id('111').set_fontsize('x-large')
 
-	plt.savefig('figures/'+args.sample_name+'_venn.pdf')
-	plt.savefig('figures/'+args.sample_name+'_venn.png')
+	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.pdf')
+	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.png')
 
 if __name__ == '__main__':
 	main()
