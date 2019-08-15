@@ -23,7 +23,7 @@ def read_sj_file(infile, dtype):
 
 	df = pd.read_csv(infile, sep='\t', 
 		names=['chrom', 'start', 'stop'], usecols=[0,1,2])
-	# df['dtype'] = dtype
+	df.drop_duplicates(inplace=True)
 	return df
 
 def find_intersect_counts(dfa, dfb, dfc):
@@ -99,7 +99,8 @@ def main():
 	v.get_label_by_id('011').set_fontsize('x-large')
 	v.get_label_by_id('111').set_fontsize('x-large')
 
-	plt.savefig(args.sample_name+'_venn.pdf')
+	plt.savefig('figures/'+args.sample_name+'_venn.pdf')
+	plt.savefig('figures/'+args.sample_name+'_venn.png')
 
 if __name__ == '__main__':
 	main()
