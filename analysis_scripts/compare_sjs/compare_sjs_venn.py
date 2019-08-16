@@ -117,7 +117,7 @@ def main():
 		v.get_label_by_id('111').set_text(intersection_labels[6])
 
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.pdf')
-	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.png')
+	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.png', dpi = 600)
 
 if __name__ == '__main__':
 	main()
