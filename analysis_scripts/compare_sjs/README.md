@@ -96,6 +96,20 @@ python compare_sjs_venn.py \
 <img align="left" width="500" src="figures/HepG2_venn.png">
 <img align="left" width="500" src="figures/K562_venn.png">
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Splice junction novelty types
 
 We wanted to investigate the support for and percent makeup for splice junctions of different novelty types. In this case we define splice junction novelty as the following: 
