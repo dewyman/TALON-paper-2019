@@ -92,23 +92,9 @@ python compare_sjs_venn.py \
 	--log
  ```
 
-<img align="left" width="500" src="figures/GM12878_venn.png">
-<img align="left" width="500" src="figures/HepG2_venn.png">
-<img align="left" width="500" src="figures/K562_venn.png">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img align="center" width="500" src="figures/GM12878_venn.png">
+<img align="center" width="500" src="figures/HepG2_venn.png">
+<img align="center" width="500" src="figures/K562_venn.png">
 
 ## Splice junction novelty types
 
