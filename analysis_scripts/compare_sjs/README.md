@@ -1,4 +1,4 @@
-## Splice junction comparison
+## Technology (PacBio vs. ONT vs. Illumina) splice junction comparison
 
 1. We will use GM12878 to compare splice junctions across sequencing platforms. We need the GM12878 PacBio and ONT GTFs from the supplement, tables S2 and S17. These will be stored in pb_gtfs/ and ont_gtfs/ respectively.
 
@@ -88,10 +88,61 @@ python compare_sjs_venn.py \
 	-pb pb_talon_K562_sjs.tab \
 	-ont ont_talon_K562_sjs.tab \
 	-illumina K562_alignedSJ.out.tab \
-	-sample K562
+	-sample K562 \
+	--log
  ```
 
 <img align="left" width="500" src="figures/GM12878_venn.png">
 <img align="left" width="500" src="figures/HepG2_venn.png">
 <img align="left" width="500" src="figures/K562_venn.png">
 
+## Splice junction novelty types
+
+We wanted to investigate the support for and percent makeup for splice junctions of different novelty types. In this case we define splice junction novelty as the following: 
+
+* **Known junction:** A splice junction with the whole splice junction (splice donor and acceptor) seen in the Gencode annotation
+* **NIC junction:** A splice junction where both the splice donor and acceptor individually are in the Gencode annotation, but are never seen together
+* **NNC junction:** A splice junction where at least one of the splice donor or acceptor is not present in the Gencode annotation
+
+1. Going off of this, we first obtain the splice junction file from Gencode v29 using the TranscriptClean utility.
+```
+conda activate python2.7
+TCPATH=~/mortazavi_lab/bin/TranscriptClean/accessory_scripts/
+ANNPATH=~/mortazavi_lab/ref/gencode.v29/
+REFPATH=~/mortazavi_lab/ref/hg38/
+
+
+python ${TCPATH}get_SJs_from_gtf.py \
+    --f ${ANNPATH}gencode.v29.annotation.gtf \
+	--g ${REFPATH}hg38.fa \
+	--o gencode_v29_sjs.tab
+```
+
+2. We then use the splice junctions we extracted from the PacBio GM12878 gtf (Table S2) to label each splice junction with its novelty type
+```
+conda activate base
+python label_sj_novelty.py \
+	-sj pb_talon_GM12878_sjs.tab \
+	-ref_sj gencode_v29_sjs.tab 
+```
+
+3. Now we can look at the proportions of known, nnc, and nic splice junctions present in our data in the form of a bar chart
+```
+python plot_sj_novelty_counts.py \
+	-sj pb_talon_GM12878_sjs_novelty.tab \
+	-sample GM12878
+```
+
+<img align="left" width="500" src="figures/GM12878_sj_novelty.png">
+
+4. Get splice junction novelty types for our Illumina splice junction file so we can look for support for novel splice junctions in our short-read data
+```
+python label_sj_novelty.py \
+	-sj GM12878_alignedSJ.out.tab \
+	-ref_sj gencode_v29_sjs.tab 
+```
+
+5. Look at NNC makeup with finer resolution, are both the donor and acceptor completely novel or is has one or the other been seen before?
+```
+# coming soon
+```
