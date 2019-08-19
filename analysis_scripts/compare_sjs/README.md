@@ -88,8 +88,7 @@ python compare_sjs_venn.py \
 	-pb pb_talon_K562_sjs.tab \
 	-ont ont_talon_K562_sjs.tab \
 	-illumina K562_alignedSJ.out.tab \
-	-sample K562 \
-	--log
+	-sample K562 
  ```
 
 <img align="center" width="500" src="figures/GM12878_venn.png">
@@ -158,3 +157,50 @@ python plot_sj_novelty_counts.py \
 ```
 # coming soon
 ```
+
+7. Also perform the above analysis for HepG2 and K562
+```
+# HepG2
+python label_sj_novelty.py \
+	-sj pb_talon_HepG2_sjs.tab \
+	-ref_sj gencode_v29_sjs.tab 
+
+python plot_sj_novelty_counts.py \
+	-sj pb_talon_HepG2_sjs_novelty.tab \
+	-sample HepG2
+
+python label_sj_novelty.py \
+	-sj HepG2_alignedSJ.out.tab \
+	-ref_sj gencode_v29_sjs.tab 
+
+python plot_sj_novelty_counts.py \
+	-sj pb_talon_HepG2_sjs_novelty.tab \
+	-sample HepG2 \
+	--extra_support HepG2_alignedSJ.out_novelty.tab \
+	--support_name Illumina
+
+# K562
+python label_sj_novelty.py \
+	-sj pb_talon_K562_sjs.tab \
+	-ref_sj gencode_v29_sjs.tab 
+
+python plot_sj_novelty_counts.py \
+	-sj pb_talon_K562_sjs_novelty.tab \
+	-sample K562
+
+python label_sj_novelty.py \
+	-sj K562_alignedSJ.out.tab \
+	-ref_sj gencode_v29_sjs.tab 
+
+python plot_sj_novelty_counts.py \
+	-sj pb_talon_K562_sjs_novelty.tab \
+	-sample K562 \
+	--extra_support K562_alignedSJ.out_novelty.tab \
+	--support_name Illumina
+```
+
+<img align="left" width="500" src="figures/HepG2_sj_novelty.png">
+<img align="left" width="500" src="figures/HepG2_sj_novelty_Illumina_support.png">
+
+<img align="left" width="500" src="figures/K562_sj_novelty.png">
+<img align="left" width="500" src="figures/K562_sj_novelty_Illumina_support.png">
