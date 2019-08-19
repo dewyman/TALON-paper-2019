@@ -142,7 +142,19 @@ python label_sj_novelty.py \
 	-ref_sj gencode_v29_sjs.tab 
 ```
 
-5. Look at NNC makeup with finer resolution, are both the donor and acceptor completely novel or is has one or the other been seen before?
+5. Let's see what percentage of novel splice junctions are supported by Illumina data. 
+```
+python plot_sj_novelty_counts.py \
+	-sj pb_talon_GM12878_sjs_novelty.tab \
+	-sample GM12878 \
+	--extra_support GM12878_alignedSJ.out_novelty.tab \
+	--support_name Illumina
+```
+
+<img align="left" width="500" src="figures/GM12878_sj_novelty_Illumina_support.png">
+
+
+6. Look at NNC makeup with finer resolution, are both the donor and acceptor completely novel or is has one or the other been seen before?
 ```
 # coming soon
 ```
