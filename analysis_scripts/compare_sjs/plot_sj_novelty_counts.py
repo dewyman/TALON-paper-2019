@@ -19,6 +19,8 @@ def get_args():
 		help = 'Splice junction file to compare to for extra support')
 	parser.add_argument('--support_name', dest='sup_name', default=None,
 		help = 'Type of extra support, ie. Illumina')
+	parser.add_argument('--nnc_subtypes', dest='split_nnc', default=False, 
+		action='store_true', help='Use this flag to plot the NNC subtypes')
 
 	args = parser.parse_args()
 	return args
@@ -104,7 +106,6 @@ def extra_support_plot(counts, sup_counts, args):
 	nov_counts['Supported Count'] = sup_counts
 	nov_counts['Unsupported Count'] = unsup_counts
 
-
 	# add aesthetics-related columns
 	nov_counts['log2(count)'] = nov_counts.apply(
 		lambda x: math.log2(x.Count), axis=1)
@@ -112,6 +113,7 @@ def extra_support_plot(counts, sup_counts, args):
 		lambda x: 100*(float(x['Supported Count'])/x.Count), axis=1)
 	nov_counts['log2(supported count)'] = nov_counts.apply(
 		lambda x: (x.percent/100)*x['log2(count)'], axis=1)
+	nov_counts['total_percent'] = 100
 
 	# color palette
 	green = "#009E73"
@@ -124,24 +126,32 @@ def extra_support_plot(counts, sup_counts, args):
 	sns.set(font_scale=1.5, style="whitegrid")
 	order = ['Known', 'NIC', 'NNC']
 
-	sns.barplot(x='Novelty', y='log2(count)', data=nov_counts, 
+	top_plot = sns.barplot(x='Novelty', y='total_percent', data=nov_counts, 
 		color='white', order=order, edgecolor='black')
-	bottom_plot = sns.barplot(x='Novelty', y='log2(supported count)', 
+	bottom_plot = sns.barplot(x='Novelty', y='percent', 
 		data=nov_counts, palette=colors, saturation=1, order=order,
 		edgecolor='black')
 
 	topbar = plt.Rectangle((0,0),1,1,fc='white', edgecolor='black')
 	bottombar = plt.Rectangle((0,0),1,1,fc='#0000A3',  edgecolor='black')
 
-	plt.ylim(0, 20)
+	# plt.ylim(0, 20)
 	plt.title('{} Splice Junction Novelty with {} Support'.format(args.sample_name,
 		args.sup_name))
-	bottom_plot.set_ylabel("log2(SJ count)")
+	bottom_plot.set_ylabel("Percent of Total SJs")
 	for ntype, p in zip(order, bottom_plot.patches):
 		height = p.get_height()
 		bottom_plot.text(p.get_x()+p.get_width()/2.,
 				height + .3,
-				'{:1.2f}%'.format(nov_counts.loc[nov_counts.Novelty == ntype]['percent'].values[0]),
+				'n = {}'.format(nov_counts.loc[nov_counts.Novelty==ntype]['Count'].values[0]),
+				ha="center")
+	for ntype, p in zip(order, bottom_plot.patches):
+		val = nov_counts.loc[nov_counts.Novelty == ntype]['percent'].values[0]
+		height = val
+		height = (height/2)
+		bottom_plot.text(p.get_x()+p.get_width()/2.,
+				height,
+				'{:1.2f}%'.format(val),
 				ha="center")
 
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_sj_novelty_{}_support.pdf'.format(args.sup_name))
