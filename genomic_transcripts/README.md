@@ -91,3 +91,19 @@ Rscript ../analysis_scripts/plot_support_by_novelty_type.R  \
      -o GM12878-PacBio/RNA-PET/GM12878-genomic
 
 ```
+
+7. Find out how many genomic transcripts overlap with the last exon of a transcript
+```
+# Get the last exon of every known GENCODE transcript
+python extract_last_exons.py --f ../refs/gencode.v29.annotation.gtf --o gencode_v29
+
+# Get transcripts in BED format
+awk -v OFS='\t' '{if($3 == "transcript") print $1,$4-1,$5,".",".",$7}' GM12878_pacbio_repro_genomic_talon.gtf > GM12878_pacbio_repro_genomic_talon.bed
+
+# Bedtools intersect it
+source activate mypython3.7.2
+bedtools intersect -a GM12878_pacbio_repro_genomic_talon.bed \
+                   -b gencode_v29_last_exons.bed \
+                   -u \
+                   -s | wc -l 
+```
