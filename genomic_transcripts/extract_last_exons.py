@@ -27,7 +27,7 @@ def output_last_entry(o, chrom, transcript_exons, transcript_strand):
     start = str(last_exon[0])
     end = str(last_exon[-1])
 
-    o.write("\t".join([chrom, start, end, ".", transcript_strand, "."]) + "\n")
+    o.write("\t".join([chrom, start, end, ".", ".", transcript_strand]) + "\n")
     return
 
 def main():
