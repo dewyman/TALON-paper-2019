@@ -6,6 +6,8 @@ def getOptions():
 
     parser.add_option("--f", dest = "infile",
         help = "Input GTF file of genomic transcripts", metavar = "FILE", type = "string")
+    parser.add_option("--e", dest = "exons",
+        help = "Input BED file of final exons", metavar = "FILE", type = "string")
     parser.add_option("--p", dest = "prefix", help = "Prefix for intermediate files",
         metavar = "FILE", type = "string")
 
@@ -16,18 +18,19 @@ def main():
 
     options = getOptions()
     infile = options.infile
-    bed = options.prefix + "_genomic.bed"
+    exons = options.exons
+    bed = options.prefix + "genomic.bed"
 
     # Get genomic transcripts in BED format
     cmd = """awk -v OFS='\t' '{if($3 == "transcript") print $1,$4-1,$5,".",".",$7}' """ + infile + " > " + bed
     os.system(cmd)
 
     # Bedtools intersect it
-    btools_out = options.prefix + "_nGenomic_intersect_lastExons.bed"
-    bedtools_cmd = """bedtools intersect -a GM12878_pacbio_repro_genomic_talon.bed \
-                      -b gencode_v29_last_exons.bed \
+    btools_out = options.prefix + "nGenomic_intersect_lastExons.bed"
+    bedtools_cmd = """bedtools intersect -a %s \
+                      -b %s \
                       -u \
-                      -s | wc -l > """ + btools_out
+                      -s | wc -l > %s""" % (bed, exons, btools_out)
     os.system(bedtools_cmd)
 
     # Now, collect the results for output
@@ -37,7 +40,7 @@ def main():
     total_genomic = sum(1 for line in open(bed))
     percent_overlap = round(overlap_size*100./total_genomic)
 
-    print("\t".join([str(overlap_size), str(total_genomic), str(percent_overlap) + "%"]))
+    print("\t".join([options.prefix, str(overlap_size), str(total_genomic), str(percent_overlap) + "%"]))
 
 if __name__ == '__main__':
     main()
