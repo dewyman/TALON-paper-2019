@@ -150,7 +150,7 @@ python plot_sj_novelty_counts.py \
 	--support_name Illumina
 ```
 
-<img align="left" width="500" src="figures/GM12878_sj_novelty_Illumina_support.png">
+<img align="left" width="500" src="figures/PacBio_GM12878_sj_novelty_Illumina_support.png">
 
 <!-- 
 6. Look at NNC makeup with finer resolution, are both the donor and acceptor completely novel or is has one or the other been seen before?
@@ -252,6 +252,8 @@ python plot_sj_novelty_counts.py \
 	-sample "ONT K562" \
 	--extra_support K562_alignedSJ.out_novelty.tab \
 	--support_name Illumina
+
+
 ```
 
 <img align="left" width="500" src="figures/PacBio_HepG2_sj_novelty.png">
