@@ -256,11 +256,11 @@ python plot_sj_novelty_counts.py \
 
 ```
 
-<img align="left" width="500" src="figures/PacBio_HepG2_sj_novelty.png">
+<img align="left" width="500" src="figures/ONT_GM12878_sj_novelty.png">
 <img align="left" width="500" src="figures/ONT_GM12878_sj_novelty_Illumina_support.png">
 
-<img align="left" width="500" src="figures/PacBio_HepG2_sj_novelty.png">
+<img align="left" width="500" src="figures/ONT_HepG2_sj_novelty.png">
 <img align="left" width="500" src="figures/ONT_HepG2_sj_novelty_Illumina_support.png">
 
-<img align="left" width="500" src="figures/PacBio_K562_sj_novelty.png">
+<img align="left" width="500" src="figures/ONT_K562_sj_novelty.png">
 <img align="left" width="500" src="figures/ONT_K562_sj_novelty_Illumina_support.png">
