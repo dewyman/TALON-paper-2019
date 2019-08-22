@@ -106,3 +106,28 @@ python gen_isoform_support_table.py \
 	-csv ont_K562_isoform_sj_support.csv \
 	-sample ont_K562
 ```
+
+6. We also wanted to see how this works in cortex/hippocampus so we'll do the same analysis there
+```
+# cortex
+python get_isoform_sj_support.py \
+	-gtf ../mouse_brain/cortex_talon_observedOnly.gtf  \
+	-ref_sj_1 ../cortex_alignedSJ.out.tab \
+	-ref_sj_2 ../gencode_vM21_sjs.tab \
+	-sample cortex
+
+python gen_isoform_support_table.py \
+	-csv cortex_isoform_sj_support.csv \
+	-sample cortex
+
+# hippocampus
+python get_isoform_sj_support.py \
+	-gtf ../mouse_brain/hippocampus_talon_observedOnly.gtf  \
+	-ref_sj_1 ../hippocampus_alignedSJ.out.tab \
+	-ref_sj_2 ../gencode_vM21_sjs.tab \
+	-sample hippocampus
+
+python gen_isoform_support_table.py \
+	-csv hippocampus_isoform_sj_support.csv \
+	-sample hippocampus
+```
