@@ -1,6 +1,6 @@
-## How does TranscriptClean affect splice junction support?
+## How do TranscriptClean and TALON affect splice junction support?
 
-We wanted to see how running TranscriptClean affects whether or not splice junctions are supported by Illumina or Gencode. 
+We wanted to see how running TranscriptClean and TALON affects whether or not splice junctions are supported by Illumina or Gencode. 
 
 1. Create pre-TranscriptClean splice junction files from our GM12878 sam files. 
 ```
@@ -47,6 +47,21 @@ python ../compare_sjs_venn_new.py \
 
 <img align="center" width="500" src="figures/Post-TC_PacBio_GM12878_venn.png">
 
+5. Finally, we want to see what changes in terms of SJ support when we look at post-TALON SJs.
+```
+python ../compare_sjs_venn_new.py \
+	-sj_1 ../pb_talon_GM12878_sjs.tab \
+	-sj_1_name "Post-TALON PacBio" \
+	-sj_2 ../GM12878_alignedSJ.out.tab \
+	-sj_2_name "Illumina" \
+	-sj_3 ../gencode_v29_sjs.tab \
+	-sj_3_name "Gencode" \
+	-sample "Post-TALON PacBio GM12878"
+```
+
+<img align="center" width="500" src="figures/Post-TALON_PacBio_GM12878_venn.png">
+
+
 For the other cell lines: 
 ```
 # HepG2
@@ -78,6 +93,15 @@ python ../compare_sjs_venn_new.py \
 	-sj_3_name "Gencode" \
 	-sample "Post-TC PacBio HepG2"
 
+python ../compare_sjs_venn_new.py \
+	-sj_1 ../pb_talon_HepG2_sjs.tab \
+	-sj_1_name "Post-TALON PacBio" \
+	-sj_2 ../HepG2_alignedSJ.out.tab \
+	-sj_2_name "Illumina" \
+	-sj_3 ../gencode_v29_sjs.tab \
+	-sj_3_name "Gencode" \
+	-sample "Post-TALON PacBio HepG2"
+
 # K562
 python ../extract_SJs_from_sam.py \
 	--sam pre_TC_sams/PacBio/K562/PacBio_K562_Rep1-Rep2_pre-TC.sam \
@@ -106,12 +130,24 @@ python ../compare_sjs_venn_new.py \
 	-sj_3 ../gencode_v29_sjs.tab \
 	-sj_3_name "Gencode" \
 	-sample "Post-TC PacBio K562"
+
+python ../compare_sjs_venn_new.py \
+	-sj_1 ../pb_talon_K562_sjs.tab \
+	-sj_1_name "Post-TALON PacBio" \
+	-sj_2 ../K562_alignedSJ.out.tab \
+	-sj_2_name "Illumina" \
+	-sj_3 ../gencode_v29_sjs.tab \
+	-sj_3_name "Gencode" \
+	-sample "Post-TALON PacBio K562"
 ```
 
 <img align="center" width="500" src="figures/Pre-TC_PacBio_HepG2_venn.png">
 <img align="center" width="500" src="figures/Post-TC_PacBio_HepG2_venn.png">
+<img align="center" width="500" src="figures/Post-TALON_PacBio_HepG2_venn.png">
 <img align="center" width="500" src="figures/Pre-TC_PacBio_K562_venn.png">
 <img align="center" width="500" src="figures/Post-TC_PacBio_K562_venn.png">
+<img align="center" width="500" src="figures/Post-TALON_PacBio_HepG2_venn.png">
+
 
 For ONT
 ```
@@ -144,6 +180,15 @@ python ../compare_sjs_venn_new.py \
 	-sj_3_name "Gencode" \
 	-sample "Post-TC ONT GM12878"
 
+python ../compare_sjs_venn_new.py \
+	-sj_1 ../ont_talon_GM12878_sjs.tab \
+	-sj_1_name "Post-TALON ONT" \
+	-sj_2 ../GM12878_alignedSJ.out.tab \
+	-sj_2_name "Illumina" \
+	-sj_3 ../gencode_v29_sjs.tab \
+	-sj_3_name "Gencode" \
+	-sample "Post-TALON ONT GM12878"
+
 # HepG2
 python ../extract_SJs_from_sam.py \
 	--sam pre_TC_sams/ONT/HepG2/ONT_HepG2_Rep1-Rep3_pre-TC.sam \
@@ -173,6 +218,15 @@ python ../compare_sjs_venn_new.py \
 	-sj_3_name "Gencode" \
 	-sample "Post-TC ONT HepG2"
 
+python ../compare_sjs_venn_new.py \
+	-sj_1 ../ont_talon_HepG2_sjs.tab \
+	-sj_1_name "Post-TALON ONT" \
+	-sj_2 ../HepG2_alignedSJ.out.tab \
+	-sj_2_name "Illumina" \
+	-sj_3 ../gencode_v29_sjs.tab \
+	-sj_3_name "Gencode" \
+	-sample "Post-TALON ONT HepG2"
+
 # K562
 python ../extract_SJs_from_sam.py \
 	--sam pre_TC_sams/ONT/K562/ONT_K562_Rep1-Rep2_pre-TC.sam \
@@ -201,11 +255,23 @@ python ../compare_sjs_venn_new.py \
 	-sj_3 ../gencode_v29_sjs.tab \
 	-sj_3_name "Gencode" \
 	-sample "Post-TC ONT K562"
+
+python ../compare_sjs_venn_new.py \
+	-sj_1 ../ont_talon_K562_sjs.tab \
+	-sj_1_name "Post-TALON ONT" \
+	-sj_2 ../K562_alignedSJ.out.tab \
+	-sj_2_name "Illumina" \
+	-sj_3 ../gencode_v29_sjs.tab \
+	-sj_3_name "Gencode" \
+	-sample "Post-TALON ONT K562"
 ```
 
 <img align="center" width="500" src="figures/Pre-TC_ONT_GM12878_venn.png">
 <img align="center" width="500" src="figures/Post-TC_ONT_GM12878_venn.png">
+<img align="center" width="500" src="figures/Post-TALON_ONT_GM12878_venn.png">
 <img align="center" width="500" src="figures/Pre-TC_ONT_HepG2_venn.png">
 <img align="center" width="500" src="figures/Post-TC_ONT_HepG2_venn.png">
+<img align="center" width="500" src="figures/Post-TALON_ONT_HepG2_venn.png">
 <img align="center" width="500" src="figures/Pre-TC_ONT_K562_venn.png">
 <img align="center" width="500" src="figures/Post-TC_ONT_K562_venn.png">
+<img align="center" width="500" src="figures/Post-TALON_ONT_K562_venn.png">
