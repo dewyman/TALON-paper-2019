@@ -1,4 +1,4 @@
-i# Running FLAIR on K562 PacBio data
+# Running FLAIR on K562 ONT data
 
 FLAIR was cloned from https://github.com/BrooksLabUCSC/flair on 8/5/2019.
 
@@ -30,6 +30,7 @@ qsub ./run_flair_quantify.sh
 ```
 python ../format_flair_matrix_like_talon.py counts_matrix.tsv counts_matrix_talon_abd.tsv
 
+module load R/3.5.1
 mkdir FLAIR
 
 Rscript ../plot_detection_by_TPM_for_datasets.R \
@@ -39,7 +40,7 @@ Rscript ../plot_detection_by_TPM_for_datasets.R \
       --ik2 ~/mortazavi_lab/bin/TALON-paper-2019/Illumina/K562/Kallisto/Rep2/abundance.tsv \
       --color red \
       -o FLAIR
-`
+
 Rscript ../pacbio_v_illumina_edgeR.R \
     --f counts_matrix_talon_abd.tsv \
     --datasets K562_ONT_Rep1_K562_batch1,K562_ONT_Rep2_K562_batch1 \
@@ -72,4 +73,17 @@ Rscript ../plot_pacbio_transcript_expression_corr.R \
     --d2_label "ONT Rep2" \
     --outdir FLAIR 
 ```
+
+6. Finally, let's see how the gene detection sensitivity compares between FLAIR and TALON on the same datasets. We will need the ONT GM12878 unfiltered TALON abundance file (table S24)
+```
+Rscript ../compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon K562_ont_talon_abundance.tsv \
+    --flair counts_matrix_talon_abd.tsv \
+    --talonD ONT18,ONT31 \
+    --flairDD K562_ONT_Rep1_K562_batch1,K562_ONT_Rep2_K562_batch1 \
+    --ik1 ../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    -o FLAIR 
+```
+
 

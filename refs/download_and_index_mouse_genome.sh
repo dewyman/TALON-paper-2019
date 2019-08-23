@@ -13,7 +13,9 @@ awk '{print $1}' mm10_no_alt_analysis_set_ENCODE.fasta > mm10.fa
 module load samtools/1.3
 samtools faidx mm10.fa
 
-# Download index for STAR
-wget https://www.encodeproject.org/files/ENCFF483PAE/@@download/ENCFF483PAE.tar.gz
-tar -xvzf ENCFF483PAE.tar.gz
-mv out STAR_mm10_ENCODE
+# Index genome with STAR
+module load STAR/2.5.2a
+STAR --runThreadN 4 \
+     --runMode genomeGenerate \
+     --genomeDir STAR_mm10_ENCODE \
+     --genomeFastaFiles mm10_no_alt_analysis_set_ENCODE.fasta
