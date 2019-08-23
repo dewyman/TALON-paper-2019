@@ -79,8 +79,8 @@ main <-function() {
 expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs, regression_line) {
 
     # Take log2(TPM + 1)
-    merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
-    merged_abundances$data2.TPM = log(merged_abundances$data2.TPM + 1, base=2)
+    merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
+    merged_abundances$data2.TPM = log(merged_abundances$data2.TPM + 0.1, base=2)
     
     # Plot log2(TPM + 1) for each dataset on a scatterplot. Color points according to known/novel status
     pearsonCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "pearson", continuity = FALSE, conf.level = 0.95)$estimate
@@ -99,8 +99,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
     fname <- paste(joined_names, "gene", "correlationPlot.png", sep="_")
     corr_fname <- paste(joined_names, "gene", "correlations.txt", sep="_")
 
-    xlabel <- paste("log2(TPM+1) in ", celltype, " PacBio", sep="")
-    ylabel <- paste("log2(TPM+1) in ", celltype, " ONT", sep="")
+    xlabel <- paste("log2(TPM+0.1) in ", celltype, " PacBio", sep="")
+    ylabel <- paste("log2(TPM+0.1) in ", celltype, " ONT", sep="")
     corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
