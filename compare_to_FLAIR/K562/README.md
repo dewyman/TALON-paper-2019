@@ -45,4 +45,36 @@ Rscript ../pacbio_v_illumina_edgeR.R \
     --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
     --color red \
     -o FLAIR
+
+Rscript ../compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ../S27_full_gencode_v29_pb_ont_talon_abundance.tsv \
+    --flair counts_matrix_talon_abd.tsv \
+    --talonD PacBio_K562_1,PacBio_K562_2 \
+    --flairD K562_Rep1_K562_batch1,K562_Rep2_K562_batch1 \
+    --ik1 ../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    -o .
+```
+
+5. We also want to see how reproducible our datasets are as characterized by FLAIR. Run the following gene and transcript correlations to see:
+```
+Rscript ../plot_pacbio_gene_expression_corr.R \
+    --f counts_matrix_talon_abd.tsv \
+    --color blue \
+    --d1 K562_Rep1_K562_batch1 \
+    --d2 K562_Rep2_K562_batch1 \
+    --celltype K562 \
+    --d1_label "PacBio Rep1" \
+    --d2_label "PacBio Rep2" \
+    -o FLAIR
+
+Rscript ../plot_pacbio_transcript_expression_corr.R \
+   --f counts_matrix_talon_abd.tsv \
+   --color blue \
+    --d1 K562_Rep1_K562_batch1 \
+    --d2 K562_Rep2_K562_batch1 \
+    --celltype K562 \
+    --d1_label "PacBio Rep1" \
+    --d2_label "PacBio Rep2" \
+    --outdir FLAIR
 ```

@@ -45,25 +45,36 @@ Rscript ../pacbio_v_illumina_edgeR.R \
     --ik2 ../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
     --color blue \
     -o FLAIR
+
+Rscript ../compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ../S27_full_gencode_v29_pb_ont_talon_abundance.tsv \
+    --flair counts_matrix_talon_abd.tsv \
+    --talonD PacBio_GM12878_1,PacBio_GM12878_2 \
+    --flairD GM12878_Rep1_GM12878_batch1,GM12878_Rep2_GM12878_batch1 \
+    --ik1 ../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
+    -o .
 ```
 
-5. In order to examine the completeness of the FLAIR transcripts, we ran our FANTOM CAGE analysis as previosuly applied to the TALON results:
-Commands not working right now because of the FLAIR GTF format.
+5. We also want to see how reproducible our datasets are as characterized by FLAIR. Run the following gene and transcript correlations to see:
 ```
-source activate mypython3.7.2
-mkdir -p CAGE
-python ../../CAGE/run_CAGE_analysis.py \
-        --gtf flair.collapse.isoforms.gtf \
-        --cage ../../CAGE/data/FANTOM5/hg38_CAGE.bed \
-        --maxdist 100 \
-        --o CAGE/GM12878
+Rscript ../plot_pacbio_gene_expression_corr.R \
+    --f counts_matrix_talon_abd.tsv \
+    --color blue \
+    --d1 GM12878_Rep1_GM12878_batch1 \
+    --d2 GM12878_Rep2_GM12878_batch1 \
+    --celltype GM12878 \
+    --d1_label "PacBio Rep1" \
+    --d2_label "PacBio Rep2" \
+    -o FLAIR 
 
-
-Rscript ../plot_support_no_novelty_type.R \
-    --f CAGE/GM12878_CAGE_results.csv \
-    --t CAGE \
-    --novelty CAGE/transcript_beds/GM12878_novelty.csv \
-    --abundance GM12878_talon_abundance.tsv \
-    --d1 D8 --d2 D9 --as GM12878_antisense_mapping.csv \
-    -o CAGE/GM12878
+Rscript ../plot_pacbio_transcript_expression_corr.R \
+   --f counts_matrix_talon_abd.tsv \ 
+   --color blue \
+    --d1 GM12878_Rep1_GM12878_batch1 \
+    --d2 GM12878_Rep2_GM12878_batch1 \
+    --celltype GM12878 \
+    --d1_label "PacBio Rep1" \
+    --d2_label "PacBio Rep2" \
+    --outdir FLAIR 
 ```

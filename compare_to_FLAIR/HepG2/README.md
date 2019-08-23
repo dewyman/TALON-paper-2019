@@ -30,12 +30,13 @@ qsub ./run_flair_quantify.sh
 ```
 python ../format_flair_matrix_like_talon.py counts_matrix.tsv counts_matrix_talon_abd.tsv
 
+mkdir FLAIR
 Rscript ../plot_detection_by_TPM_for_datasets.R \
       --f counts_matrix_talon_abd.tsv \
       --datasets HepG2_Rep1_HepG2_batch1,HepG2_Rep2_HepG2_batch1 \
       --ik1 ../../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
       --ik2 ../../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
-      --color red \
+      --color green \
       -o FLAIR
 
 Rscript ../pacbio_v_illumina_edgeR.R \
@@ -43,6 +44,38 @@ Rscript ../pacbio_v_illumina_edgeR.R \
     --datasets HepG2_Rep1_HepG2_batch1,HepG2_Rep2_HepG2_batch1 \
     --ik1 ../../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
     --ik2 ../../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
-    --color red \
+    --color green \
     -o FLAIR
+
+Rscript ../compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ../S27_full_gencode_v29_pb_ont_talon_abundance.tsv \
+    --flair counts_matrix_talon_abd.tsv \
+    --talonD PacBio_HepG2_1,PacBio_HepG2_2 \
+    --flairD HepG2_Rep1_HepG2_batch1,HepG2_Rep2_HepG2_batch1 \
+    --ik1 ../../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
+    -o .
+```
+
+5. We also want to see how reproducible our datasets are as characterized by FLAIR. Run the following gene and transcript correlations to see:
+```
+Rscript ../plot_pacbio_gene_expression_corr.R \
+    --f counts_matrix_talon_abd.tsv \
+    --color blue \
+    --d1 HepG2_Rep1_HepG2_batch1 \
+    --d2 HepG2_Rep2_HepG2_batch1 \
+    --celltype HepG2 \
+    --d1_label "PacBio Rep1" \
+    --d2_label "PacBio Rep2" \
+    -o FLAIR
+
+Rscript ../plot_pacbio_transcript_expression_corr.R \
+   --f counts_matrix_talon_abd.tsv \
+   --color blue \
+    --d1 HepG2_Rep1_HepG2_batch1 \
+    --d2 HepG2_Rep2_HepG2_batch1 \
+    --celltype HepG2 \
+    --d1_label "PacBio Rep1" \
+    --d2_label "PacBio Rep2" \
+    --outdir FLAIR
 ```
