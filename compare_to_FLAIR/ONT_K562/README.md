@@ -40,7 +40,7 @@ Rscript ../plot_detection_by_TPM_for_datasets.R \
       --ik2 ~/mortazavi_lab/bin/TALON-paper-2019/Illumina/K562/Kallisto/Rep2/abundance.tsv \
       --color red \
       -o FLAIR
-`
+
 Rscript ../pacbio_v_illumina_edgeR.R \
     --f counts_matrix_talon_abd.tsv \
     --datasets K562_ONT_Rep1_K562_batch1,K562_ONT_Rep2_K562_batch1 \
@@ -84,6 +84,6 @@ Rscript ../compare_TALON_FLAR_detection_to_Illumina.R \
     --ik1 ../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
     --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
     -o FLAIR 
-    ```
+```
 
 
