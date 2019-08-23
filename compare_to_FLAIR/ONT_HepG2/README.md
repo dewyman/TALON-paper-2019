@@ -76,7 +76,7 @@ Rscript ../plot_pacbio_transcript_expression_corr.R \
 
 6. Finally, let's see how the gene detection sensitivity compares between FLAIR and TALON on the same datasets. We will need the ONT GM12878 unfiltered TALON abundance file (table S21)
 ```
-Rscript ../compare_TALON_FLAR_detection_to_Illumina.R \
+Rscript ../compare_TALON_FLAIR_detection_to_Illumina.R \
     --talon HepG2_ont_talon_abundance.tsv \
     --flair counts_matrix_talon_abd.tsv \
     --talonD ONT32,ONT33 \
