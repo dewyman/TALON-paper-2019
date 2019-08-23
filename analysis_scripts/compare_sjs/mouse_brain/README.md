@@ -147,7 +147,7 @@ python ../compare_sjs_venn_new.py \
 <img align="center" width="500" src="figures/Post-TALON_Cortex_venn.png">
 <img align="center" width="500" src="figures/Post-TALON_Hippocampus_venn.png">
 
-
+<!-- 
 8. Build a venn diagram illustrating splice junction support for those found *after* TALON from gencode and Illumina for each sample
 ```
 # cortex
@@ -169,4 +169,4 @@ python ../compare_sjs_venn_new.py \
 	-sj_3 ../gencode_vM21_sjs.tab \
 	-sj_3_name "Gencode" \
 	-sample "Post-TALON Hippocampus"
-```
+``` -->
