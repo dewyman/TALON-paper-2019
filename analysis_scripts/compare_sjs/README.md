@@ -179,7 +179,7 @@ python compare_sjs_venn_new.py \
 ```
 
 <img align="left" width="500" src="figures/PacBio_GM12878_gc_venn2.png">
-<img align="left" width="500" src="figures/Novel_GM12878_SJs_venn.png">
+<img align="left" width="500" src="figures/Novel_PacBio_GM12878_SJs_venn.png">
 
 7. Also perform the above analysis for HepG2 and K562
 ```
@@ -259,12 +259,12 @@ python compare_sjs_venn_new.py \
 <img align="left" width="500" src="figures/PacBio_HepG2_sj_novelty.png">
 <img align="left" width="500" src="figures/PacBio_HepG2_sj_novelty_Illumina_support.png">
 <img align="left" width="500" src="figures/PacBio_HepG2_gc_venn2.png">
-<img align="left" width="500" src="figures/Novel_HepG2_SJs_venn.png">
+<img align="left" width="500" src="figures/Novel_PacBio_HepG2_SJs_venn.png">
 
 <img align="left" width="500" src="figures/PacBio_K562_sj_novelty.png">
 <img align="left" width="500" src="figures/PacBio_K562_sj_novelty_Illumina_support.png">
 <img align="left" width="500" src="figures/PacBio_K562_gc_venn2.png">
-<img align="left" width="500" src="figures/Novel_K562_SJs_venn.png">
+<img align="left" width="500" src="figures/Novel_PacBio_K562_SJs_venn.png">
 
 
 8. Also perform this analysis for the ONT data 
