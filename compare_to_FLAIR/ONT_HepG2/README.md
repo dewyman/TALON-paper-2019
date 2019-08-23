@@ -1,4 +1,4 @@
-i# Running FLAIR on HepG2 ONT data
+# Running FLAIR on HepG2 ONT data
 
 FLAIR was cloned from https://github.com/BrooksLabUCSC/flair on 8/5/2019.
 
