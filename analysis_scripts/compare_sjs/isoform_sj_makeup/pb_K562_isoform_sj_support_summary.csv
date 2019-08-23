@@ -1,0 +1,6 @@
+novelty,total,illumina_count,percent_illumina,gencode_count,percent_gencode
+ISM,6835,6317,92.42,6561,95.99
+Known,20003,16440,82.19,20003,100.0
+NIC,8628,6631,76.85,5961,69.09
+NNC,2655,1222,46.03,10,0.38
+antisense,505,405,80.2,362,71.68
