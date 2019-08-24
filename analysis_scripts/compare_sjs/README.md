@@ -21,12 +21,29 @@ python ${TCPATH}get_SJs_from_gtf.py \
 
 3. Now, let's get the splice junctions present in the Illumina data by mapping with STAR. 
 ```
-qsub run_STAR_illumina_GM12878.sh
+qsub run_STAR_illumina_GM12878_Rep1.sh
+qsub run_STAR_illumina_GM12878_Rep2.sh
 ```
 
-4. Create a venn diagram demonstrating which splice junctions are present in which dataset.
+4. Filter out novel Illumina SJs that don't have support from both reps and known Illumina SJs that have no read support.
 ```
 conda activate base
+python filter_illumina_sjs.py \
+	-sj_1 GM12878_Rep1_alignedSJ.out.tab \
+	-sj_2 GM12878_Rep2_alignedSJ.out.tab 
+```
+<!-- 
+testing.
+```
+python compare_sjs_venn.py \
+	-pb pb_talon_GM12878_sjs.tab \
+	-ont ont_talon_GM12878_sjs.tab \
+	-illumina test_Gm12878_short.tab \
+	-sample GM12878_filtered_illumina
+``` -->
+
+5. Create a venn diagram demonstrating which splice junctions are present in which dataset.
+```
 mkdir figures
 python compare_sjs_venn.py \
 	-pb pb_talon_GM12878_sjs.tab \
@@ -35,12 +52,7 @@ python compare_sjs_venn.py \
 	-sample GM12878
 ```
 
-5. We wanted to see how TranscriptClean alters SJ support by other technologies, so we pulled the SJs out of the pre-TranscriptClean sam files
-```
-
-```
-
-5. We also ran the above analysis for the other 2 cell lines:
+6. We also ran the above analysis for the other 2 cell lines:
  ```
 # HepG2 (requires tables S5 and S20)
 conda activate python2.7
@@ -57,9 +69,14 @@ python ${TCPATH}get_SJs_from_gtf.py \
 	--g ${REFPATH}hg38.fa \
 	--o ont_talon_HepG2_sjs.tab
 
-qsub run_STAR_illumina_HepG2.sh
+qsub run_STAR_illumina_HepG2_Rep1.sh
+qsub run_STAR_illumina_HepG2_Rep2.sh
 
 conda activate base
+python filter_illumina_sjs.py \
+	-sj_1 HepG2_Rep1_alignedSJ.out.tab \
+	-sj_2 HepG2_Rep2_alignedSJ.out.tab 
+
 python compare_sjs_venn.py \
 	-pb pb_talon_HepG2_sjs.tab \
 	-ont ont_talon_HepG2_sjs.tab \
@@ -81,7 +98,19 @@ python ${TCPATH}get_SJs_from_gtf.py \
 	--g ${REFPATH}hg38.fa \
 	--o ont_talon_K562_sjs.tab
 
-qsub run_STAR_illumina_K562.sh
+qsub run_STAR_illumina_K562_Rep1.sh
+qsub run_STAR_illumina_K562_Rep2.sh
+
+conda activate base
+python filter_illumina_sjs.py \
+	-sj_1 K562_Rep1_alignedSJ.out.tab \
+	-sj_2 K562_Rep2_alignedSJ.out.tab 
+
+python compare_sjs_venn.py \
+	-pb pb_talon_K562_sjs.tab \
+	-ont ont_talon_K562_sjs.tab \
+	-illumina HepG2_alignedSJ.out.tab \
+	-sample K562
 
 conda activate base
 python compare_sjs_venn.py \
@@ -175,6 +204,19 @@ python compare_sjs_venn_new.py \
 	-sj_3 ont_talon_GM12878_sjs_novelty.tab  \
 	-sj_3_name "ONT" \
 	-sample "Novel PacBio GM12878 SJs" \
+	--log
+```
+
+testing
+```
+python compare_sjs_venn_new.py \
+	-sj_1 PacBio_GM12878_unsupported_sjs.tab \
+	-sj_1_name "Novel PacBio SJs" \
+	-sj_2 test_Gm12878_short.tab \
+	-sj_2_name "Illumina" \
+	-sj_3 ont_talon_GM12878_sjs_novelty.tab  \
+	-sj_3_name "ONT" \
+	-sample "Novel PacBio GM12878 SJs filtered illumina" \
 	--log
 ```
 

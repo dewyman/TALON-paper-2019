@@ -8,10 +8,10 @@
 #$ -o /data/users/freese/mortazavi_lab/qsub_output
 #$ -e /data/users/freese/mortazavi_lab/qsub_output
 #$ -ckpt restart
-#$ -N HepG2_st
+#$ -N map_K562_2
 
 DPATH=~/mortazavi_lab/data/tier1_filtered/illumina/
-reads="${DPATH}HepG2/HepG2_rep1_illumina_1.fastq.gz,${DPATH}HepG2/HepG2_rep2_illumina_1.fastq.gz ${DPATH}HepG2/HepG2_rep1_illumina_2.fastq.gz,${DPATH}HepG2/HepG2_rep2_illumina_2.fastq.gz"
+reads="${DPATH}K562/K562_rep2_illumina_1.fastq.gz ${DPATH}K562/K562_rep2_illumina_2.fastq.gz"
 
 module load STAR/2.5.2a
 STAR \
@@ -28,7 +28,7 @@ STAR \
 	--alignIntronMin 20 \
 	--alignIntronMax 1000000 \
 	--alignMatesGapMax 1000000 \
-	--outFileNamePrefix HepG2_aligned \
+	--outFileNamePrefix K562_Rep2_aligned \
 	--outSAMattributes NH HI NM MD jM jI \
 	--outSAMtype SAM \
 	--readFilesCommand zcat
