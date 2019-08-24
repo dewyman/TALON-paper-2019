@@ -160,6 +160,53 @@ python ../compare_sjs_venn_new.py \
 <img align="center" width="500" src="figures/Post-TALON_Cortex_venn.png">
 <img align="center" width="500" src="figures/Post-TALON_Hippocampus_venn.png">
 
+9. We will also look at support for splice junctions of different splice junction novelty types. First, we'll label each splice junction from the PacBio data with its novelty type.
+
+* **Known junction:** A splice junction with the whole splice junction (splice donor and acceptor) seen in the Gencode annotation
+* **NIC junction:** A splice junction where both the splice donor and acceptor individually are in the Gencode annotation, but are never seen together
+* **NNC junction:** A splice junction where at least one of the splice donor or acceptor is not present in the Gencode annotation
+```
+# cortex
+python ../label_sj_novelty.py \
+	-sj pb_post_TALON_cortex_SJs.tab \
+	-ref_sj ../gencode_vM21_sjs.tab
+
+# hippocampus
+python ../label_sj_novelty.py \
+	-sj pb_post_TALON_hippocampus_SJs.tab \
+	-ref_sj ../gencode_vM21_sjs.tab
+```
+
+10. Now, we'll build the splice junctions by novelty Illumina support bar plots
+```
+# cortex
+python ../plot_sj_novelty_counts.py \
+	-sj pb_post_TALON_cortex_SJs.tab \
+	-sample "PacBio Cortex"
+
+python ../plot_sj_novelty_counts.py \
+	-sj pb_post_TALON_cortex_SJs.tab \
+	-sample "PacBio Cortex" \
+	--extra_support cortex_alignedSJ.out_novelty.tab \
+	--support_name Illumina
+
+# hippocampus
+python ../plot_sj_novelty_counts.py \
+	-sj pb_post_TALON_hippocampus_SJs.tab \
+	-sample "PacBio Hippocampus"
+
+python ../plot_sj_novelty_counts.py \
+	-sj pb_post_TALON_hippocampus_SJs.tab \
+	-sample "PacBio hippocampus" \
+	--extra_support hippocampus_alignedSJ.out_novelty.tab \
+	--support_name Illumina
+```
+
+<img align="left" width="500" src="figures/PacBio_cortex_sj_novelty.png">
+<img align="left" width="500" src="figures/PacBio_cortex_sj_novelty_Illumina_support.png">
+<img align="left" width="500" src="figures/PacBio_hippocampus_sj_novelty.png">
+<img align="left" width="500" src="figures/PacBio_hippocampus_sj_novelty_Illumina_support.png">
+
 <!-- 
 8. Build a venn diagram illustrating splice junction support for those found *after* TALON from gencode and Illumina for each sample
 ```
