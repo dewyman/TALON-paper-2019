@@ -10,6 +10,8 @@ main <-function() {
     # Get dataset names and check that they exist in the file
     d1 <- opt$d1
     d2 <- opt$d2
+    d1_type <- opt$d1_type
+    d2_type <- opt$d2_type
     if (d1 %in% colnames(abundance_table) == F |
         d2 %in% colnames(abundance_table) == F) {
         print("One of the provided dataset names is not in the abundance file provided. Exiting...")
@@ -46,7 +48,7 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = t_levels)
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs, opt$regression_line)
+    expression_by_status(merged_abundances, d1, d2, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs, opt$regression_line, d1_type, d2_type)
 }
 
 filter_transcripts_on_options <- function(abundance_table, opt) {
@@ -131,7 +133,7 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
     return(filtered)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype, lsr, corr_labs, regression_line) {
+expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype, lsr, corr_labs, regression_line, d1_type, d2_type) {
 
     # Take log2(TPM + 1)
     merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
@@ -156,8 +158,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     fname <- paste(joined_names, "transcript", "correlationPlot.png", sep="_")
     corr_fname <- paste(joined_names, "transcript", "correlations.txt", sep="_")
 
-    xlabel <- paste("log2(TPM+0.1) in ", celltype, " PacBio", sep="")
-    ylabel <- paste("log2(TPM+0.1) in ", celltype, " ONT", sep="")
+    xlabel <- paste("log2(TPM+0.1) in ", celltype, " ", d1_type, sep="")
+    ylabel <- paste("log2(TPM+0.1) in ", celltype, " ", d2_type, sep="")
     corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
@@ -289,10 +291,14 @@ parse_options <- function() {
                     default = NULL, help = "FILTERED TALON abundance output file"),
         make_option(c("--color"), action = "store", dest = "color_scheme",
                     default = NULL, help = "blue, red, or green"),
-        make_option("--d1", action = "store", dest = "d1",
+       make_option("--d1", action = "store", dest = "d1",
                     default = NULL, help = "First dataset name to use in comparison"),
+        make_option("--d1_type", action="store", dest="d1_type",
+                    help="datatype of dataset 1 ie 'Rep1 PacBio' or 'Rep2 ONT'"),
         make_option("--d2", action = "store", dest = "d2",
                     default = NULL, help = "Second dataset name to use in comparison"),
+        make_option("--d2_type", action="store", dest="d2_type",
+                    help="datatype of dataset 2 ie 'Rep1 PacBio' or 'Rep2 ONT'"),
         make_option("--celltype", action = "store", dest = "celltype",
                     default = NULL, help = "Celltype to use in plot labels"),
         make_option(c("--lsr"), action="store_true", dest="lsr",
