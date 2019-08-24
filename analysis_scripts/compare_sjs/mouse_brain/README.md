@@ -210,15 +210,15 @@ python ../plot_sj_novelty_counts.py \
 
 python ../plot_sj_novelty_counts.py \
 	-sj pb_post_TALON_hippocampus_SJs_novelty.tab \
-	-sample "PacBio ippocampus" \
+	-sample "PacBio Hippocampus" \
 	--extra_support hippocampus_alignedSJ.out_novelty.tab \
 	--support_name Illumina
 ```
 
-<img align="left" width="500" src="figures/PacBio_cortex_sj_novelty.png">
-<img align="left" width="500" src="figures/PacBio_cortex_sj_novelty_Illumina_support.png">
-<img align="left" width="500" src="figures/PacBio_hippocampus_sj_novelty.png">
-<img align="left" width="500" src="figures/PacBio_hippocampus_sj_novelty_Illumina_support.png">
+<img align="left" width="500" src="figures/PacBio_Cortex_sj_novelty.png">
+<img align="left" width="500" src="figures/PacBio_Cortex_sj_novelty_Illumina_support.png">
+<img align="left" width="500" src="figures/PacBio_Hippocampus_sj_novelty.png">
+<img align="left" width="500" src="figures/PacBio_Hippocampus_sj_novelty_Illumina_support.png">
 
 <!-- 
 8. Build a venn diagram illustrating splice junction support for those found *after* TALON from gencode and Illumina for each sample
