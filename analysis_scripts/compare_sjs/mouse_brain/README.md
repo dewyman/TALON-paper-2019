@@ -177,27 +177,40 @@ python ../label_sj_novelty.py \
 	-ref_sj ../gencode_vM21_sjs.tab
 ```
 
-10. Now, we'll build the splice junctions by novelty Illumina support bar plots
+10. Also determine the novelty of the Illumina splice junctions
+```
+# cortex
+python ../label_sj_novelty.py \
+	-sj cortex_alignedSJ.out.tab \
+	-ref_sj ../gencode_vM21_sjs.tab 
+
+# hippocampus
+python ../label_sj_novelty.py \
+	-sj hippocampus_alignedSJ.out.tab \
+	-ref_sj ../gencode_vM21_sjs.tab 
+```
+
+11. Now, we'll build the splice junctions by novelty Illumina support bar plots
 ```
 # cortex
 python ../plot_sj_novelty_counts.py \
-	-sj pb_post_TALON_cortex_SJs.tab \
+	-sj pb_post_TALON_cortex_SJs_novelty.tab \
 	-sample "PacBio Cortex"
 
 python ../plot_sj_novelty_counts.py \
-	-sj pb_post_TALON_cortex_SJs.tab \
+	-sj pb_post_TALON_cortex_SJs_novelty.tab \
 	-sample "PacBio Cortex" \
 	--extra_support cortex_alignedSJ.out_novelty.tab \
 	--support_name Illumina
 
 # hippocampus
 python ../plot_sj_novelty_counts.py \
-	-sj pb_post_TALON_hippocampus_SJs.tab \
+	-sj pb_post_TALON_hippocampus_SJs_novelty.tab \
 	-sample "PacBio Hippocampus"
 
 python ../plot_sj_novelty_counts.py \
-	-sj pb_post_TALON_hippocampus_SJs.tab \
-	-sample "PacBio hippocampus" \
+	-sj pb_post_TALON_hippocampus_SJs_novelty.tab \
+	-sample "PacBio ippocampus" \
 	--extra_support hippocampus_alignedSJ.out_novelty.tab \
 	--support_name Illumina
 ```
