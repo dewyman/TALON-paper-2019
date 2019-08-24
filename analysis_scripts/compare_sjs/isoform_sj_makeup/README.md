@@ -147,10 +147,10 @@ python gen_isoform_support_table.py \
 	-sample hippocampus
 ```
 
-# testing
+<!-- # testing
 ```
 python ${TCPATH}get_SJs_from_gtf.py \
     --f ${ANNPATH}whats_happening.gtf \
 	--g ${REFPATH}hg38.fa \
 	--o whats_happening_sjs.tab
-```
+``` -->
