@@ -109,13 +109,6 @@ python filter_illumina_sjs.py \
 python compare_sjs_venn.py \
 	-pb pb_talon_K562_sjs.tab \
 	-ont ont_talon_K562_sjs.tab \
-	-illumina HepG2_alignedSJ.out.tab \
-	-sample K562
-
-conda activate base
-python compare_sjs_venn.py \
-	-pb pb_talon_K562_sjs.tab \
-	-ont ont_talon_K562_sjs.tab \
 	-illumina K562_alignedSJ.out.tab \
 	-sample K562 
  ```
@@ -207,7 +200,7 @@ python compare_sjs_venn_new.py \
 	--log
 ```
 
-testing
+<!-- testing
 ```
 python compare_sjs_venn_new.py \
 	-sj_1 PacBio_GM12878_unsupported_sjs.tab \
@@ -218,7 +211,7 @@ python compare_sjs_venn_new.py \
 	-sj_3_name "ONT" \
 	-sample "Novel PacBio GM12878 SJs filtered illumina" \
 	--log
-```
+``` -->
 
 <img align="left" width="500" src="figures/PacBio_GM12878_gc_venn2.png">
 <img align="left" width="500" src="figures/Novel_PacBio_GM12878_SJs_venn.png">
