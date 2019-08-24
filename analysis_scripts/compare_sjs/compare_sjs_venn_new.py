@@ -31,27 +31,27 @@ def get_args():
 def read_sj_file(infile, dtype):
 
 	df = pd.read_csv(infile, sep='\t', 
-		names=['chrom', 'start', 'stop', 'strand'], usecols=[0,1,2])
+		names=['chrom', 'start', 'stop', 'strand'], usecols=[0,1,2,3])
 	# df.drop_duplicates(inplace=True)
 	return df
 
 def find_intersect_counts(dfa, dfb, dfc, args):
 	
 	# intersection of all (a,b,c) 
-	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop'])
-	temp = pd.merge(temp, dfc, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop', 'strand'])
+	temp = pd.merge(temp, dfc, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_abc = len(temp.index)
 
 	# intersection of (a,b)
-	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_ab = len(temp.index) - count_abc
 
 	# intersection of (a,c)
-	temp = pd.merge(dfa, dfc, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfa, dfc, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_ac = len(temp.index) - count_abc
 
 	# intersection of (b,c)
-	temp = pd.merge(dfb, dfc, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfb, dfc, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_bc = len(temp.index) - count_abc
 
 	# just a
