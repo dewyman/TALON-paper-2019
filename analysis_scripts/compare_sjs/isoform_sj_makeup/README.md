@@ -46,6 +46,21 @@ python get_isoform_sj_support.py \
 	-sample test
 ``` -->
 
+
+<!-- testing
+```
+python get_isoform_sj_support.py \
+	-gtf ISM_partial.gtf \
+	-ref_sj_1 ../GM12878_alignedSJ.out.tab \
+	-ref_sj_2 ../gencode_v29_sjs.tab \
+	-sample test
+python get_isoform_sj_support.py \
+	-gtf NNC_partial.gtf \
+	-ref_sj_1 ../GM12878_alignedSJ.out.tab \
+	-ref_sj_2 ../gencode_v29_sjs.tab \
+	-sample test -->
+<!-- ``` -->
+
 4. We can run this for the other cell lines as well:  
 ```
 # HepG2
@@ -112,7 +127,7 @@ python gen_isoform_support_table.py \
 # cortex
 python get_isoform_sj_support.py \
 	-gtf ../mouse_brain/cortex_talon_observedOnly.gtf  \
-	-ref_sj_1 ../cortex_alignedSJ.out.tab \
+	-ref_sj_1 ../mouse_brain/cortex_alignedSJ.out.tab \
 	-ref_sj_2 ../gencode_vM21_sjs.tab \
 	-sample cortex
 
@@ -123,7 +138,7 @@ python gen_isoform_support_table.py \
 # hippocampus
 python get_isoform_sj_support.py \
 	-gtf ../mouse_brain/hippocampus_talon_observedOnly.gtf  \
-	-ref_sj_1 ../hippocampus_alignedSJ.out.tab \
+	-ref_sj_1 ../mouse_brain/hippocampus_alignedSJ.out.tab \
 	-ref_sj_2 ../gencode_vM21_sjs.tab \
 	-sample hippocampus
 
@@ -131,3 +146,11 @@ python gen_isoform_support_table.py \
 	-csv hippocampus_isoform_sj_support.csv \
 	-sample hippocampus
 ```
+
+<!-- # testing
+```
+python ${TCPATH}get_SJs_from_gtf.py \
+    --f ${ANNPATH}whats_happening.gtf \
+	--g ${REFPATH}hg38.fa \
+	--o whats_happening_sjs.tab
+``` -->

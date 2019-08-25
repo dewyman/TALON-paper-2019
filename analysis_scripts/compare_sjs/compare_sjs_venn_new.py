@@ -31,27 +31,27 @@ def get_args():
 def read_sj_file(infile, dtype):
 
 	df = pd.read_csv(infile, sep='\t', 
-		names=['chrom', 'start', 'stop'], usecols=[0,1,2])
-	df.drop_duplicates(inplace=True)
+		names=['chrom', 'start', 'stop', 'strand'], usecols=[0,1,2,3])
+	# df.drop_duplicates(inplace=True)
 	return df
 
 def find_intersect_counts(dfa, dfb, dfc, args):
 	
 	# intersection of all (a,b,c) 
-	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop'])
-	temp = pd.merge(temp, dfc, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop', 'strand'])
+	temp = pd.merge(temp, dfc, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_abc = len(temp.index)
 
 	# intersection of (a,b)
-	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfa, dfb, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_ab = len(temp.index) - count_abc
 
 	# intersection of (a,c)
-	temp = pd.merge(dfa, dfc, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfa, dfc, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_ac = len(temp.index) - count_abc
 
 	# intersection of (b,c)
-	temp = pd.merge(dfb, dfc, how='inner', on=['chrom', 'start', 'stop'])
+	temp = pd.merge(dfb, dfc, how='inner', on=['chrom', 'start', 'stop', 'strand'])
 	count_bc = len(temp.index) - count_abc
 
 	# just a
@@ -74,10 +74,14 @@ def main():
 
 	# read in each of the sj dfs
 	pb_df = read_sj_file(args.sj_1, args.sj_1_name)
+	print(pb_df.head())
+	print('long-read df')
 	print(len(pb_df.index))
 	ont_df = read_sj_file(args.sj_2, args.sj_2_name)
+	print(ont_df.head())
 	print(len(ont_df.index))
 	ill_df = read_sj_file(args.sj_3, args.sj_3_name)
+	print(ill_df.head())
 	print(len(ill_df.index))
 
 	# get each of the intersection counts that we care about
@@ -105,13 +109,13 @@ def main():
 	plt.title('{} Splice Junction Support'.format(args.sample_name), fontsize='xx-large')
 
 	# messing with numerical text
-	v.get_label_by_id('100').set_fontsize('x-large')
-	v.get_label_by_id('010').set_fontsize('x-large')
-	v.get_label_by_id('001').set_fontsize('x-large')
-	v.get_label_by_id('110').set_fontsize('x-large')
-	v.get_label_by_id('101').set_fontsize('x-large')
-	v.get_label_by_id('011').set_fontsize('x-large')
-	v.get_label_by_id('111').set_fontsize('x-large')
+	# v.get_label_by_id('100').set_fontsize('x-large')
+	# v.get_label_by_id('010').set_fontsize('x-large')
+	# v.get_label_by_id('001').set_fontsize('x-large')
+	# v.get_label_by_id('110').set_fontsize('x-large')
+	# v.get_label_by_id('101').set_fontsize('x-large')
+	# v.get_label_by_id('011').set_fontsize('x-large')
+	# v.get_label_by_id('111').set_fontsize('x-large')
 
 	if args.log_sizes:
 		v.get_label_by_id('100').set_text(intersection_labels[0])

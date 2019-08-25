@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -q som,bio,free64
+#$ -q som,free64
 #$ -pe one-node-mpi 16
 #$ -R y
 #$ -m ea
@@ -8,17 +8,17 @@
 #$ -o /data/users/freese/mortazavi_lab/qsub_output
 #$ -e /data/users/freese/mortazavi_lab/qsub_output
 #$ -ckpt restart
-#$ -N HepG2_st
+#$ -N map_hippo_2
 
-DPATH=~/mortazavi_lab/data/tier1_filtered/illumina/
-reads="${DPATH}HepG2/HepG2_rep1_illumina_1.fastq.gz,${DPATH}HepG2/HepG2_rep2_illumina_1.fastq.gz ${DPATH}HepG2/HepG2_rep1_illumina_2.fastq.gz,${DPATH}HepG2/HepG2_rep2_illumina_2.fastq.gz"
+DPATH=~/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/compare_sjs/mouse_brain/
+reads="${DPATH}Hp2a_IlPB85_R1.fastq.gz ${DPATH}Hp2a_IlPB85_R2.fastq.gz"
 
 module load STAR/2.5.2a
 STAR \
 	--runThreadN 8 \
-	--genomeDir ~/mortazavi_lab/ref/hg38/STAR_hg38_ENCODE/ \
+	--genomeDir ~/mortazavi_lab/ref/mm10/STAR_mm10_ENCODE/ \
 	--readFilesIn $reads \
-	--sjdbGTFfile ~/mortazavi_lab/ref/gencode.v29/gencode.v29.annotation.gtf \
+	--sjdbGTFfile ~/mortazavi_lab/ref/gencode.vM21/gencode.vM21.annotation.gtf \
 	--outFilterType BySJout \
 	--outFilterMultimapNmax 20 \
 	--alignSJoverhangMin 8 \
@@ -28,7 +28,7 @@ STAR \
 	--alignIntronMin 20 \
 	--alignIntronMax 1000000 \
 	--alignMatesGapMax 1000000 \
-	--outFileNamePrefix HepG2_aligned \
+	--outFileNamePrefix hippocampus_Rep2_aligned \
 	--outSAMattributes NH HI NM MD jM jI \
 	--outSAMtype SAM \
 	--readFilesCommand zcat

@@ -117,7 +117,12 @@ def determine_sj_support(g, df, ref_df, gc_df):
 			exon_num = int(get_field_value('exon_number', fields))
 			strand = line[6]
 
+			# testing 
+			# print(get_field_value('exon_id', fields))
+
 			if tid != prev_tid:
+
+				# print('transcript: '+tid)
 
 				# check if last transcript was monoexonic
 				if n_exons == 1: 
@@ -142,6 +147,7 @@ def determine_sj_support(g, df, ref_df, gc_df):
 
 				# get the current junction and check if it's in our list of sjs
 				sj = get_sj(line, prev_exon_end)
+				# print(sj)
 
 				if strand == "+":
 					prev_exon_end = line[4]
@@ -151,8 +157,9 @@ def determine_sj_support(g, df, ref_df, gc_df):
 				if sj not in ref_df.id.values.tolist():
 					df.loc[df.transcript_id == tid, 'illumina_sj_support'] = False
 				if sj not in gc_df.id.values.tolist():
+					# print('culprit exon not found in gc~')
 					df.loc[df.transcript_id == tid, 'gencode_sj_support'] = False
-		
+			# print()
 		# clean up if the last entry is monoexonic
 		if n_exons == 1: 
 				df = df[df.transcript_id != prev_tid]
@@ -172,7 +179,7 @@ def main():
 	gc_df = read_sj_file(args.ref_sj_2)
 
 	# # testing
-	# gc_df.to_csv('one_transcript_gencode.csv', index=False)
+	gc_df.to_csv('gencode_sjs.csv', index=False)
 
 	df = get_transcript_df(args.gtf)
 	# print(df.head())

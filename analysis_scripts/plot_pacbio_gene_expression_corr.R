@@ -19,6 +19,8 @@ main <-function() {
     # Get dataset names and check that they exist in the file
     d1 <- opt$d1
     d2 <- opt$d2
+    d1_type <- opt$d1_type
+    d2_type <- opt$d2_type
     if (d1 %in% colnames(abundance_table) == F |
         d2 %in% colnames(abundance_table) == F) {
         print("One of the provided dataset names is not in the abundance file provided. Exiting...")
@@ -73,14 +75,14 @@ main <-function() {
     merged_abundances$novelty <- factor(merged_abundances$novelty, levels = c("Known", "Antisense", "Intergenic"))
 
     # Plot expression scatterplots
-    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs, opt$regression_line)
+    expression_by_status(merged_abundances, d1, d2, opt, opt$outdir, color_vec, opt$celltype, opt$lsr, opt$corr_labs, opt$regression_line, d1_type, d2_type)
 }
 
-expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs, regression_line) {
+expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs, regression_line, d1_type, d2_type) {
 
     # Take log2(TPM + 1)
-    merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 1, base=2)
-    merged_abundances$data2.TPM = log(merged_abundances$data2.TPM + 1, base=2)
+    merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
+    merged_abundances$data2.TPM = log(merged_abundances$data2.TPM + 0.1, base=2)
     
     # Plot log2(TPM + 1) for each dataset on a scatterplot. Color points according to known/novel status
     pearsonCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "pearson", continuity = FALSE, conf.level = 0.95)$estimate
@@ -99,8 +101,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
     fname <- paste(joined_names, "gene", "correlationPlot.png", sep="_")
     corr_fname <- paste(joined_names, "gene", "correlations.txt", sep="_")
 
-    xlabel <- paste("log2(TPM+1) in ", celltype, " PacBio", sep="")
-    ylabel <- paste("log2(TPM+1) in ", celltype, " ONT", sep="")
+    xlabel <- paste("log2(TPM+0.1) in ", celltype, " ", d1_type, sep="")
+    ylabel <- paste("log2(TPM+0.1) in ", celltype, " ", d2_type, sep="")
     corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
@@ -237,8 +239,12 @@ parse_options <- function() {
                     default = NULL, help = "blue, red, or green"),
         make_option("--d1", action = "store", dest = "d1",
                     default = NULL, help = "First dataset name to use in comparison"),
+        make_option("--d1_type", action="store", dest="d1_type",
+                    help="datatype of dataset 1 ie 'Rep1 PacBio' or 'Rep2 ONT'"),
         make_option("--d2", action = "store", dest = "d2",
                     default = NULL, help = "Second dataset name to use in comparison"),
+        make_option("--d2_type", action="store", dest="d2_type",
+                    help="datatype of dataset 2 ie 'Rep1 PacBio' or 'Rep2 ONT'"),
         make_option(c("--lsr"), action="store_true", dest="lsr",
               help="Include this option if you want the LSR label on", default = F),
         make_option("--celltype", action = "store", dest = "celltype",
