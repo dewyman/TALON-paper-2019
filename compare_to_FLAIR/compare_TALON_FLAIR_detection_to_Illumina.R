@@ -91,12 +91,13 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
     xlabel <- paste(capitalize(cat_type), "expression level in Illumina data (TPM)")
     ylabel <- paste("Fraction of ", cat_type, "s", sep="")
     levels <- c("Not detected", "FLAIR only", "TALON only", "TALON and FLAIR")
+    illumina$detection <- factor(illumina$detection, levels = levels)
+
 
     png(filename = fname,
         width = 2100, height = 2500, units = "px",
         bg = "white",  res = 300)
-    g = ggplot(illumina, aes(x = group, fill = factor(detection, 
-                                                      levels = levels))) +
+    g = ggplot(illumina, aes(x = group, fill = detection)) +
        geom_bar(position = "fill", col = "black") + 
        scale_fill_manual("",values=color_vec)  + 
        theme_bw() + 
@@ -115,31 +116,14 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
 
     print(g)
     dev.off()
+
+    detection_matrix <- illumina %>% group_by(detection) %>% count()
+    print(detection_matrix)
+    fname2 <- paste(outdir, "/TALON_FLAIR_detection.txt", sep="")
+    write.table(detection_matrix, fname2, sep="\t", quote=F, col.names=T,
+                row.names=T)
 }
 
-plot_length_hists_by_detection <- function(illumina, outdir) {
-
-    fname <- paste(outdir, "/transcript_length_by_detection_status_100plusTPM.png", sep="")
-    xlabel <- "Transcript length (kilobases)"
-    ylabel <- "Count"
-    illumina$length <- illumina$length/1000
-
-    png(filename = fname,
-        width = 3000, height = 2000, units = "px",
-        bg = "white",  res = 300)
-    g = ggplot(illumina, aes(x = length, color = factor(detection, levels = c("Not detected in PacBio", "Detected in one PacBio rep", "Detected in both PacBio reps")))) +
-       geom_freqpoly(binwidth = 0.1) + 
-       scale_colour_manual("",values=c("red", "skyblue", "navy"))  +
-       theme_bw() + 
-       theme(axis.text.x = element_text(color = "black", size=17)) +
-       xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=17)) +
-       theme(axis.text.y = element_text(color = "black", size=17)) + 
-       coord_cartesian(xlim=c(0, 7), ylim=c(0,60)) + 
-       scale_x_continuous(breaks=seq(0,7, by = 1))
-
-    print(g)
-    dev.off()
-}
 
 get_detected_genes_for_dataset <- function(abundance, dataset) {
     data <- abundance[,c("annot_gene_id", dataset)]
