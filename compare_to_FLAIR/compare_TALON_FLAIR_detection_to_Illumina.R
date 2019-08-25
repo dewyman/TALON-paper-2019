@@ -34,7 +34,8 @@ main <-function() {
     illumina_gene_detection_buckets <- get_buckets(illumina_gene_detection)    
 
     # Plot detection by TPM
-    color_vec <- c("white", "#8dadd1", "#742a8b", "#3b003a")
+    color_vec <- c("white", "orange" , "#AECDE1",  "#3978AF")
+    #color_vec <- c("white", "#8dadd1", "#742a8b", "#3b003a")
     plot_detection(illumina_gene_detection_buckets$illumina, 
                    illumina_gene_detection_buckets$interval_labels, 
                    "gene", color_vec, opt$outdir)
