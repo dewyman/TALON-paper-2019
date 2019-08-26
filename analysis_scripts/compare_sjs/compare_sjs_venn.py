@@ -84,10 +84,7 @@ def main():
 	# change circle sizes 
 	if args.log_sizes:
 		intersection_labels = tuple([str(i) for i in counts])
-		counts = tuple([math.log2(i) for i in counts if i != 0 else 0])
-
-	#print(counts)
-	#print(labels)
+		counts = tuple([math.log2(i) if i != 0 else 0 for i in counts])
 
 	# plot the venn diagram
 	plt.figure(figsize=(8.5,8.5))

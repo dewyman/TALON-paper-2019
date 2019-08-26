@@ -9,12 +9,12 @@ The goal is to look at the splice junctions in K562 long reads before Transcript
 1) Obtain PacBio K562 splice junctions in pre-TranscriptClean reads (data is divided into 4 SMRT cells total from 2 libraries)
 ```
 cat ../../../../pipeline/D10/Minimap2/1_A01/mapped_FLNC_noScaff.sam \
-    ../../../../pipeline/D10/Minimap2/2_B01/mapped_FLNC_noScaff.sam \
-    ../../../../pipeline/D10/Minimap2/3_C01/mapped_FLNC_noScaff.sam \
-    ../../../../pipeline/D10/Minimap2/4_D01/mapped_FLNC_noScaff.sam \
-    ../../../../pipeline/D11/Minimap2/3_C01/mapped_FLNC_noScaff.sam \
-    ../../../../pipeline/D11/Minimap2/4_D01/mapped_FLNC_noScaff.sam \
-    | grep -v "^@" > PacBio_K562_pre-TC.sam
+    <(grep -v "^@" ../../../../pipeline/D10/Minimap2/2_B01/mapped_FLNC_noScaff.sam) \
+    <(grep -v "^@" ../../../../pipeline/D10/Minimap2/3_C01/mapped_FLNC_noScaff.sam) \
+    <(grep -v "^@" ../../../../pipeline/D10/Minimap2/4_D01/mapped_FLNC_noScaff.sam) \
+    <(grep -v "^@" ../../../../pipeline/D11/Minimap2/3_C01/mapped_FLNC_noScaff.sam) \
+    <(grep -v "^@" ../../../../pipeline/D11/Minimap2/4_D01/mapped_FLNC_noScaff.sam) \
+    > PacBio_K562_pre-TC.sam
 
 time python ../../extract_SJs_from_sam.py \
     --sam PacBio_K562_pre-TC.sam \
@@ -38,7 +38,7 @@ time python ../../extract_SJs_from_sam.py \
 
 3) Use the splice junctions we extracted for Illumina using STAR:
 ```
-../../../../Illumina/K562/K562_alignedSJ.out.tab
+/share/crsp/lab/seyedam/share/TALON_paper_data/illumina_sjs/K562_alignedSJ.out.tab
 ```
 
 ## Analysis
@@ -52,7 +52,7 @@ time python ../../extract_SJs_from_sam.py \
 ```
 awk '{if($5 == 0) print $0}' PacBio_K562_pre-TC_SJs.txt > ncsj_PacBio_K562_pre-TC_SJs.txt
 awk '{if($5 == 0) print $0}' ONT_K562_pre-TC_SJs.txt > ncsj_ONT_K562_pre-TC_SJs.txt
-awk '{if($5 == 0) print $0}' ../../../../Illumina/K562/K562_alignedSJ.out.tab > ncsj_Illumina_K562_pre-TC_SJs.txt
+awk '{if($5 == 0) print $0}' /share/crsp/lab/seyedam/share/TALON_paper_data/illumina_sjs/K562_alignedSJ.out.tab > ncsj_Illumina_K562_pre-TC_SJs.txt
 ```
 
 2) Run comparison across platforms
