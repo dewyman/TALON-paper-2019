@@ -111,7 +111,7 @@ def main():
 	if args.log_sizes:
 		i = 0
 		for ID in ('100', '010', '001', '110', '101', '011', '111'):
-                	try:
+					try:
 				v.get_label_by_id(ID).set_text(intersection_labels[i])
 			except:
 				pass
