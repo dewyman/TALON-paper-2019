@@ -36,7 +36,7 @@ time python ../../extract_SJs_from_sam.py \
 
 3) Use the splice junctions we extracted for Illumina using STAR:
 ```
-../../../../Illumina/GM12878/GM12878_alignedSJ.out.tab
+/share/crsp/lab/seyedam/share/TALON_paper_data/illumina_sjs/GM12878_alignedSJ.out.tab
 ```
 
 ## Analysis
@@ -50,7 +50,7 @@ time python ../../extract_SJs_from_sam.py \
 ```
 awk '{if($5 == 0) print $0}' PacBio_GM12878_pre-TC_SJs.txt > ncsj_PacBio_GM12878_pre-TC_SJs.txt
 awk '{if($5 == 0) print $0}' ONT_GM12878_pre-TC_SJs.txt > ncsj_ONT_GM12878_pre-TC_SJs.txt
-awk '{if($5 == 0) print $0}' ../../../../Illumina/GM12878/GM12878_alignedSJ.out.tab > ncsj_Illumina_GM12878_pre-TC_SJs.txt
+awk '{if($5 == 0) print $0}' /share/crsp/lab/seyedam/share/TALON_paper_data/illumina_sjs/GM12878_alignedSJ.out.tab > ncsj_Illumina_GM12878_pre-TC_SJs.txt
 ```
 
 2) Run comparison across platforms

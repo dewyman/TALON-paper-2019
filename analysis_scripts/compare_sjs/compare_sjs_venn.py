@@ -77,13 +77,16 @@ def main():
 	# get each of the intersection counts that we care about
 	counts, labels = find_intersect_counts(pb_df, ont_df, ill_df)
 
+	print(counts)
+	print(labels)
+
 	# change circle sizes 
 	if args.log_sizes:
 		intersection_labels = tuple([str(i) for i in counts])
 		counts = tuple([math.log2(i) for i in counts])
 
-	print(counts)
-	print(labels)
+	#print(counts)
+	#print(labels)
 
 	# plot the venn diagram
 	plt.figure(figsize=(8.5,8.5))
@@ -99,22 +102,20 @@ def main():
 	plt.title('{} Splice Junction Support'.format(args.sample_name), fontsize='xx-large')
 
 	# messing with numerical text
-	v.get_label_by_id('100').set_fontsize('x-large')
-	v.get_label_by_id('010').set_fontsize('x-large')
-	v.get_label_by_id('001').set_fontsize('x-large')
-	v.get_label_by_id('110').set_fontsize('x-large')
-	v.get_label_by_id('101').set_fontsize('x-large')
-	v.get_label_by_id('011').set_fontsize('x-large')
-	v.get_label_by_id('111').set_fontsize('x-large')
+	for ID in ('100', '010', '001', '110', '101', '011', '111'):
+		try:
+			v.get_label_by_id(ID).set_fontsize('x-large')
+		except:
+			pass
 
 	if args.log_sizes:
-		v.get_label_by_id('100').set_text(intersection_labels[0])
-		v.get_label_by_id('010').set_text(intersection_labels[1])
-		v.get_label_by_id('001').set_text(intersection_labels[3])
-		v.get_label_by_id('110').set_text(intersection_labels[2])
-		v.get_label_by_id('101').set_text(intersection_labels[4])
-		v.get_label_by_id('011').set_text(intersection_labels[5])
-		v.get_label_by_id('111').set_text(intersection_labels[6])
+		i = 0
+		for ID in ('100', '010', '001', '110', '101', '011', '111'):
+                	try:
+				v.get_label_by_id(ID).set_text(intersection_labels[i])
+			except:
+				pass
+			i += 1
 
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.pdf')
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_venn.png', dpi = 600)
