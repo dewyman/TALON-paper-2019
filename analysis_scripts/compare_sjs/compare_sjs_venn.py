@@ -3,6 +3,7 @@ import argparse
 from matplotlib_venn import venn3
 import matplotlib.pyplot as plt
 import math
+import numpy as np
 
 def get_args():
 	desc = 'Given sj files, see which splice junctions are shared/unique between datasets'
@@ -83,7 +84,7 @@ def main():
 	# change circle sizes 
 	if args.log_sizes:
 		intersection_labels = tuple([str(i) for i in counts])
-		counts = tuple([math.log2(i) for i in counts])
+		counts = tuple([math.log2(i) for i in counts if i != 0 else 0])
 
 	#print(counts)
 	#print(labels)
