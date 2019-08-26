@@ -109,13 +109,13 @@ def main():
 	plt.title('{} Splice Junction Support'.format(args.sample_name), fontsize='xx-large')
 
 	# messing with numerical text
-	# v.get_label_by_id('100').set_fontsize('x-large')
-	# v.get_label_by_id('010').set_fontsize('x-large')
-	# v.get_label_by_id('001').set_fontsize('x-large')
-	# v.get_label_by_id('110').set_fontsize('x-large')
-	# v.get_label_by_id('101').set_fontsize('x-large')
-	# v.get_label_by_id('011').set_fontsize('x-large')
-	# v.get_label_by_id('111').set_fontsize('x-large')
+	v.get_label_by_id('100').set_fontsize('x-large')
+	v.get_label_by_id('010').set_fontsize('x-large')
+	v.get_label_by_id('001').set_fontsize('x-large')
+	v.get_label_by_id('110').set_fontsize('x-large')
+	v.get_label_by_id('101').set_fontsize('x-large')
+	v.get_label_by_id('011').set_fontsize('x-large')
+	v.get_label_by_id('111').set_fontsize('x-large')
 
 	if args.log_sizes:
 		v.get_label_by_id('100').set_text(intersection_labels[0])
