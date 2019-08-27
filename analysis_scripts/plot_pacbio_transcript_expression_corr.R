@@ -135,18 +135,18 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
 
 expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype, lsr, corr_labs, regression_line, d1_type, d2_type) {
 
-    # Take log2(TPM + 1)
-    merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
-    merged_abundances$data2.TPM = log(merged_abundances$data2.TPM + 0.1, base=2)
+    # Take log2(TPM + 0.1)
+    merged_abundances$data1.log_TPM = log(merged_abundances$data1.TPM + 0.1, base=10)
+    merged_abundances$data2.log_TPM = log(merged_abundances$data2.TPM + 0.1, base=10)
     t_levels <- levels(merged_abundances$novelty)
     
-    # Plot log2(TPM + 1) for each dataset on a scatterplot. Color points according to known/novel status
-    pearsonCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "pearson", continuity = FALSE, conf.level = 0.95)$estimate
-    spearmanCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "spearman", continuity = FALSE, 
+    # Plot log2(TPM + 0.1) for each dataset on a scatterplot. Color points according to known/novel status
+    pearsonCorr = cor.test(~data1.log_TPM + data2.log_TPM, data=merged_abundances, method = "pearson", continuity = FALSE, conf.level = 0.95)$estimate
+    spearmanCorr = cor.test(~data1.log_TPM + data2.log_TPM, data=merged_abundances, method = "spearman", continuity = FALSE, 
                              exact = FALSE, conf.level = 0.95)$estimate
 
     # Least-Square Regression Line
-    mod<-lm(data2.TPM~data1.TPM, data=merged_abundances)
+    mod<-lm(data2.log_TPM~data1.log_TPM, data=merged_abundances)
     #print(lm(data2.TPM~data1.TPM, data=merged_abundances))
     #print(lm(data1.TPM~data2.TPM, data=merged_abundances))
     #print(summary(merged_abundances$data1.TPM))
@@ -158,8 +158,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     fname <- paste(joined_names, "transcript", "correlationPlot.png", sep="_")
     corr_fname <- paste(joined_names, "transcript", "correlations.txt", sep="_")
 
-    xlabel <- paste("log2(TPM+0.1) in ", celltype, " ", d1_type, sep="")
-    ylabel <- paste("log2(TPM+0.1) in ", celltype, " ", d2_type, sep="")
+    xlabel <- paste("TPM+0.1 in ", celltype, " ", d1_type, sep="")
+    ylabel <- paste("TPM+0.1 in ", celltype, " ", d2_type, sep="")
     corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
@@ -186,9 +186,11 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
-        coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
+        scale_x_continuous(trans=log10_trans(), limits=c(0.1,32768),labels=trans_format('log10',math_format(10^.x)))+
+        scale_y_continuous(trans=log10_trans(), limits=c(0.1,32768), labels=trans_format('log10',math_format(10^.x)))+
+        # coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("Transcript status", values=color_vec) +
-        theme(legend.position=c(0.75,0.25),
+        theme(legend.position=c(0.73,0.2),
               legend.title = element_text(colour = 'black', size = 21),
               legend.background = element_rect(fill="white", color = "black"),
               legend.key = element_rect(fill="transparent"),
@@ -210,16 +212,20 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
 
      # Find max density y value across both datasets
      vars <- unique(merged_abundances$novelty)
-     xd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data2.TPM"))
-     yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.TPM"))
+     xd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data2.log_TPM"))
+     yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.log_TPM"))
      plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
 
+     # density x lims 
+     density_xmin = log(0.1, base=10)
+     density_xmax = log(32768, base=10)
+
      # Marginal density plot of x (top panel)
-     xdensity <- ggplot(merged_abundances, aes(data1.TPM, fill=novelty, color=novelty)) + 
+     xdensity <- ggplot(merged_abundances, aes(data1.log_TPM, fill=novelty, color=novelty)) + 
                         geom_density(alpha=.5) + 
                         scale_fill_manual(values = color_vec) + 
                         scale_color_manual(values = color_vec) +
-                        coord_cartesian(ylim = c(0, plot_max)) +
+                        coord_cartesian(xlim = c(density_xmin, density_xmax), ylim = c(0, plot_max)) +
                         scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
                         theme(legend.position = "none",
                               axis.title.x=element_blank(),
@@ -230,11 +236,11 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
                               plot.margin = margin(0.75, 0, 0, 0, "cm"))
 
     # Marginal density plot of y (right panel)
-    ydensity <- ggplot(merged_abundances, aes(data2.TPM, fill=novelty, color=novelty)) + 
+    ydensity <- ggplot(merged_abundances, aes(data2.log_TPM, fill=novelty, color=novelty)) + 
                        geom_density(alpha=.5) + 
                        scale_fill_manual(values = color_vec) +
                        scale_color_manual(values = color_vec) +
-                       coord_cartesian(ylim = c(0, plot_max)) +
+                       coord_cartesian(xlim = c(density_xmin, density_xmax), ylim = c(0, plot_max)) +
                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
                        theme(legend.position = "none",
                              axis.title.y=element_blank(),
@@ -281,6 +287,9 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("optparse"))
     suppressPackageStartupMessages(library("gridExtra"))
     suppressPackageStartupMessages(library("cowplot"))
+    suppressPackageStartupMessages(library("scales"))
+
+
     return
 }
 
