@@ -83,7 +83,7 @@ main <-function() {
     illumina_PB_et$adj_pval <- p.adjust(illumina_PB_et$PValue, method = "bonferroni")
 
     # Volcano plot
-    volcano_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
+    #volcano_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
 
     # MA plot
     ma_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
@@ -91,7 +91,7 @@ main <-function() {
     # Merge the EdgeR table with the other information
     illumina_PB_et <- cbind(illumina_PB_et, merged_illumina_pacbio)
     illumina_PB_et <- illumina_PB_et[order(illumina_PB_et$adj_pval),]
-    print(head(subset(illumina_PB_et, logFC > 0)))
+    #print(head(subset(illumina_PB_et, logFC > 0)))
     write.table(illumina_PB_et, paste(opt$outdir, "/edgeR_", dtype, "_illumina_genes.tsv", sep=""),
                 row.names=F, col.names=T, quote=F)
 }
