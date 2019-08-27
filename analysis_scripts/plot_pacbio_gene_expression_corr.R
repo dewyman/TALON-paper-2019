@@ -80,16 +80,19 @@ main <-function() {
 
 expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs, regression_line, d1_type, d2_type) {
 
-    # Take log2(TPM + 1)
-    merged_abundances$data1.TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
-    merged_abundances$data2.TPM = log(merged_abundances$data2.TPM + 0.1, base=2)
+    # Take log2(TPM + 0.1)
+    merged_abundances$data1.log_TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
+    merged_abundances$data2.log_TPM = log(merged_abundances$data2.TPM + 0.1, base=2)
+
+    # print(max(merged_abundances$data1.log_TPM))
+    # print(max(merged_abundances$data2.log_TPM))
     
-    # Plot log2(TPM + 1) for each dataset on a scatterplot. Color points according to known/novel status
-    pearsonCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "pearson", continuity = FALSE, conf.level = 0.95)$estimate
-    spearmanCorr = cor.test(~data1.TPM + data2.TPM, data=merged_abundances, method = "spearman", continuity = FALSE, conf.level = 0.95)$estimate
+    # Plot log2(TPM + 0.1) for each dataset on a scatterplot. Color points according to known/novel status
+    pearsonCorr = cor.test(~data1.log_TPM + data2.log_TPM, data=merged_abundances, method = "pearson", continuity = FALSE, conf.level = 0.95)$estimate
+    spearmanCorr = cor.test(~data1.log_TPM + data2.log_TPM, data=merged_abundances, method = "spearman", continuity = FALSE, conf.level = 0.95)$estimate
 
     # Least-Square Regression Line
-    mod<-lm(data2.TPM~data1.TPM, data=merged_abundances)
+    mod<-lm(data2.log_TPM~data1.log_TPM, data=merged_abundances)
 
     joined_names <- paste(outdir, "/", d1, "-", d2, sep = "")
     if (options$antisense == T) {
@@ -101,8 +104,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
     fname <- paste(joined_names, "gene", "correlationPlot.png", sep="_")
     corr_fname <- paste(joined_names, "gene", "correlations.txt", sep="_")
 
-    xlabel <- paste("log2(TPM+0.1) in ", celltype, " ", d1_type, sep="")
-    ylabel <- paste("log2(TPM+0.1) in ", celltype, " ", d2_type, sep="")
+    xlabel <- paste("TPM+0.1 in ", celltype, " ", d1_type, sep="")
+    ylabel <- paste("TPM+0.1 in ", celltype, " ", d2_type, sep="")
     corr_label <- paste("Pearson r: ",
                             round(pearsonCorr, 2), "\nSpearman rho: ",
                             round(spearmanCorr, 2), "\nLSR slope: ",
@@ -125,6 +128,9 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
         width = 2500, height = 2500, units = "px",
         bg = "white",  res = 300)
 
+    # testing
+
+
     # Main scatterplot
     scatterplot = ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
                          geom_jitter(alpha = 0.5) + theme_bw() +
@@ -132,7 +138,13 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                          theme(text= element_text(size=24)) +
                          theme(axis.text.x = element_text(color = "black", size=24),
                                axis.text.y = element_text(color = "black", size=24)) +
-                         coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
+                         # coord_trans(x='log2', y='log2')+
+                         # xlim(0, 16000)+
+                         # ylim(0, 16000)+
+                         scale_x_continuous(trans=log2_trans(), limits=c(0.1,32768),labels=trans_format('log2',math_format(2^.x)))+
+                         scale_y_continuous(trans=log2_trans(), limits=c(0.1,32768), labels=trans_format('log2',math_format(2^.x)))+
+                         # scale_x_continuous(trans='log2')+
+                         # scale_y_continuous(trans='log2')+
                          scale_colour_manual("Gene status", values=color_vec) +
                          theme(legend.position=c(0.8,0.2),
                              legend.title = element_text(colour = 'black', size = 21),
@@ -156,17 +168,23 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
 
      # Find max density y value across both datasets
      vars <- unique(merged_abundances$novelty)
-     xd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data2.TPM"))
-     yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.TPM"))
+     xd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data2.log_TPM"))
+     yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.log_TPM"))
      plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
 
+     density_xmin = log(0.1, base=2)
+     density_xmax = log(32768, base=2)
+     # print(density_xmin)
+     # print(density_xmax)
+
      # Marginal density plot of x (top panel)
-     xdensity <- ggplot(merged_abundances, aes(data1.TPM, fill=novelty, color=novelty)) + 
+     xdensity <- ggplot(merged_abundances, aes(data1.log_TPM, fill=novelty, color=novelty)) + 
                         geom_density(alpha=.5) + 
                         scale_fill_manual(values = color_vec) + 
                         scale_color_manual(values = color_vec) +
-                        coord_cartesian(ylim = c(0, plot_max)) +
-                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                        coord_cartesian(xlim = c(density_xmin, density_xmax), ylim = c(0, plot_max)) +
+                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max)) +
+                        # scale_x_continuous(trans='log2', limits=c(0.1,16000))+
                         theme(legend.position = "none",
                               axis.title.x=element_blank(),
                               axis.text.x=element_blank(),
@@ -176,12 +194,13 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                               plot.margin = margin(0.75, 0, 0, 0, "cm"))
 
     # Marginal density plot of y (right panel)
-    ydensity <- ggplot(merged_abundances, aes(data2.TPM, fill=novelty, color=novelty)) + 
+    ydensity <- ggplot(merged_abundances, aes(data2.log_TPM, fill=novelty, color=novelty)) + 
                        geom_density(alpha=.5) + 
                        scale_fill_manual(values = color_vec) +
                        scale_color_manual(values = color_vec) +
-                       coord_cartesian(ylim = c(0, plot_max)) +
+                       coord_cartesian(xlim = c(density_xmin, density_xmax), ylim = c(0, plot_max)) +
                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                       # scale_x_continuous(trans='log2', limits=c(0.1,16000))+
                        theme(legend.position = "none",
                              axis.title.y=element_blank(),
                              axis.text.y=element_blank(),
@@ -227,6 +246,8 @@ load_packages <- function() {
     suppressPackageStartupMessages(library("optparse"))
     suppressPackageStartupMessages(library("gridExtra"))
     suppressPackageStartupMessages(library("cowplot"))
+    suppressPackageStartupMessages(library("scales"))
+
     return
 }
 
