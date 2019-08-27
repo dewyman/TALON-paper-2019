@@ -44,7 +44,7 @@ main <-function() {
     
 
     # Combine the Illumina tables with information about which genes/transcripts are observed in Pacbio
-    illumina_gene_detection <- get_detection(illumina_gene_table, d1_genes, d2_genes, "gene")
+    illumina_gene_detection <- get_detection(illumina_gene_table, d1_genes, d2_genes, "gene", opt$dtype)
 
     #write.table(illumina_gene_detection[,c("gene","detection")], paste(opt$outdir, "/", "gene_detection.csv", sep=""),
     #            col.names=F, row.names=F, quote=F, sep=",")
@@ -54,7 +54,7 @@ main <-function() {
     illumina_gene_detection_buckets <- get_buckets(illumina_gene_detection)    
 
     # Plot detection by TPM
-    plot_detection(illumina_gene_detection_buckets$illumina, illumina_gene_detection_buckets$interval_labels, "gene", color_vec, opt$outdir)
+    plot_detection(illumina_gene_detection_buckets$illumina, illumina_gene_detection_buckets$interval_labels, "gene", color_vec, opt$outdir, opt$dtype)
     print ("--------------------------")
 
    #plot_length_hists_by_detection(highly_expressed, opt$outdir)
@@ -72,18 +72,20 @@ get_buckets <- function(illumina) {
 }
 
 
-get_detection <- function(illumina, d1_items, d2_items, cat_type) {
+get_detection <- function(illumina, d1_items, d2_items, cat_type, dtype) {
 
     shared <- intersect(d1_items, d2_items)
     d1_d2_union <- union(d1_items, d2_items) 
     not_shared <- d1_d2_union[(d1_d2_union %in% shared) == F]
 
-    illumina$detection = ifelse(illumina[,cat_type] %in% not_shared, "Detected in one PacBio rep",
-                                             ifelse(illumina[,cat_type] %in% shared, "Detected in both PacBio reps", "Not detected in PacBio"))
+    illumina$detection = ifelse(illumina[,cat_type] %in% not_shared, paste0("Detected in one ", dtype, " rep"),
+                                             ifelse(illumina[,cat_type] %in% shared, paste0("Detected in both ", dtype, " reps"), 
+                                                                                     paste0("Not detected in ", dtype)))
+
     return(illumina)
 }
 
-plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
+plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir, dtype) {
 
     # Plot the curves
     fname <- paste(outdir, "/", cat_type, "_detection_by_TPM.png", sep="")
@@ -93,7 +95,9 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
     png(filename = fname,
         width = 2100, height = 2500, units = "px",
         bg = "white",  res = 300)
-    g = ggplot(illumina, aes(x = group, fill = factor(detection, levels = c("Not detected in PacBio", "Detected in one PacBio rep", "Detected in both PacBio reps")))) +
+    g = ggplot(illumina, aes(x = group, fill = factor(detection, levels = c(paste0("Not detected in ", dtype),
+                                                                            paste0("Detected in one ", dtype, " rep"), 
+                                                                            paste0("Detected in both ", dtype, " reps"))))) +
        geom_bar(position = "fill", col = "black") + 
        scale_fill_manual("",values=color_vec)  + 
        theme_bw() + 
@@ -112,9 +116,9 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
 
     print(g)
     dev.off()
-    if (cat_type == "gene") {
-        print(subset(illumina, (group == "(100,500]" | group == "(500,1e+11]") &
-                            detection != "Detected in both PacBio reps"))
+    # if (cat_type == "gene") {
+    #     print(subset(illumina, (group == "(100,500]" | group == "(500,1e+11]") &
+    #                         detection != "Detected in both PacBio reps"))
     
     #print(unique(as.character(subset(illumina, group == "(500,1e+11]" & detection == "Not detected in PacBio")$gene)))
     #print(unique(as.character(subset(illumina, group == "(50,100]" & detection == "Not detected in PacBio")$gene)))
@@ -122,7 +126,7 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
  
     #print(unique(as.character(subset(illumina, (group == "(500,1e+11]" | group == "(100,500]")
     #                                            & detection == "Not detected in PacBio")$gene)))
-    }
+    #}
 }
 
 plot_length_hists_by_detection <- function(illumina, outdir) {
@@ -227,6 +231,8 @@ parse_options <- function() {
                     default = NULL, help = "Rep2 Illumina Kallisto file."),
         make_option(c("--color"), action = "store", dest = "color_scheme",
                     default = NULL, help = "blue, red, or green"),
+        make_option(c("--dtype"), action="store", dest='dtype',
+                    help = 'Platform used to generate the data ie PacBio or ONT'),
         make_option(c("-o","--outdir"), action = "store", dest = "outdir",
                     default = NULL, help = "Output directory for plots and outfiles")
         )
