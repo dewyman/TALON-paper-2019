@@ -112,17 +112,9 @@ plot_detection <- function(illumina, cIntervals, cat_type, color_vec, outdir) {
 
     print(g)
     dev.off()
-    if (cat_type == "gene") {
-        print(subset(illumina, (group == "(100,500]" | group == "(500,1e+11]") &
-                            detection != "Detected in both PacBio reps"))
-    
-    #print(unique(as.character(subset(illumina, group == "(500,1e+11]" & detection == "Not detected in PacBio")$gene)))
-    #print(unique(as.character(subset(illumina, group == "(50,100]" & detection == "Not detected in PacBio")$gene)))
 
- 
-    #print(unique(as.character(subset(illumina, (group == "(500,1e+11]" | group == "(100,500]")
-    #                                            & detection == "Not detected in PacBio")$gene)))
-    }
+    #print(illumina %>% group_by("detection") %>% count())
+
 }
 
 plot_length_hists_by_detection <- function(illumina, outdir) {
