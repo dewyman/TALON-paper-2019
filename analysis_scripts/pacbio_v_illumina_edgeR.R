@@ -83,7 +83,7 @@ main <-function() {
     illumina_PB_et$adj_pval <- p.adjust(illumina_PB_et$PValue, method = "bonferroni")
 
     # Volcano plot
-    volcano_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
+    #volcano_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
 
     # MA plot
     ma_plot(illumina_PB_et, fill_color, opt$outdir, dtype)
