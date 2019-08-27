@@ -60,8 +60,8 @@ plot_distinct_novelty <- function(observed_transcripts, outdir, datasets){
     # Plotting
     str_datasets <- paste(datasets, collapse='-')
     fname <- paste(outdir, "/", str_datasets, "_distinct_isoforms_by_category.png", sep="")
-    xlabel <- "Isoform category"
-    ylabel <- "Number of distinct isoforms"
+    xlabel <- "Category"
+    ylabel <- "Number of distinct transcript models"
     ymax <- 1.02*(max(count(distinct_transcripts,"novelty")$freq))
 
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
@@ -74,22 +74,23 @@ plot_distinct_novelty <- function(observed_transcripts, outdir, datasets){
     g = ggplot(distinct_transcripts, aes(x = novelty, width=.6,
                fill = as.factor(novelty))) + 
                geom_bar() + 
-               xlab(xlabel) + ylab(ylabel) +
-               scale_fill_manual("Isoform Type", values = colors) +
-               theme_bw(base_family = "Helvetica", base_size = 18) +
+               ylab(ylabel) +
+               scale_fill_manual("Transcript Type", values = colors) +
+               theme_bw(base_family = "Helvetica", base_size = 20) +
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
-                     axis.text.x = element_text(color="black", size = rel(1.5)),
+                     axis.text.x = element_text(color="black", size = rel(1.75),
+                                             angle = 25, vjust = 1, hjust=1),
                      axis.text.y = element_text(color="black", size = rel(2)),
-                     axis.title.x = element_text(color="black", size=rel(1.75)),
+                     axis.title.x = element_blank(),
                      axis.title.y = element_text(color="black", size=rel(1.75))) +
-               guides(fill = FALSE) + 
-               coord_cartesian(ylim = c(0, ymax)) 
-               #theme(legend.position=c(0.8,0.7),
-               #      legend.title = element_blank(),
-               #      legend.background = element_rect(fill="white", color = "black"),
-               #      legend.key = element_rect(fill="transparent"),
-               #      legend.text = element_text(colour = 'black', size = rel(2)))
+               #guides(fill = FALSE) + 
+               coord_cartesian(ylim = c(0, ymax)) +
+               theme(legend.position=c(0.7,0.8),
+                     legend.title = element_text(colour = 'black', size = rel(2)),
+                     legend.background = element_rect(fill="white", color = "black"),
+                     legend.key = element_rect(fill="transparent"),
+                     legend.text = element_text(colour = 'black', size = rel(2)))
 
     print(g)
     dev.off()
@@ -141,13 +142,14 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
     g = ggplot(observed_transcripts, aes(x = dataset,
                fill = as.factor(novelty))) + #factor(ERCC, levels = novelty)) +
                geom_bar(position="dodge") + #custom_theme() +
-               xlab(xlabel) + ylab(ylabel) +
+               xlab("") + ylab(ylabel) +
                theme_bw(base_family = "Helvetica", base_size = 18) +
                scale_fill_manual("Isoform Type", values = colors) +
                theme_bw(base_family = "Helvetica", base_size = 18) +
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
-                     axis.text.x = element_text(color="black", size = rel(1.5)),
+                     axis.text.x = element_blank(), #element_text(color="black", size = rel(1.5)),
+                     axis.ticks.x = element_blank(),
                      axis.text.y = element_text(color="black", size = rel(2)),
                      axis.title.x = element_text(color="black", size=rel(1.5)),
                      axis.title.y = element_text(color="black", size=rel(1.5))) +
@@ -156,15 +158,15 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
                      legend.position=c(0.85,0.85),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent")) +
-                yscale("log2", .format = TRUE) +
+                yscale("log10", .format = TRUE) +
                 coord_cartesian(ylim = c(1, ymax)) +
                 geom_text(aes(y = ..count.., 
                   label = paste0(percent, '%')), 
                   stat = 'count', 
                   position = position_dodge(.9), 
                   size = rel(7.5), vjust=-0.25) +
-                expand_limits(x = 2)
-                #guides(fill = FALSE)
+                #expand_limits(x = 2) +
+                guides(fill = FALSE)
 
 
     print(g)
