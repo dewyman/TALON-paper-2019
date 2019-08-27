@@ -190,7 +190,7 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         scale_y_continuous(trans=log2_trans(), limits=c(0.1,32768), labels=trans_format('log2',math_format(2^.x)))+
         # coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("Transcript status", values=color_vec) +
-        theme(legend.position=c(0.75,0.25),
+        theme(legend.position=c(0.73,0.2),
               legend.title = element_text(colour = 'black', size = 21),
               legend.background = element_rect(fill="white", color = "black"),
               legend.key = element_rect(fill="transparent"),

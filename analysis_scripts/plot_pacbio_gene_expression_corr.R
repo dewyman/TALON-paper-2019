@@ -146,7 +146,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                          # scale_x_continuous(trans='log2')+
                          # scale_y_continuous(trans='log2')+
                          scale_colour_manual("Gene status", values=color_vec) +
-                         theme(legend.position=c(0.8,0.2),
+                         theme(legend.position=c(0.73,0.2),
                              legend.title = element_text(colour = 'black', size = 21),
                              legend.background = element_rect(fill="white", color = "black"),
                              legend.key = element_rect(fill="transparent"),
@@ -172,6 +172,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
      yd_max <- max(sapply(vars, compute_max_density_for_var, merged_abundances, "data1.log_TPM"))
      plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
 
+     # density xlims
      density_xmin = log(0.1, base=2)
      density_xmax = log(32768, base=2)
      # print(density_xmin)
