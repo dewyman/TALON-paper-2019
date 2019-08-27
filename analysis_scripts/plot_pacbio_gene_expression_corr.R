@@ -125,7 +125,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
     write(corr_label, corr_fname)
 
     png(filename = fname,
-        width = 2500, height = 2500, units = "px",
+        width = 2700, height = 2500, units = "px",
         bg = "white",  res = 300)
 
     # testing
@@ -141,8 +141,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                          # coord_trans(x='log2', y='log2')+
                          # xlim(0, 16000)+
                          # ylim(0, 16000)+
-                         scale_x_continuous(trans=log2_trans(), limits=c(0.1,32768),labels=trans_format('log10',math_format(10^.x)))+
-                         scale_y_continuous(trans=log2_trans(), limits=c(0.1,32768), labels=trans_format('log10',math_format(10^.x)))+
+                         scale_x_continuous(trans=log10_trans(), limits=c(0.1,32768))+
+                         scale_y_continuous(trans=log10_trans(), limits=c(0.1,32768))+
                          # scale_x_continuous(trans='log2')+
                          # scale_y_continuous(trans='log2')+
                          scale_colour_manual("Gene status", values=color_vec) +
@@ -192,7 +192,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                               axis.ticks.x=element_blank(),
                               axis.text.y=element_text(color = "black", size=14),
                               axis.title.y=element_text(color = "black", size=20),
-                              plot.margin = margin(0.75, 0, 0, 0, "cm"))
+                              plot.margin = margin(0.75, 0, 0, 1.65, "cm"))
 
     # Marginal density plot of y (right panel)
     ydensity <- ggplot(merged_abundances, aes(data2.log_TPM, fill=novelty, color=novelty)) + 

@@ -179,15 +179,15 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
     write(corr_label, corr_fname)
 
     png(filename = fname,
-        width = 2500, height = 2500, units = "px",
+        width = 2700, height = 2500, units = "px",
         bg = "white",  res = 300)
     scatterplot <- ggplot(merged_abundances, aes(x = data1.TPM, y = data2.TPM, color = novelty)) +
         geom_jitter(alpha = 0.5) + theme_bw() +
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
-        scale_x_continuous(trans=log10_trans(), limits=c(0.1,32768),labels=trans_format('log10',math_format(10^.x)))+
-        scale_y_continuous(trans=log10_trans(), limits=c(0.1,32768), labels=trans_format('log10',math_format(10^.x)))+
+        scale_x_continuous(trans=log10_trans(), limits=c(0.1,32768))+
+        scale_y_continuous(trans=log10_trans(), limits=c(0.1,32768))+
         # coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("Transcript status", values=color_vec) +
         theme(legend.position=c(0.73,0.2),
@@ -233,7 +233,7 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
                               axis.ticks.x=element_blank(),
                               axis.text.y=element_text(color = "black", size=14),
                               axis.title.y=element_text(color = "black", size=20),
-                              plot.margin = margin(0.75, 0, 0, 0, "cm"))
+                              plot.margin = margin(0.75, 0, 0, 1.65, "cm"))
 
     # Marginal density plot of y (right panel)
     ydensity <- ggplot(merged_abundances, aes(data2.log_TPM, fill=novelty, color=novelty)) + 
