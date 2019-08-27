@@ -81,8 +81,8 @@ main <-function() {
 expression_by_status <- function(merged_abundances, d1, d2, options, outdir, color_vec, celltype, lsr, corr_labs, regression_line, d1_type, d2_type) {
 
     # Take log2(TPM + 0.1)
-    merged_abundances$data1.log_TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
-    merged_abundances$data2.log_TPM = log(merged_abundances$data2.TPM + 0.1, base=2)
+    merged_abundances$data1.log_TPM = log(merged_abundances$data1.TPM + 0.1, base=10)
+    merged_abundances$data2.log_TPM = log(merged_abundances$data2.TPM + 0.1, base=10)
 
     # print(max(merged_abundances$data1.log_TPM))
     # print(max(merged_abundances$data2.log_TPM))
@@ -141,8 +141,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                          # coord_trans(x='log2', y='log2')+
                          # xlim(0, 16000)+
                          # ylim(0, 16000)+
-                         scale_x_continuous(trans=log2_trans(), limits=c(0.1,32768),labels=trans_format('log2',math_format(2^.x)))+
-                         scale_y_continuous(trans=log2_trans(), limits=c(0.1,32768), labels=trans_format('log2',math_format(2^.x)))+
+                         scale_x_continuous(trans=log2_trans(), limits=c(0.1,32768),labels=trans_format('log10',math_format(10^.x)))+
+                         scale_y_continuous(trans=log2_trans(), limits=c(0.1,32768), labels=trans_format('log10',math_format(10^.x)))+
                          # scale_x_continuous(trans='log2')+
                          # scale_y_continuous(trans='log2')+
                          scale_colour_manual("Gene status", values=color_vec) +
@@ -173,8 +173,8 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
      plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
 
      # density xlims
-     density_xmin = log(0.1, base=2)
-     density_xmax = log(32768, base=2)
+     density_xmin = log(0.1, base=10)
+     density_xmax = log(32768, base=10)
      # print(density_xmin)
      # print(density_xmax)
 

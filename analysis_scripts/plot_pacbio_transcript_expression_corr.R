@@ -136,8 +136,8 @@ filter_transcripts_on_options <- function(abundance_table, opt) {
 expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, celltype, lsr, corr_labs, regression_line, d1_type, d2_type) {
 
     # Take log2(TPM + 0.1)
-    merged_abundances$data1.log_TPM = log(merged_abundances$data1.TPM + 0.1, base=2)
-    merged_abundances$data2.log_TPM = log(merged_abundances$data2.TPM + 0.1, base=2)
+    merged_abundances$data1.log_TPM = log(merged_abundances$data1.TPM + 0.1, base=10)
+    merged_abundances$data2.log_TPM = log(merged_abundances$data2.TPM + 0.1, base=10)
     t_levels <- levels(merged_abundances$novelty)
     
     # Plot log2(TPM + 0.1) for each dataset on a scatterplot. Color points according to known/novel status
@@ -186,8 +186,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
-        scale_x_continuous(trans=log2_trans(), limits=c(0.1,32768),labels=trans_format('log2',math_format(2^.x)))+
-        scale_y_continuous(trans=log2_trans(), limits=c(0.1,32768), labels=trans_format('log2',math_format(2^.x)))+
+        scale_x_continuous(trans=log10_trans(), limits=c(0.1,32768),labels=trans_format('log10',math_format(10^.x)))+
+        scale_y_continuous(trans=log10_trans(), limits=c(0.1,32768), labels=trans_format('log10',math_format(10^.x)))+
         # coord_cartesian(xlim=c(0, 16), ylim=c(0, 16)) +
         scale_colour_manual("Transcript status", values=color_vec) +
         theme(legend.position=c(0.73,0.2),
@@ -217,8 +217,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
      plot_max <- round(max(c(xd_max, yd_max))*1.001, 2)
 
      # density x lims 
-     density_xmin = log(0.1, base=2)
-     density_xmax = log(32768, base=2)
+     density_xmin = log(0.1, base=10)
+     density_xmax = log(32768, base=10)
 
      # Marginal density plot of x (top panel)
      xdensity <- ggplot(merged_abundances, aes(data1.log_TPM, fill=novelty, color=novelty)) + 
