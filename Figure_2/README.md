@@ -82,7 +82,7 @@ Correlations are in PacBio_GM12878_1-PacBio_GM12878_2_Known_transcript_correlati
 
 ## Panel F: Expression of transcript models in each biological replicate of GM12878, labeled by their novelty assignments
 ```bash
-Rscript ${PLOTPATH}/plot_pacbio_transcript_expression_corr.R \
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
          --f ${filt_abundance} \
          --d1 PacBio_GM12878_1 \
          --d1_type 'Rep1 PacBio' \
@@ -93,6 +93,8 @@ Rscript ${PLOTPATH}/plot_pacbio_transcript_expression_corr.R \
          -o .
 
 ```
+<img align="center" width="400" src="PacBio_GM12878_1-PacBio_GM12878_2_Known-ISM-NIC-NNC-Antisense-Intergenic_transcript_correlationPlot.png">
+Correlations are in PacBio_GM12878_1-PacBio_GM12878_2_Known-ISM-NIC-NNC-Antisense-Intergenic_transcript_correlations.txt.
 
 ## Panel G: Comparison of known transcript expression levels in the PacBio and Illumina RNA-seq platforms (GM12878 Rep 1 and 2). 
 ```bash
@@ -100,14 +102,15 @@ Rscript ../plotting_scripts/plot_novelty_category_read_counts.R \
          --f ${filt_abundance} \
          --datasets PacBio_GM12878_1 \
          --o .
-
 ```
+<img align="center" width="400" src="">
 
 ## Panel H: Total number of PacBio reads assigned to each novelty category after transcript filtering
 Rscript ../plotting_scripts/plot_novelty_category_read_counts.R \
          --f ${filt_abundance}  \
          --datasets PacBio_GM12878_1 \
          --o .
+<img align="center" width="400" src="">
 
 ## Panel I: Visualization of PacBio-derived custom GTF annotations in the UCSC genome browser for ENCODE tier 1 cell lines. 
 
@@ -119,5 +122,6 @@ Rscript ${PLOTPATH}/plot_expression_for_genome_browser.R \
         --transcripts TCF3_transcript_names.txt \
         -o .
 ```
+<img align="center" width="400" src="">
 The resulting plot was combined manually with a UCSC genome browser screenshot to create Figure 2i. The bars from left to right are in the same order as the transcript names in TCF3_transcript_names.txt. The groups.csv file provides the dataset groupings needed to average expression values by cell line.
  
