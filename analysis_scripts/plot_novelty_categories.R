@@ -172,35 +172,6 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
 
     print(g)
     dev.off()
-    quit()
-    # Write a log file
-    FSM_rows = subset(observed_transcripts, novelty == "KNOWN")
-    ISM_rows = subset(observed_transcripts, novelty == "ISM")
-    NIC_rows = subset(observed_transcripts, novelty == "NIC")
-    NNC_rows = subset(observed_transcripts, novelty == "NNC")
-    antisense_rows = subset(observed_transcripts, novelty == "antisense")
-    intergenic_rows = subset(observed_transcripts, novelty == "intergenic")
-
-    FSMs_per_dataset <- table(FSM_rows$dataset)
-    ISMs_per_dataset <- table(ISM_rows$dataset)
-    NIC_per_dataset <- table(NIC_rows$dataset)
-    NNC_per_dataset <- table(NNC_rows$dataset)
-    antisense_per_dataset <- table(antisense_rows$dataset)
-    intergenic_per_dataset <- table(intergenic_rows$dataset)
-
-    reads_per_dataset <- table(observed_transcripts$dataset)
-    datasets <- names(FSMs_per_dataset)
-
-    FSM_table <- data.frame("dataset" = as.character(datasets),
-                            "total_reads" = as.numeric(reads_per_dataset),
-                            "percent_FSM" = 100*as.numeric(FSMs_per_dataset)/as.numeric(reads_per_dataset),
-                            "percent_ISM" = 100*as.numeric(ISMs_per_dataset)/as.numeric(reads_per_dataset),
-                            "percent_NIC" = 100*as.numeric(NIC_per_dataset)/as.numeric(reads_per_dataset),
-                            "percent_NNC" = 100*as.numeric(NNC_per_dataset)/as.numeric(reads_per_dataset),
-                            "percent_antisense" = 100*as.numeric(antisense_per_dataset)/as.numeric(reads_per_dataset),
-                            "percent_intergenic" = 100*as.numeric(intergenic_per_dataset)/as.numeric(reads_per_dataset),
-                            stringsAsFactors = FALSE)
-    print(FSM_table)
      
 } 
 
