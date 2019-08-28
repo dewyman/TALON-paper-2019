@@ -96,15 +96,15 @@ main <-function() {
 ma_plot <- function(data, fillcolor, outdir, dtype) {
 
     data$status <- as.factor(ifelse(abs(data$logFC) > 1 & data$adj_pval <= 0.01,
-                             "Bonf. p-value <= 0.01", "Bonf. p-value > 0.01"))
+                             "Significant", "Not significant"))
 
-    n_sig <- length(data$status[data$status == "Bonf. p-value <= 0.01"])
-    n_no_sig <- length(data$status[data$status == "Bonf. p-value > 0.01"])
+    n_sig <- length(data$status[data$status == "Significant"])
+    n_no_sig <- length(data$status[data$status == "Not significant"])
 
     # Add labels for most significant p-values
-    data$label <- NA
-    top_diff <- quantile(data$adj_pval, c(.0015))
-    data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"]
+    #data$label <- NA
+    #top_diff <- quantile(data$adj_pval, c(.0015))
+    #data[data$adj_pval <= top_diff, "label"] <- data[data$adj_pval <= top_diff, "gene_name"]
 
     fname <- paste(outdir, "/edgeR_", dtype, "_illumina_gene_MA_plot.png", sep="")
     xlabel <- "log2(Counts per million)"
@@ -129,7 +129,7 @@ ma_plot <- function(data, fillcolor, outdir, dtype) {
                      legend.title = element_blank(),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 18)) #+
+                     legend.text = element_text(colour = 'black', size = 18))
 
     print(g)
     dev.off()
@@ -162,7 +162,7 @@ filter_kallisto_illumina_genes <- function(kallisto_file) {
     gencode_quant_min300_noMT <- subset(gencode_quant_min300, !(gene %in% mitochondrial_blacklist))
 
     # Aggregate by gene
-    gene_gencode_quant_min300_noMT <- aggregate(gencode_quant_min300_noMT$tpm, by=list(gencode_quant_min300_noMT$g_ID), FUN=sum)
+    gene_gencode_quant_min300_noMT <- aggregate(gencode_quant_min300_noMT$tpm, by=list(gencode_quant_min300_noMT$gene), FUN=sum)
     colnames(gene_gencode_quant_min300_noMT) <- c("gene", "tpm")
 
     # Constraints: > 300 bp, TPM > 1
