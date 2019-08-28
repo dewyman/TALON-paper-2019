@@ -30,12 +30,11 @@ Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
 ```
 <img align="center" width="400" src="PacBio_GM12878_1-PacBio_GM12878_2_gene_correlationPlot.png">
 
-The Pearson and Spearman correlations are printed to the file in ${OUTDIR} with ending 'gene_correlations.txt'.
+ Pearson and Spearman correlations are printed to the file in ${OUTDIR} with ending 'gene_correlations.txt'.
 
 ## Panel B: Proportion of genes expressed in Illumina RNA-seq data of GM12878 that are also detected in the PacBio GM12878 data, binned by Illumina expression level 
 ```bash
-FLAIR=../compare_to_FLAIR
-Rscript ${FLAIR}/plot_detection_by_TPM_for_datasets.R \
+Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
          --f ${abundance} \
          --datasets PacBio_GM12878_1,PacBio_GM12878_2 \
          --ik1 ${kallisto1} \
@@ -44,6 +43,7 @@ Rscript ${FLAIR}/plot_detection_by_TPM_for_datasets.R \
          --dtype PacBio \
          -o .
 ```
+<img align="center" width="400" src="gene_detection_by_TPM.png">
 
 ## Panel C: Comparison of gene expression levels for known genes in the PacBio and Illumina RNA-seq platforms (GM12878)
 ```bash
