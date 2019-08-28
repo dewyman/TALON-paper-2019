@@ -98,12 +98,16 @@ Correlations are in PacBio_GM12878_1-PacBio_GM12878_2_Known-ISM-NIC-NNC-Antisens
 
 ## Panel G: Comparison of known transcript expression levels in the PacBio and Illumina RNA-seq platforms (GM12878 Rep 1 and 2). 
 ```bash
-Rscript ../plotting_scripts/plot_novelty_category_read_counts.R \
+Rscript ${PLOTPATH}/longread_v_illumina_transcripts_edgeR.R \
          --f ${filt_abundance} \
-         --datasets PacBio_GM12878_1 \
-         --o .
+         --datasets PacBio_GM12878_1,PacBio_GM12878_2 \
+         --ik1 ${kallisto1} \
+         --ik2 ${kallisto2} \
+         --color green \
+          -o . 
+
 ```
-<img align="center" width="400" src="">
+<img align="center" width="400" src="edgeR_PacBio_illumina_transcript_MA_plot.png">
 
 ## Panel H: Total number of PacBio reads assigned to each novelty category after transcript filtering
 Rscript ../plotting_scripts/plot_novelty_category_read_counts.R \
