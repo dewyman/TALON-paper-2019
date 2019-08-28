@@ -110,10 +110,12 @@ Rscript ${PLOTPATH}/longread_v_illumina_transcripts_edgeR.R \
 <img align="center" width="400" src="edgeR_PacBio_illumina_transcript_MA_plot.png">
 
 ## Panel H: Total number of PacBio reads assigned to each novelty category after transcript filtering
-Rscript ../plotting_scripts/plot_novelty_category_read_counts.R \
+```bash
+Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
          --f ${filt_abundance}  \
          --datasets PacBio_GM12878_1 \
          --o .
+```
 <img align="center" width="400" src="PacBio_GM12878_1_reads_by_isoform_category.png">
 
 ## Panel I: Visualization of PacBio-derived custom GTF annotations in the UCSC genome browser for ENCODE tier 1 cell lines. 
@@ -126,6 +128,6 @@ Rscript ${PLOTPATH}/plot_expression_for_genome_browser.R \
         --transcripts TCF3_transcript_names.txt \
         -o .
 ```
-<img align="center" width="400" src="">
+<img align="center" width="400" src="transcript_expression.png">
 The resulting plot was combined manually with a UCSC genome browser screenshot to create Figure 2i. The bars from left to right are in the same order as the transcript names in TCF3_transcript_names.txt. The groups.csv file provides the dataset groupings needed to average expression values by cell line.
  
