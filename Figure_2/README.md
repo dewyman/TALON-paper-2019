@@ -59,7 +59,7 @@ Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
 
 ## Panel D: Number of distinct transcript isoforms observed in each novelty category (GM12878)
 ```bash
-Rscript ../plotting_scripts/plot_novelty_categories_distinct_isoforms.R \
+Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
          --f ${filt_abundance} \
          --datasets PacBio_GM12878_1,PacBio_GM12878_2 \
          --o .
