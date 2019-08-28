@@ -2,7 +2,6 @@ main <-function() {
 
     load_packages()
     opt <- parse_options()
-    database <- opt$database
     datasets <- opt$datasets
     outdir <- opt$outdir
 
