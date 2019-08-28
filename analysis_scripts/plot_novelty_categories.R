@@ -130,7 +130,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
     fname <- paste(outdir, "/", str_datasets, "_reads_by_isoform_category.png", sep="")
     # fname <- paste(outdir, "/reads_by_isoform_category.png", sep="")
     xlabel <- "Dataset"
-    ylabel <- "log10(read count)"
+    ylabel <- "Read count"
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00",
                 "NNC" = "#E69F00", "Antisense" = "#000000",
                 "Intergenic" = "#CC79A7")
