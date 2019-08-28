@@ -64,6 +64,7 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
          --datasets PacBio_GM12878_1,PacBio_GM12878_2 \
          --o .
 ```
+<img align="center" width="400" src="PacBio_GM12878_1-PacBio_GM12878_2_distinct_isoforms_by_category.png">
 
 ## Panel E: Expression level of known transcript models in each biological replicate of GM12878
 ```bash
