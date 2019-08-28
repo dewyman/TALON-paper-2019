@@ -171,7 +171,6 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
 
     print(g)
     dev.off()
-    quit()
 
     # Write a log file
     FSM_rows = subset(observed_transcripts, novelty == "KNOWN")
