@@ -30,7 +30,7 @@ Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
 ```
 <img align="center" width="400" src="PacBio_GM12878_1-PacBio_GM12878_2_gene_correlationPlot.png">
 
- Pearson and Spearman correlations are printed to the file in ${OUTDIR} with ending 'gene_correlations.txt'.
+ Pearson and Spearman correlations are recorded in PacBio_GM12878_1-PacBio_GM12878_2_gene_correlations.txt.
 
 ## Panel B: Proportion of genes expressed in Illumina RNA-seq data of GM12878 that are also detected in the PacBio GM12878 data, binned by Illumina expression level 
 ```bash
