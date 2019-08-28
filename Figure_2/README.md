@@ -68,7 +68,7 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
 
 ## Panel E: Expression level of known transcript models in each biological replicate of GM12878
 ```bash
-Rscript ${PLOTPATH}/plot_pacbio_transcript_expression_corr.R \
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
          --f ${filt_abundance} \ 
          --d1 PacBio_GM12878_1 \
          --d1_type 'Rep1 PacBio' \
@@ -76,8 +76,9 @@ Rscript ${PLOTPATH}/plot_pacbio_transcript_expression_corr.R \
          --d2_type 'Rep2 PacBio' \
          --celltype GM12878 \
          -o .
-
 ```
+<img align="center" width="400" src="PacBio_GM12878_1-PacBio_GM12878_2_Known_transcript_correlationPlot.png">
+Correlations are in PacBio_GM12878_1-PacBio_GM12878_2_Known_transcript_correlations.txt. 
 
 ## Panel F: Expression of transcript models in each biological replicate of GM12878, labeled by their novelty assignments
 ```bash
