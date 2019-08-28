@@ -117,9 +117,10 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
 
     # Compute percentages
     freqs_by_dataset <- count(observed_transcripts, c("dataset","novelty"))
+    print(freqs_by_dataset)
     freqs_by_dataset <- freqs_by_dataset %>% group_by(dataset) %>% 
                         mutate(percent = round(100*freq/sum(freq),1))
-    
+    print(freqs_by_dataset)
 
     observed_transcripts <- merge(observed_transcripts, freqs_by_dataset, 
                                   by = c("dataset","novelty"), all.x = T, all.y = F)
@@ -171,7 +172,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, datasets){
 
     print(g)
     dev.off()
-
+    quit()
     # Write a log file
     FSM_rows = subset(observed_transcripts, novelty == "KNOWN")
     ISM_rows = subset(observed_transcripts, novelty == "ISM")
