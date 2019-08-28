@@ -19,7 +19,6 @@ main <-function() {
     abundance <- as.data.frame(read_delim(opt$infile, "\t", escape_double = FALSE,
                                   col_names = TRUE, trim_ws = TRUE, na = "NA"))
     abundance <- abundance[, c("annot_transcript_id", datasets)]
-    print(subset(abundance, annot_transcript_id %in% transcript_IDs))
 
     # Reshape the data so that the datasets are rows
     abundance <- melt(abundance)
