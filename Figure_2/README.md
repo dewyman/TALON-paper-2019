@@ -47,13 +47,15 @@ Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
 
 ## Panel C: Comparison of gene expression levels for known genes in the PacBio and Illumina RNA-seq platforms (GM12878)
 ```bash
-Rscript ${PLOTPATH}/pacbio_v_illumina_edgeR.R --f ${abundance} \
+Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
+         --f ${abundance} \
          --datasets PacBio_GM12878_1,PacBio_GM12878_2 \ 
          --ik1 ${kallisto1} \
          --ik2 ${kallisto2} \
          --color blue \
          -o .
 ```
+<img align="center" width="400" src="edgeR_PacBio_illumina_gene_MA_plot.png">
 
 ## Panel D: Number of distinct transcript isoforms observed in each novelty category (GM12878)
 ```bash
