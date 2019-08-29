@@ -4,6 +4,7 @@ This repository contains custom scripts and documentation associated with the an
 You can find the preprint here: https://www.biorxiv.org/content/10.1101/672931v1
 
 To download the TALON program, please visit https://github.com/dewyman/TALON.  
+To download the TranscriptClean program, please visit https://github.com/dewyman/TranscriptClean.
 To download the ENCODE DCC deployment of the TALON pipeline, please visit https://github.com/ENCODE-DCC/long-read-rna-pipeline. 
 
 ## plotting_scripts
