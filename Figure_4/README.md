@@ -13,8 +13,9 @@ RNAPET=../RNA-PET/data/GM12878_hg38.bed
 GENOME=../refs/hg38/hg38.fa
 ```
 GTF files are available as supplementary tables of the TALON paper.  
-To obtain FANTOM5 CAGE data, please see instructions at https://github.com/dewyman/TALON-paper-2019/blob/master/CAGE
-To obtain ENCODE RNA-PET data, please see instructions at https://github.com/dewyman/TALON-paper-2019/tree/master/RNA-PET
+To obtain FANTOM5 CAGE data, please see instructions at https://github.com/dewyman/TALON-paper-2019/blob/master/CAGE  
+To obtain ENCODE RNA-PET data, please see instructions at https://github.com/dewyman/TALON-paper-2019/tree/master/RNA-PET  
+Use this script to get the reference genome: https://github.com/dewyman/TALON-paper-2019/blob/master/refs/download_and_index_human_genome.sh. 
 
 Software versions:  
 * Python 3.7.2
