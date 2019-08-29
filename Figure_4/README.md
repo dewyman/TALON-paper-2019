@@ -38,7 +38,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
     --ymax 22000 \ 
     -o ${OUTPLOTS}/GM12878_PacBio
 ```
-
+<img align="center" width="400" src="plots/GM12878_PacBio_CAGE_support.png">
 
 ## Panel B: Percentage of TALON transcript models with a poly(A) motif identified at their 3' end (GM12878 PacBio)
 
