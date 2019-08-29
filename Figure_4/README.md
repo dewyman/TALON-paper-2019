@@ -144,4 +144,4 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
     --splitISM \
     -o ${OUTPLOTS}/GM12878_ONT
 ```
-<img align="center" width="400" src="plots/GM12878_ONT_RNA-PET-comp_support.png">
+<img align="center" width="400" src="plots/GM12878_ONT_RNA-PET_support.png">
