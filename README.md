@@ -12,6 +12,9 @@ Final versions of data visualization scripts used in the paper.
 ## Figure_2
 Describes exactly how the panels of Figure 2 in the paper were generated
 
+## Figure_4
+Describes exactly how the panels of Figure 4 in the paper were generated
+
 ## refs
 Contains instructions for downloading reference genomes, GENCODE annotations, and variant files. Also includes scripts we used to prepare input files for TranscriptClean and TALON initializations.
 
