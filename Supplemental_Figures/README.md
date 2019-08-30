@@ -239,12 +239,13 @@ Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
 
 ## Panel A: Expression level of known and ISM transcript models in PacBio/ONT in GM12878
 ```bash
-abundance=S29_full_gencode_v29_pb_ont_talon_abundance_filtered.tsv
+abundance=S28_full_gencode_v29_pb_ont_talon_abundance.tsv
+filt_abundance=S29_full_gencode_v29_pb_ont_talon_abundance_filtered.tsv
 ```
 
 ```bash
 Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
-         --f ${abundance} \
+         --f ${filt_abundance} \
          --d1 PacBio_GM12878_1 \
          --d1_type 'PacBio' \
          --d2 ONT_GM12878_2 \
@@ -327,5 +328,74 @@ Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
 ```
 <img align="center" width="400" src="figures/ONT_K562_1-ONT_K562_2_Known-ISM_transcript_correlationPlot.png">
 Correlations are in ONT_K562_1-ONT_K562_2_Known-ISM_transcript_correlations.txt.  
+
+# Figure S12: Gene and transcript reproducibility across long-read platforms ONT and PacBio in HepG2 and K562
+
+## Panel A: Expression level of known and antisense genes in PacBio/ONT in HepG2
+
+```bash
+Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
+          --f ${abundance} \
+          --color green \
+          --d1 PacBio_HepG2_1 \
+          --d2 ONT_HepG2_1 \
+          --celltype HepG2 \
+          --d1_type 'PacBio' \
+          --d2_type 'ONT' \
+          -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_HepG2_1-ONT_HepG2_1_gene_correlationPlot.png">
+
+Pearson and Spearman correlations are recorded in PacBio_HepG2_1-ONT_HepG2_1_gene_correlations.txt.
+
+## Panel B: Expression level of known and antisense genes in PacBio/ONT in HepG2
+
+```bash
+Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
+          --f ${abundance} \
+          --color red \
+          --d1 PacBio_K562_1 \
+          --d2 ONT_K562_1 \
+          --celltype HepG2 \
+          --d1_type 'PacBio' \
+          --d2_type 'ONT' \
+          -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_K562_1-ONT_K562_1_gene_correlationPlot.png">
+
+Pearson and Spearman correlations are recorded in PacBio_K562_1-ONT_K562_1_gene_correlations.txt.
+
+## Panel C: Expression level of known and ISM transcript models in PacBio/ONT in HepG2
+
+```bash
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
+         --f ${filt_abundance} \
+         --d1 PacBio_HepG2_1 \
+         --d1_type 'PacBio' \
+         --d2 ONT_HepG2_1 \
+         --d2_type 'ONT' \
+         --celltype HepG2 \
+         --ISM \
+         -o figures/
+```
+<img align="center" width="400" src="figures/">
+Correlations are in . 
+
+## Panel D: Expression level of known and ISM transcript models in PacBio/ONT in K562
+
+```bash
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
+         --f ${filt_abundance} \
+         --d1 PacBio_K562_1 \
+         --d1_type 'PacBio' \
+         --d2 ONT_K562_2 \
+         --d2_type 'ONT' \
+         --celltype K562 \
+         --ISM \
+         -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_K562_1-ONT_K562_2_Known-ISM_transcript_correlationPlot.png">
+Correlations are in PacBio_K562_1-ONT_K562_2_Known-ISM_transcript_correlations.txt. 
+
 
 
