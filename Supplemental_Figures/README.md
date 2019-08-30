@@ -65,7 +65,7 @@ Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
          --color green \
          --dtype PacBio \
          -o figures/
-mv figures/gene_detection_by_TPM.png figures/HepG2_gene_detection_by_TPM
+mv figures/gene_detection_by_TPM.png figures/HepG2_gene_detection_by_TPM.png
 ```
 <img align="center" width="400" src="figures/HepG2_gene_detection_by_TPM.png">
 
@@ -79,6 +79,34 @@ Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
          --color red \
          --dtype PacBio \
          -o figures/
-mv figures/gene_detection_by_TPM.png figures/K562_gene_detection_by_TPM
+mv figures/gene_detection_by_TPM.png figures/K562_gene_detection_by_TPM.png
 ```
 <img align="center" width="400" src="figures/K562_gene_detection_by_TPM.png">
+
+# Figure S5: HepG2 and K562 TALON PacBio gene expression compared to Illumina short-read expression
+
+## Panel A: Comparison of gene expression levels for known genes in the PacBio and Illumina RNA-seq platforms (HepG2)
+```bash
+Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
+         --f ${hepg2_abundance} \
+         --datasets PacBio_HepG2_1,PacBio_HepG2_2 \
+         --ik1 ${hepg2_kallisto1} \
+         --ik2 ${hepg2_kallisto2} \
+         --color green \
+         -o figures/
+mv figures/edgeR_PacBio_illumina_gene_MA_plot.png HepG2_edgeR_PacBio_illumina_gene_MA_plot.png
+```
+<img align="center" width="400" src="HepG2_edgeR_PacBio_illumina_gene_MA_plot.png">
+
+## Panel B: Comparison of gene expression levels for known genes in the PacBio and Illumina RNA-seq platforms (K562)
+```bash
+Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
+         --f ${k562_abundance} \
+         --datasets PacBio_K562_1,PacBio_K562_2 \
+         --ik1 ${k562_kallisto1} \
+         --ik2 ${k562_kallisto2} \
+         --color red \
+         -o figures/
+mv figures/edgeR_PacBio_illumina_gene_MA_plot.png K562_edgeR_PacBio_illumina_gene_MA_plot.png
+```
+<img align="center" width="400" src="K562_edgeR_PacBio_illumina_gene_MA_plot.png">
