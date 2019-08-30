@@ -303,14 +303,14 @@ Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
          --f ${hepg2_filt_abundance} \
          --d1 ONT_HepG2_1 \
          --d1_type 'ONT Rep1' \
-         --d2 ONT_HepG2_2 \
+         --d2 ONT_HepG2_3 \
          --d2_type 'ONT Rep2' \
          --celltype HepG2 \
          --ISM \
          -o figures/
 ```
-<img align="center" width="400" src="figures/ONT_HepG2_1-ONT_HepG2_2_Known-ISM_transcript_correlationPlot.png">
-Correlations are in ONT_HepG2_1-ONT_HepG2_2_Known-ISM_transcript_correlations.txt.
+<img align="center" width="400" src="figures/ONT_HepG2_1-ONT_HepG2_3_Known-ISM_transcript_correlationPlot.png">
+Correlations are in ONT_HepG2_1-ONT_HepG2_3_Known-ISM_transcript_correlations.txt.
 
 ## Panel E: Expression level of known and ISM transcript models in ONT in K562
 
