@@ -269,14 +269,14 @@ k562_filt_abundance=S26_K562_ont_talon_abundance_filtered.tsv
 Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
           --f ${hepg2_abundance} \
           --color green \
-          --d1 ONT_HepG2_1 \
-          --d2 ONT_HepG2_2 \
+          --d1 ONT_HepG2_3 \
+          --d2 ONT_HepG2_1 \
           --celltype HepG2 \
           --d1_type 'ONT Rep1' \
           --d2_type 'ONT Rep2' \
           -o figures/
 ```
-<img align="center" width="400" src="figures/ONT_HepG2_1-ONT_HepG2_2_gene_correlationPlot.png">
+<img align="center" width="400" src="figures/ONT_HepG2_3-ONT_HepG2_1_gene_correlationPlot.png">
 
 Pearson and Spearman correlations are recorded in ONT_HepG2_1-ONT_HepG2_2_gene_correlations.txt
 
@@ -301,15 +301,15 @@ Pearson and Spearman correlations are recorded in ONT_K562_1-ONT_K562_2_gene_cor
 ```bash
 Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
          --f ${hepg2_filt_abundance} \
-         --d1 ONT_HepG2_1 \
+         --d1 ONT_HepG2_3 \
          --d1_type 'ONT Rep1' \
-         --d2 ONT_HepG2_3 \
+         --d2 ONT_HepG2_1 \
          --d2_type 'ONT Rep2' \
          --celltype HepG2 \
          --ISM \
          -o figures/
 ```
-<img align="center" width="400" src="figures/ONT_HepG2_1-ONT_HepG2_3_Known-ISM_transcript_correlationPlot.png">
+<img align="center" width="400" src="figures/ONT_HepG2_3-ONT_HepG2_1_Known-ISM_transcript_correlationPlot.png">
 Correlations are in ONT_HepG2_1-ONT_HepG2_3_Known-ISM_transcript_correlations.txt.
 
 ## Panel E: Expression level of known and ISM transcript models in ONT in K562
