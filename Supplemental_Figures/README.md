@@ -131,7 +131,7 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
 ```
 <img align="center" width="400" src="figures/PacBio_K562_1-PacBio_K562_2_distinct_isoforms_by_category.png">
 
-# Figure S6: Transcript quantification by PacBio and TALON in HepG2 and K562
+# Figure S7: Transcript quantification by PacBio and TALON in HepG2 and K562
 
 ## Panel A: Expression level of known transcript models in each PacBio biological replicate of HepG2
 ```bash
@@ -224,7 +224,7 @@ Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
          --datasets PacBio_HepG2_1 \
          --o figures/
 ```
-<img align="center" width="400" src="PacBio_HepG2_1_reads_by_isoform_category.png">
+<img align="center" width="400" src="figures/PacBio_HepG2_1_reads_by_isoform_category.png">
 
 ## Panel H: Total number of PacBio reads assigned to each novelty category in PacBio K562 after transcript filtering
 ```bash
@@ -233,4 +233,4 @@ Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
          --datasets PacBio_K562_1 \
          --o figures/
 ```
-<img align="center" width="400" src="PacBio_K562_1_reads_by_isoform_category.png">
+<img align="center" width="400" src="figures/PacBio_K562_1_reads_by_isoform_category.png">
