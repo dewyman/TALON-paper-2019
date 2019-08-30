@@ -120,7 +120,7 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
          --datasets PacBio_HepG2_1,PacBio_HepG2_2 \
          --o figures/
 ```
-<img align="center" width="400" src="figures/PacBio_HepG2_1_PacBio_HepG2_2_distinct_isoforms_by_category.png">
+<img align="center" width="400" src="figures/PacBio_HepG2_1-PacBio_HepG2_2_distinct_isoforms_by_category.png">
 
 ## Panel B: K562
 ```bash
@@ -129,4 +129,4 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
          --datasets PacBio_K562_1,PacBio_K562_2 \
          --o figures/
 ```
-<img align="center" width="400" src="figures/PacBio_K562_1_PacBio_K562_2_distinct_isoforms_by_category.png">
+<img align="center" width="400" src="figures/PacBio_K562_1-PacBio_K562_2_distinct_isoforms_by_category.png">
