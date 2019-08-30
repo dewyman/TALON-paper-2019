@@ -63,7 +63,7 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
          --datasets ONT_GM12878_1,ONT_GM12878_2 \
          --o .
 ```
-<img align="center" width="400" src="PacBio_GM12878_1-PacBio_GM12878_2_distinct_isoforms_by_category.png">
+<img align="center" width="400" src="ONT_GM12878_1-PacBio_ONT_2_distinct_isoforms_by_category.png">
 
 ## Panel E: Expression level of known genes (Gencode v29) models in GM12878 as quantified using PacBio (x) and Oxford Nanopore (y)
 ```bash
