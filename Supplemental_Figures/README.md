@@ -130,3 +130,107 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
          --o figures/
 ```
 <img align="center" width="400" src="figures/PacBio_K562_1-PacBio_K562_2_distinct_isoforms_by_category.png">
+
+# Figure S6: Transcript quantification by PacBio and TALON in HepG2 and K562
+
+## Panel A: Expression level of known transcript models in each PacBio biological replicate of HepG2
+```bash
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
+         --f ${hepg2_filt_abundance} \
+         --d1 PacBio_HepG2_1 \
+         --d1_type 'Rep1 PacBio' \
+         --d2 PacBio_HepG2_2 \
+         --d2_type 'Rep2 PacBio' \
+         --celltype HepG2 \
+         -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_HepG2_1-PacBio_HepG2_2_Known_transcript_correlationPlot.png">
+Correlations are in PacBio_HepG2_1-PacBio_HepG2_2_Known_transcript_correlations.txt. 
+
+## Panel B: Expression level of known transcript models in each PacBio biological replicate of K562
+```bash
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
+         --f ${k562_filt_abundance} \
+         --d1 PacBio_K562_1 \
+         --d1_type 'Rep1 PacBio' \
+         --d2 PacBio_K562_2 \
+         --d2_type 'Rep2 PacBio' \
+         --celltype K562 \
+         -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_K562_1-PacBio_K562_2_Known_transcript_correlationPlot.png">
+Correlations are in PacBio_K562_1-PacBio_K562_2_Known_transcript_correlations.txt. 
+
+## Panel C: Expression of transcript models in each biological replicate of HepG2, labeled by their novelty assignments
+```bash
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
+         --f ${hepg2_filt_abundance} \
+         --d1 PacBio_HepG2_1 \
+         --d1_type 'Rep1 PacBio' \
+         --d2 PacBio_HepG2_2 \
+         --d2_type 'Rep2 PacBio' \
+         --celltype HepG2 \
+         --ISM --NIC --NNC --antisense --intergenic \
+         -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_HepG2_1-PacBio_HepG2_2_Known-ISM-NIC-NNC-Antisense-Intergenic_transcript_correlationPlot.png">
+Correlations are in PacBio_HepG2_1-PacBio_HepG2_2_Known-ISM-NIC-NNC-Antisense-Intergenic_transcript_correlations.txt.
+
+## Panel D: Expression of transcript models in each biological replicate of K562, labeled by their novelty assignments
+```bash
+Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
+         --f ${k562_filt_abundance} \
+         --d1 PacBio_K562_1 \
+         --d1_type 'Rep1 PacBio' \
+         --d2 PacBio_K562_2 \
+         --d2_type 'Rep2 PacBio' \
+         --celltype K562 \
+         --ISM --NIC --NNC --antisense --intergenic \
+         -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_K562_1-PacBio_K562_2_Known-ISM-NIC-NNC-Antisense-Intergenic_transcript_correlationPlot.png">
+Correlations are in PacBio_K562_1-PacBio_K562_2_Known-ISM-NIC-NNC-Antisense-Intergenic_transcript_correlations.txt.
+
+## Panel E: Comparison of known transcript expression levels in the PacBio and Illumina RNA-seq platforms (HepG2 Rep 1 and 2). 
+```bash
+Rscript ${PLOTPATH}/longread_v_illumina_transcripts_edgeR.R \
+         --f ${hepg2_filt_abundance} \
+         --datasets PacBio_HepG2_1,PacBio_HepG2_2 \
+         --ik1 ${hepg2_kallisto1} \
+         --ik2 ${hepg2_kallisto2} \
+         --color green \
+          -o figures/
+mv figures/edgeR_PacBio_illumina_transcript_MA_plot.png figures/HepG2_edgeR_PacBio_illumina_transcript_MA_plot.png
+```
+<img align="center" width="400" src="figures/HepG2_edgeR_PacBio_illumina_transcript_MA_plot.png">
+
+## Panel F: Comparison of known transcript expression levels in the PacBio and Illumina RNA-seq platforms (K562 Rep 1 and 2). 
+```bash
+Rscript ${PLOTPATH}/longread_v_illumina_transcripts_edgeR.R \
+         --f ${k562_filt_abundance} \
+         --datasets PacBio_K562_1,PacBio_K562_2 \
+         --ik1 ${k562_kallisto1} \
+         --ik2 ${k562_kallisto2} \
+         --color green \
+          -o figures/
+mv figures/edgeR_PacBio_illumina_transcript_MA_plot.png figures/K562_edgeR_PacBio_illumina_transcript_MA_plot.png
+```
+<img align="center" width="400" src="figures/K562_edgeR_PacBio_illumina_transcript_MA_plot.png">
+
+## Panel G: Total number of PacBio reads assigned to each novelty category in PacBio HepG2 after transcript filtering
+```bash
+Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
+         --f ${hepg2_filt_abundance}  \
+         --datasets PacBio_HepG2_1 \
+         --o figures/
+```
+<img align="center" width="400" src="PacBio_HepG2_1_reads_by_isoform_category.png">
+
+## Panel H: Total number of PacBio reads assigned to each novelty category in PacBio K562 after transcript filtering
+```bash
+Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
+         --f ${k562_filt_abundance}  \
+         --datasets PacBio_K562_1 \
+         --o figures/
+```
+<img align="center" width="400" src="PacBio_K562_1_reads_by_isoform_category.png">
