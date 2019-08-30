@@ -378,8 +378,8 @@ Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
          --ISM \
          -o figures/
 ```
-<img align="center" width="400" src="figures/">
-Correlations are in . 
+<img align="center" width="400" src="figures/PacBio_HepG2_1-ONT_HepG2_1_Known-ISM_transcript_correlationPlot.png">
+Correlations are in PacBio_HepG2_1-ONT_HepG2_1_Known-ISM_transcript_correlations.txt. 
 
 ## Panel D: Expression level of known and ISM transcript models in PacBio/ONT in K562
 
