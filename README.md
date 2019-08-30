@@ -13,6 +13,9 @@ Final versions of data visualization scripts used in the paper.
 ## Figure_2
 Describes exactly how the panels of Figure 2 in the paper were generated
 
+## Figure_3
+Describes exactly how the panels of Figure 3 in the paper were generated
+
 ## Figure_4
 Describes exactly how the panels of Figure 4 in the paper were generated
 
