@@ -1,0 +1,84 @@
+# Figure S3: HepG2 and K562 TALON PacBio gene quantification and expression
+
+Files/paths used to generate the panels of this figure:
+```bash
+mkdir figures
+
+PLOTPATH=../plotting_scripts
+
+hepg2_abundance=S6_HepG2_talon_abundance.tsv
+hepg2_filt_abundance=S7_HepG2_talon_abundance_filtered.tsv
+hepg2_kallisto1=../Illumina/HepG2/Kallisto/Rep1/abundance.tsv
+hepg2_kallisto2=../Illumina/HepG2/Kallisto/Rep2/abundance.tsv
+
+k562_abundance=S9_K562_talon_abundance.tsv
+k562_filt_abundance=S10_K562_talon_abundance_filtered.tsv
+k562_kallisto1=../Illumina/K562/Kallisto/Rep1/abundance.tsv
+k562_kallisto2=../Illumina/K562/Kallisto/Rep2/abundance.tsv
+
+tier1_filt_abundance=S17_full_gencode_v29_pb_talon_abundance_filtered.tsv
+```
+Abundance and GTF files are available as supplementary tables of the TALON paper. 
+
+Software versions:
+* R v3.5.1
+
+## Panel A: Expression level of known genes (GENCODE v29) in each biological replicate of HepG2 in PacBio
+```bash
+Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
+          --f ${hepg2_abundance} \
+          --color green \
+          --d1 PacBio_HepG2_1 \
+          --d2 PacBio_HepG2_2 \
+          --celltype HepG2 \
+          --d1_type 'PacBio Rep1' \
+          --d2_type 'PacBio Rep2' \
+          -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_HepG2_1-PacBio_HepG2_2_gene_correlationPlot.png">
+
+Pearson and Spearman correlations are recorded in PacBio_HepG2_1-PacBio_HepG2_2_gene_correlations.txt.
+
+## Panel B: Expression level of known genes (GENCODE v29) in each biological replicate of K562 in PacBio
+```bash
+Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
+          --f ${k562_abundance} \
+          --color red \
+          --d1 PacBio_K562_1 \
+          --d2 PacBio_K562_2 \
+          --celltype K562 \
+          --d1_type 'PacBio Rep1' \
+          --d2_type 'PacBio Rep2' \
+          -o figures/
+```
+<img align="center" width="400" src="figures/PacBio_K562_1-PacBio_K562_2_gene_correlationPlot.png">
+
+Pearson and Spearman correlations are recorded in PacBio_K562_1-PacBio_K562_2_gene_correlations.txt.
+
+## Panel C: Proportion of genes expressed in Illumina RNA-seq data of HepG2 that are also detected in the PacBio HepG2 data, binned by Illumina expression level
+```bash
+Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
+         --f ${hepg2_abundance} \
+         --datasets PacBio_HepG2_1,PacBio_HepG2_2 \
+         --ik1 ${hepg2_kallisto1} \
+         --ik2 ${hepg2_kallisto2} \
+         --color green \
+         --dtype PacBio \
+         -o figures/
+mv figures/gene_detection_by_TPM.png figures/HepG2_gene_detection_by_TPM
+```
+<img align="center" width="400" src="figures/HepG2_gene_detection_by_TPM.png">
+
+## Panel D: Proportion of genes expressed in Illumina RNA-seq data of K562 that are also detected in the PacBio K562 data, binned by Illumina expression level
+```bash
+Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
+         --f ${k562_abundance} \
+         --datasets PacBio_K562_1,PacBio_K562_2 \
+         --ik1 ${k562_kallisto1} \
+         --ik2 ${k562_kallisto2} \
+         --color red \
+         --dtype PacBio \
+         -o figures/
+mv figures/gene_detection_by_TPM.png figures/K562_gene_detection_by_TPM
+```
+<img align="center" width="400" src="figures/K562_gene_detection_by_TPM.png">
