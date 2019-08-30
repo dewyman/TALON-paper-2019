@@ -96,7 +96,7 @@ Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
          -o figures/
 mv figures/edgeR_PacBio_illumina_gene_MA_plot.png HepG2_edgeR_PacBio_illumina_gene_MA_plot.png
 ```
-<img align="center" width="400" src="HepG2_edgeR_PacBio_illumina_gene_MA_plot.png">
+<img align="center" width="400" src="figures/HepG2_edgeR_PacBio_illumina_gene_MA_plot.png">
 
 ## Panel B: Comparison of gene expression levels for known genes in the PacBio and Illumina RNA-seq platforms (K562)
 ```bash
@@ -109,4 +109,4 @@ Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
          -o figures/
 mv figures/edgeR_PacBio_illumina_gene_MA_plot.png K562_edgeR_PacBio_illumina_gene_MA_plot.png
 ```
-<img align="center" width="400" src="K562_edgeR_PacBio_illumina_gene_MA_plot.png">
+<img align="center" width="400" src="figures/K562_edgeR_PacBio_illumina_gene_MA_plot.png">
