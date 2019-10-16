@@ -224,10 +224,10 @@ python compare_sjs_venn2.py \
 python compare_sjs_venn_new.py \
 	-sj_1 PacBio_GM12878_unsupported_sjs.tab \
 	-sj_1_name "Novel PacBio SJs" \
-	-sj_2 Illumina_GM12878_unsupported_sjs.tab \
-	-sj_2_name "Novel Illumina SJs" \
-	-sj_3 ONT_GM12878_unsupported_sjs.tab  \
-	-sj_3_name "Novel ONT SJs" \
+	-sj_3 Illumina_GM12878_unsupported_sjs.tab \
+	-sj_3_name "Novel Illumina SJs" \
+	-sj_2 ONT_GM12878_unsupported_sjs.tab  \
+	-sj_2_name "Novel ONT SJs" \
 	-sample "Novel GM12878" \
 	--log
 ```
@@ -311,10 +311,10 @@ python compare_sjs_venn2.py \
 python compare_sjs_venn_new.py \
 	-sj_1 PacBio_HepG2_unsupported_sjs.tab \
 	-sj_1_name "Novel PacBio SJs" \
-	-sj_2 Illumina_HepG2_unsupported_sjs.tab \
-	-sj_2_name "Novel Illumina SJs" \
-	-sj_3 ONT_HepG2_unsupported_sjs.tab  \
-	-sj_3_name "Novel ONT SJs" \
+	-sj_3 Illumina_HepG2_unsupported_sjs.tab \
+	-sj_3_name "Novel Illumina SJs" \
+	-sj_2 ONT_HepG2_unsupported_sjs.tab  \
+	-sj_2_name "Novel ONT SJs" \
 	-sample "Novel HepG2" \
 	--log
 
@@ -379,10 +379,10 @@ python compare_sjs_venn2.py \
 python compare_sjs_venn_new.py \
 	-sj_1 PacBio_K562_unsupported_sjs.tab \
 	-sj_1_name "Novel PacBio SJs" \
-	-sj_2 Illumina_K562_unsupported_sjs.tab \
-	-sj_2_name "Novel Illumina SJs" \
-	-sj_3 ONT_K562_unsupported_sjs.tab  \
-	-sj_3_name "Novel ONT SJs" \
+	-sj_3 Illumina_K562_unsupported_sjs.tab \
+	-sj_3_name "Novel Illumina SJs" \
+	-sj_2 ONT_K562_unsupported_sjs.tab  \
+	-sj_2_name "Novel ONT SJs" \
 	-sample "Novel K562" \
 	--log	
 ```
