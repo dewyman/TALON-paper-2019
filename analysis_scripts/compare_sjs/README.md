@@ -113,9 +113,7 @@ python compare_sjs_venn.py \
 	-sample K562 
  ```
 
-<img align="center" width="500" src="figures/GM12878_venn.png">
-<img align="center" width="500" src="figures/HepG2_venn.png">
-<img align="center" width="500" src="figures/K562_venn.png">
+<img align="center" width="300" src="figures/GM12878_venn.png"> <img align="center" width="300" src="figures/HepG2_venn.png"> <img align="center" width="300" src="figures/K562_venn.png">
 
 ## Splice junction novelty types
 
@@ -154,7 +152,7 @@ python plot_sj_novelty_counts.py \
 	-sample "PacBio GM12878"
 ```
 
-<img align="left" width="500" src="figures/PacBio_GM12878_sj_novelty.png">
+<img align="center" width="500" src="figures/PacBio_GM12878_sj_novelty.png">
 
 4. Get splice junction novelty types for our Illumina splice junction file so we can look for support for novel splice junctions in our short-read data
 ```bash
@@ -172,7 +170,7 @@ python plot_sj_novelty_counts.py \
 	--support_name Illumina
 ```
 
-<img align="left" width="500" src="figures/PacBio_GM12878_sj_novelty_Illumina_support.png">
+<img align="center" width="500" src="figures/PacBio_GM12878_sj_novelty_Illumina_support.png">
 
 <!-- 
 6. Look at NNC makeup with finer resolution, are both the donor and acceptor completely novel or is has one or the other been seen before?
@@ -230,6 +228,17 @@ python compare_sjs_venn_new.py \
 	-sj_2_name "Novel ONT SJs" \
 	-sample "Novel GM12878" \
 	--log
+
+# compare known splice junctions between 3 technologies
+python compare_sjs_venn_new.py \
+	-sj_1 PacBio_GM12878_supported_sjs.tab \
+	-sj_1_name "Known PacBio SJs" \
+	-sj_3 Illumina_GM12878_supported_sjs.tab \
+	-sj_3_name "Known Illumina SJs" \
+	-sj_2 ONT_GM12878_supported_sjs.tab  \
+	-sj_2_name "Known ONT SJs" \
+	-sample "Known GM12878" \
+	--log
 ```
 
 <!-- testing
@@ -245,8 +254,8 @@ python compare_sjs_venn_new.py \
 	--log
 ``` -->
 
-<img align="left" width="500" src="figures/PacBio_GM12878_gc_venn2.png">
-<img align="left" width="500" src="figures/Novel_GM12878_venn.png">
+<img align="center" width="500" src="figures/PacBio_GM12878_gc_venn2.png">
+<img align="center" width="500" src="figures/Novel_GM12878_venn.png"> <img align="center" width="500" src="figures/Known_GM12878_venn.png">
 
 7. Also perform the above analysis for HepG2 and K562
 ```bash
@@ -318,6 +327,17 @@ python compare_sjs_venn_new.py \
 	-sample "Novel HepG2" \
 	--log
 
+# compare known splice junctions between 3 technologies
+python compare_sjs_venn_new.py \
+	-sj_1 PacBio_HepG2_supported_sjs.tab \
+	-sj_1_name "Known PacBio SJs" \
+	-sj_3 Illumina_HepG2_supported_sjs.tab \
+	-sj_3_name "Known Illumina SJs" \
+	-sj_2 ONT_HepG2_supported_sjs.tab  \
+	-sj_2_name "Known ONT SJs" \
+	-sample "Known HepG2" \
+	--log
+
 # K562
 python label_sj_novelty.py \
 	-sj pb_talon_K562_sjs.tab \
@@ -385,17 +405,24 @@ python compare_sjs_venn_new.py \
 	-sj_2_name "Novel ONT SJs" \
 	-sample "Novel K562" \
 	--log	
+
+# compare known splice junctions between 3 technologies
+python compare_sjs_venn_new.py \
+	-sj_1 PacBio_K562_supported_sjs.tab \
+	-sj_1_name "Known PacBio SJs" \
+	-sj_3 Illumina_K562_supported_sjs.tab \
+	-sj_3_name "Known Illumina SJs" \
+	-sj_2 ONT_K562_supported_sjs.tab  \
+	-sj_2_name "Known ONT SJs" \
+	-sample "Known K562" \
+	--log
 ```
 
-<img align="left" width="500" src="figures/PacBio_HepG2_sj_novelty.png">
-<img align="left" width="500" src="figures/PacBio_HepG2_sj_novelty_Illumina_support.png">
-<img align="left" width="500" src="figures/PacBio_HepG2_gc_venn2.png">
-<img align="left" width="500" src="figures/Novel_HepG2_venn.png">
+<img align="center" width="500" src="figures/PacBio_HepG2_sj_novelty.png"> <img align="center" width="500" src="figures/PacBio_HepG2_sj_novelty_Illumina_support.png">
+<img align="center" width="300" src="figures/PacBio_HepG2_gc_venn2.png"> <img align="center" width="300" src="figures/Novel_HepG2_venn.png"> <img align="center" width="300" src="figures/Known_HepG2_venn.png"> 
 
-<img align="left" width="500" src="figures/PacBio_K562_sj_novelty.png">
-<img align="left" width="500" src="figures/PacBio_K562_sj_novelty_Illumina_support.png">
-<img align="left" width="500" src="figures/PacBio_K562_gc_venn2.png">
-<img align="left" width="500" src="figures/Novel_K562_venn.png">
+<img align="center" width="500" src="figures/PacBio_K562_sj_novelty.png"><img align="center" width="500" src="figures/PacBio_K562_sj_novelty_Illumina_support.png">
+<img align="center" width="300" src="figures/PacBio_K562_gc_venn2.png"> <img align="center" width="300" src="figures/Novel_K562_venn.png"> <img align="center" width="300" src="figures/Known_K562_venn.png">
 
 
 8. Also perform this analysis for the ONT data.
@@ -497,19 +524,13 @@ python compare_sjs_venn_new.py \
 	--log
 ```
 
-<img align="left" width="500" src="figures/ONT_GM12878_sj_novelty.png">
-<img align="left" width="500" src="figures/ONT_GM12878_sj_novelty_Illumina_support.png">
-<img align="left" width="500" src="figures/ONT_GM12878_gc_venn2.png">
-<!-- <img align="left" width="500" src="figures/Novel_ONT_GM12878_SJs_venn.png"> -->
+<img align="center" width="500" src="figures/ONT_GM12878_sj_novelty.png"> <img align="center" width="500" src="figures/ONT_GM12878_sj_novelty_Illumina_support.png">
+<img align="center" width="500" src="figures/ONT_GM12878_gc_venn2.png">
 
-<img align="left" width="500" src="figures/ONT_HepG2_sj_novelty.png">
-<img align="left" width="500" src="figures/ONT_HepG2_sj_novelty_Illumina_support.png">
-<img align="left" width="500" src="figures/ONT_HepG2_gc_venn2.png">
-<!-- <img align="left" width="500" src="figures/Novel_ONT_HepG2_SJs_venn.png"> -->
+<img align="center" width="500" src="figures/ONT_HepG2_sj_novelty.png"> <img align="center" width="500" src="figures/ONT_HepG2_sj_novelty_Illumina_support.png">
+<img align="center" width="500" src="figures/ONT_HepG2_gc_venn2.png">
 
-<img align="left" width="500" src="figures/ONT_K562_sj_novelty.png">
-<img align="left" width="500" src="figures/ONT_K562_sj_novelty_Illumina_support.png">
-<img align="left" width="500" src="figures/ONT_K562_gc_venn2.png">
-<!-- <img align="left" width="500" src="figures/Novel_ONT_K562_SJs_venn.png"> -->
+<img align="center" width="500" src="figures/ONT_K562_sj_novelty.png"> <img align="center" width="500" src="figures/ONT_K562_sj_novelty_Illumina_support.png">
+<img align="center" width="500" src="figures/ONT_K562_gc_venn2.png">
 
 
