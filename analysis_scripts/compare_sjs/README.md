@@ -427,7 +427,7 @@ python compare_sjs_venn_new.py \
 
 
 8. Also perform this analysis for the ONT data.
-```bash
+<!-- ```bash
 # GM12878
 python label_sj_novelty.py \
 	-sj ont_talon_GM12878_sjs.tab \
@@ -523,7 +523,7 @@ python compare_sjs_venn_new.py \
 	-sj_3_name "PacBio" \
 	-sample "Novel ONT K562 SJs" \
 	--log
-```
+``` -->
 
 <img align="center" width="350" src="figures/ONT_GM12878_sj_novelty.png"> <img align="center" width="350" src="figures/ONT_GM12878_sj_novelty_Illumina_support.png">
 <img align="center" width="500" src="figures/ONT_GM12878_gc_venn2.png">
