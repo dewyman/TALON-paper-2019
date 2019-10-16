@@ -113,7 +113,7 @@ python compare_sjs_venn.py \
 	-sample K562 
  ```
 
-<img align="center" width="300" src="figures/GM12878_venn.png"> <img align="center" width="300" src="figures/HepG2_venn.png"> <img align="center" width="300" src="figures/K562_venn.png">
+<img align="center" width="200" src="figures/GM12878_venn.png"> <img align="center" width="200" src="figures/HepG2_venn.png"> <img align="center" width="200" src="figures/K562_venn.png">
 
 ## Splice junction novelty types
 
@@ -254,8 +254,7 @@ python compare_sjs_venn_new.py \
 	--log
 ``` -->
 
-<img align="center" width="500" src="figures/PacBio_GM12878_gc_venn2.png">
-<img align="center" width="500" src="figures/Novel_GM12878_venn.png"> <img align="center" width="500" src="figures/Known_GM12878_venn.png">
+<img align="center" width="200" src="figures/PacBio_GM12878_gc_venn2.png"> <img align="center" width="200" src="figures/Novel_GM12878_venn.png"> <img align="center" width="200" src="figures/Known_GM12878_venn.png">
 
 7. Also perform the above analysis for HepG2 and K562
 ```bash
@@ -418,11 +417,11 @@ python compare_sjs_venn_new.py \
 	--log
 ```
 
-<img align="center" width="500" src="figures/PacBio_HepG2_sj_novelty.png"> <img align="center" width="500" src="figures/PacBio_HepG2_sj_novelty_Illumina_support.png">
-<img align="center" width="300" src="figures/PacBio_HepG2_gc_venn2.png"> <img align="center" width="300" src="figures/Novel_HepG2_venn.png"> <img align="center" width="300" src="figures/Known_HepG2_venn.png"> 
+<img align="center" width="300" src="figures/PacBio_HepG2_sj_novelty.png"> <img align="center" width="300" src="figures/PacBio_HepG2_sj_novelty_Illumina_support.png">
+<img align="center" width="200" src="figures/PacBio_HepG2_gc_venn2.png"> <img align="center" width="200" src="figures/Novel_HepG2_venn.png"> <img align="center" width="200" src="figures/Known_HepG2_venn.png"> 
 
-<img align="center" width="500" src="figures/PacBio_K562_sj_novelty.png"><img align="center" width="500" src="figures/PacBio_K562_sj_novelty_Illumina_support.png">
-<img align="center" width="300" src="figures/PacBio_K562_gc_venn2.png"> <img align="center" width="300" src="figures/Novel_K562_venn.png"> <img align="center" width="300" src="figures/Known_K562_venn.png">
+<img align="center" width="300" src="figures/PacBio_K562_sj_novelty.png"><img align="center" width="300" src="figures/PacBio_K562_sj_novelty_Illumina_support.png">
+<img align="center" width="200" src="figures/PacBio_K562_gc_venn2.png"> <img align="center" width="200" src="figures/Novel_K562_venn.png"> <img align="center" width="200" src="figures/Known_K562_venn.png">
 
 
 8. Also perform this analysis for the ONT data.
@@ -524,13 +523,13 @@ python compare_sjs_venn_new.py \
 	--log
 ```
 
-<img align="center" width="500" src="figures/ONT_GM12878_sj_novelty.png"> <img align="center" width="500" src="figures/ONT_GM12878_sj_novelty_Illumina_support.png">
+<img align="center" width="300" src="figures/ONT_GM12878_sj_novelty.png"> <img align="center" width="300" src="figures/ONT_GM12878_sj_novelty_Illumina_support.png">
 <img align="center" width="500" src="figures/ONT_GM12878_gc_venn2.png">
 
-<img align="center" width="500" src="figures/ONT_HepG2_sj_novelty.png"> <img align="center" width="500" src="figures/ONT_HepG2_sj_novelty_Illumina_support.png">
+<img align="center" width="300" src="figures/ONT_HepG2_sj_novelty.png"> <img align="center" width="300" src="figures/ONT_HepG2_sj_novelty_Illumina_support.png">
 <img align="center" width="500" src="figures/ONT_HepG2_gc_venn2.png">
 
-<img align="center" width="500" src="figures/ONT_K562_sj_novelty.png"> <img align="center" width="500" src="figures/ONT_K562_sj_novelty_Illumina_support.png">
+<img align="center" width="300" src="figures/ONT_K562_sj_novelty.png"> <img align="center" width="300" src="figures/ONT_K562_sj_novelty_Illumina_support.png">
 <img align="center" width="500" src="figures/ONT_K562_gc_venn2.png">
 
 
