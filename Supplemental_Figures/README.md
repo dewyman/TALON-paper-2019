@@ -397,5 +397,12 @@ Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
 <img align="center" width="400" src="figures/PacBio_K562_1-ONT_K562_2_Known-ISM_transcript_correlationPlot.png">
 Correlations are in PacBio_K562_1-ONT_K562_2_Known-ISM_transcript_correlations.txt. 
 
+# Figure S15: Splice junction novelty and reproducibility across platforms
+
+Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/analysis_scripts/compare_sjs
+
+
+
+
 
 
