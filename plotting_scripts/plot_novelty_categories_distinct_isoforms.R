@@ -38,12 +38,21 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
                                            levels = c("Known", "ISM", "NIC", "NNC",
                                                       "Antisense", "Intergenic"))
 
+    total <- nrow(distinct_transcripts)
+
+    # Compute percentages
+    freqs_by_novelty <- distinct_transcripts %>% group_by(novelty) %>% count() %>% 
+                        mutate(percent = round(100*n/total,1))
+    print(freqs_by_novelty)
+    distinct_transcripts <- merge(distinct_transcripts, freqs_by_novelty,
+                                  by = c("novelty"), all.x = T, all.y = F)
+
     # Plotting
     str_datasets <- paste(datasets, collapse='-')
     fname <- paste(outdir, "/", str_datasets, "_distinct_isoforms_by_category.png", sep="")
     xlabel <- "Category"
     ylabel <- "Number of distinct transcript models"
-    ymax <- 1.02*(max(count(distinct_transcripts,"novelty")$freq))
+    ymax <- 1.1*(max((distinct_transcripts %>% group_by(novelty) %>% count())$n))
 
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
                 "NNC" = "#E69F00", "Antisense" = "#000000", 
@@ -53,7 +62,7 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
         width = 3100, height = 3500, units = "px",
         bg = "white",  res = 300)
     g = ggplot(distinct_transcripts, aes(x = novelty, width=.6,
-               fill = as.factor(novelty))) + 
+               fill = novelty)) + 
                geom_bar() + 
                ylab(ylabel) +
                scale_fill_manual("Transcript Type", values = colors) +
@@ -65,13 +74,20 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
                      axis.text.y = element_text(color="black", size = rel(2)),
                      axis.title.x = element_blank(),
                      axis.title.y = element_text(color="black", size=rel(1.75))) +
-               #guides(fill = FALSE) + 
-               coord_cartesian(ylim = c(0, ymax)) +
+               guides(fill = FALSE) + 
+               coord_cartesian(ylim = c(1, ymax)) +
                theme(legend.position=c(0.7,0.8),
                      legend.title = element_text(colour = 'black', size = rel(2)),
                      legend.background = element_rect(fill="white", color = "black"),
                      legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = rel(2)))
+                     legend.text = element_text(colour = 'black', size = rel(2))) +
+               yscale("log10", .format = TRUE) + 
+               geom_text(aes(y = ..count..,
+                  label = paste0(percent, '%')),
+                  stat = 'count',
+                  position = position_dodge(.9),
+                  size = rel(10), vjust=-0.25)
+                
 
     print(g)
     dev.off()
@@ -82,10 +98,11 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
 load_packages <- function() {
     suppressPackageStartupMessages(library("readr"))
     suppressPackageStartupMessages(library("ggplot2"))
-    suppressPackageStartupMessages(library("plyr"))
+    #suppressPackageStartupMessages(library("plyr"))
     suppressPackageStartupMessages(library("optparse"))
     suppressPackageStartupMessages(library("ggpubr"))
-
+    suppressPackageStartupMessages(library("dplyr"))
+  
     return
 }
 
