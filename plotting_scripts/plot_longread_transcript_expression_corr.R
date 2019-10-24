@@ -185,8 +185,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
-        scale_x_continuous(trans=log10_trans(), limits=c(0.1,32768))+
-        scale_y_continuous(trans=log10_trans(), limits=c(0.1,32768))+
+        scale_x_continuous(trans=log10_trans(), limits=c(1,32768))+
+        scale_y_continuous(trans=log10_trans(), limits=c(1,32768))+
         scale_colour_manual("Transcript status", values=color_vec) +
         theme(legend.position=c(0.73,0.2),
               legend.title = element_text(colour = 'black', size = 21),
@@ -223,7 +223,7 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
                         geom_density(alpha=.5) + 
                         scale_fill_manual(values = color_vec) + 
                         scale_color_manual(values = color_vec) +
-                        coord_cartesian(xlim = c(density_xmin, density_xmax), ylim = c(0, plot_max)) +
+                        scale_x_continuous(breaks = seq(density_xmin, density_xmax, by = density_xmax), expand = c(0,0)) +
                         scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
                         theme(legend.position = "none",
                               axis.title.x=element_blank(),
@@ -238,7 +238,7 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
                        geom_density(alpha=.5) + 
                        scale_fill_manual(values = color_vec) +
                        scale_color_manual(values = color_vec) +
-                       coord_cartesian(xlim = c(density_xmin, density_xmax), ylim = c(0, plot_max)) +
+                       scale_x_continuous(breaks = seq(density_xmin, density_xmax, by = density_xmax), expand = c(0,0)) +
                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
                        theme(legend.position = "none",
                              axis.title.y=element_blank(),
