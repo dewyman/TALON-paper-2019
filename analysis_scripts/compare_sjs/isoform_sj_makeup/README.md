@@ -147,6 +147,38 @@ python gen_isoform_support_table.py \
 	-sample hippocampus
 ```
 
+7. We can also visualize Illumina support vs. isoform novelty type with bar charts for each or our datasets. Keep in mind that a transcript counting towards having Illumina support must have ALL of its splice junctions supported by the Illumina data. 
+
+```bash
+python plot_isoform_sj_support_by_novelty.py \
+	-c pb_GM12878_isoform_sj_support_summary.csv \
+	-s "PacBio GM12878"
+
+python plot_isoform_sj_support_by_novelty.py \
+	-c ont_GM12878_isoform_sj_support_summary.csv \
+	-s "ONT GM12878"
+
+python plot_isoform_sj_support_by_novelty.py \
+	-c pb_HepG2_isoform_sj_support_summary.csv \
+	-s "PacBio HepG2"
+
+python plot_isoform_sj_support_by_novelty.py \
+	-c ont_HepG2_isoform_sj_support_summary.csv \
+	-s "ONT HepG2"
+
+python plot_isoform_sj_support_by_novelty.py \
+	-c pb_K562_isoform_sj_support_summary.csv \
+	-s "PacBio K562"
+
+python plot_isoform_sj_support_by_novelty.py \
+	-c ont_K562_isoform_sj_support_summary.csv \
+	-s "ONT K562"
+```
+
+<img align="center" width="500" src="figures/PacBio_GM12878_sj_novelty_illumina_isoform_novelty_support.png"> <img align="center" width="500" src="figures/ONT_GM12878_sj_novelty_illumina_isoform_novelty_support.png">
+<img align="center" width="500" src="figures/PacBio_HepG2_sj_novelty_illumina_isoform_novelty_support.png"> <img align="center" width="500" src="figures/ONT_HepG2_sj_novelty_illumina_isoform_novelty_support.png">
+<img align="center" width="500" src="figures/PacBio_K562_sj_novelty_illumina_isoform_novelty_support.png"> <img align="center" width="500" src="figures/ONT_K562_sj_novelty_illumina_isoform_novelty_support.png">
+
 <!-- # testing
 ```
 python ${TCPATH}get_SJs_from_gtf.py \

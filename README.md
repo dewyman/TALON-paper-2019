@@ -4,6 +4,7 @@ This repository contains custom scripts and documentation associated with the an
 You can find the preprint here: https://www.biorxiv.org/content/10.1101/672931v1
 
 To download the TALON program, please visit https://github.com/dewyman/TALON.  
+To download the TranscriptClean program, please visit https://github.com/dewyman/TranscriptClean.
 To download the ENCODE DCC deployment of the TALON pipeline, please visit https://github.com/ENCODE-DCC/long-read-rna-pipeline. 
 
 ## plotting_scripts
@@ -11,6 +12,12 @@ Final versions of data visualization scripts used in the paper.
 
 ## Figure_2
 Describes exactly how the panels of Figure 2 in the paper were generated
+
+## Figure_3
+Describes exactly how the panels of Figure 3 in the paper were generated
+
+## Figure_4
+Describes exactly how the panels of Figure 4 in the paper were generated
 
 ## refs
 Contains instructions for downloading reference genomes, GENCODE annotations, and variant files. Also includes scripts we used to prepare input files for TranscriptClean and TALON initializations.
