@@ -6,17 +6,20 @@ mkdir figures
 
 PLOTPATH=../plotting_scripts
 
-hepg2_abundance=S6_HepG2_talon_abundance.tsv
-hepg2_filt_abundance=S7_HepG2_talon_abundance_filtered.tsv
+# download the supplementary tables and change this path!
+sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+
+hepg2_abundance=${sup_tables}S6_HepG2_talon_abundance.tsv
+hepg2_filt_abundance=${sup_tables}S7_HepG2_talon_abundance_filtered.tsv
 hepg2_kallisto1=../Illumina/HepG2/Kallisto/Rep1/abundance.tsv
 hepg2_kallisto2=../Illumina/HepG2/Kallisto/Rep2/abundance.tsv
 
-k562_abundance=S9_K562_talon_abundance.tsv
-k562_filt_abundance=S10_K562_talon_abundance_filtered.tsv
+k562_abundance=${sup_tables}S9_K562_talon_abundance.tsv
+k562_filt_abundance=${sup_tables}S10_K562_talon_abundance_filtered.tsv
 k562_kallisto1=../Illumina/K562/Kallisto/Rep1/abundance.tsv
 k562_kallisto2=../Illumina/K562/Kallisto/Rep2/abundance.tsv
 
-tier1_filt_abundance=S17_full_gencode_v29_pb_talon_abundance_filtered.tsv
+tier1_filt_abundance=${sup_tables}S17_full_gencode_v29_pb_talon_abundance_filtered.tsv
 ```
 Abundance and GTF files are available as supplementary tables of the TALON paper. 
 
@@ -94,7 +97,7 @@ Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
          --ik2 ${hepg2_kallisto2} \
          --color green \
          -o figures/
-mv figures/edgeR_PacBio_illumina_gene_MA_plot.png HepG2_edgeR_PacBio_illumina_gene_MA_plot.png
+mv figures/edgeR_PacBio_illumina_gene_MA_plot.png figures/HepG2_edgeR_PacBio_illumina_gene_MA_plot.png
 ```
 <img align="center" width="400" src="figures/HepG2_edgeR_PacBio_illumina_gene_MA_plot.png">
 
@@ -107,7 +110,7 @@ Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
          --ik2 ${k562_kallisto2} \
          --color red \
          -o figures/
-mv figures/edgeR_PacBio_illumina_gene_MA_plot.png K562_edgeR_PacBio_illumina_gene_MA_plot.png
+mv figures/edgeR_PacBio_illumina_gene_MA_plot.png figures/K562_edgeR_PacBio_illumina_gene_MA_plot.png
 ```
 <img align="center" width="400" src="figures/K562_edgeR_PacBio_illumina_gene_MA_plot.png">
 
