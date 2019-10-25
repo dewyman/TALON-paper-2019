@@ -6,8 +6,9 @@ PLOTPATH=../plotting_scripts
 OUTPLOTS=plots
 mkdir -p ${OUTPLOTS}
 
-PB_GTF=S2_GM12878_talon_observedOnly.gtf
-ONT_GTF=S18_GM12878_ont_talon_observedOnly.gtf
+data_dir=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+PB_GTF=$data_dir/S2_GM12878_talon_observedOnly.gtf
+ONT_GTF=$data_dir/S18_GM12878_ont_talon_observedOnly.gtf
 CAGE=../CAGE/data/FANTOM5/hg38_CAGE.bed
 RNAPET=../RNA-PET/data/GM12878_hg38.bed
 GENOME=../refs/hg38/hg38.fa
@@ -44,7 +45,27 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="400" src="plots/GM12878_PacBio_CAGE_support.png">
 
-## Panel B: Percentage of TALON transcript models with a poly(A) motif identified at their 3' end (GM12878 PacBio)
+## Panel B: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category (GM12878 ONT)
+```bash
+OUT=CAGE/ONT_GM12878
+mkdir -p ${OUT}
+python ../CAGE/run_CAGE_analysis.py \
+        --gtf ${ONT_GTF} \
+        --cage ${CAGE} \
+        --maxdist 100 \
+        --o ${OUT}/GM12878
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/GM12878_CAGE_results.csv \
+    --t CAGE \
+    --novelty ${OUT}/transcript_beds/GM12878_novelty.csv \
+    --splitISM \
+    --ymax 22000 \
+    -o ${OUTPLOTS}/GM12878_ONT
+```
+<img align="center" width="400" src="plots/GM12878_ONT_CAGE_support.png">
+
+## Panel C: Percentage of TALON transcript models with a poly(A) motif identified at their 3' end (GM12878 PacBio)
 ```bash
 OUT=PAS-comp/PacBio_GM12878
 mkdir -p ${OUT}
@@ -65,48 +86,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="400" src="plots/GM12878_PacBio_PAS-comp_support.png">
 
-## Panel C: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair (GM12878 PacBio)
-
-```bash
-OUT=RNA-PET/PacBio_GM12878
-mkdir -p ${OUT}
-python ../RNA-PET/run_RNA-PET_analysis.py \
-    --gtf ${PB_GTF} \
-    --rnapet ${RNAPET} \
-    --maxdist 100 \
-    --o ${OUT}/GM12878
-
-Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
-    --f ${OUT}/GM12878_RNA-PET_results.csv \
-    --t RNA-PET \
-    --novelty ${OUT}/transcript_beds/GM12878_novelty.csv \
-    --ymax 22000 \
-    --splitISM \
-    -o ${OUTPLOTS}/GM12878_PacBio
-```
-<img align="center" width="400" src="plots/GM12878_PacBio_RNA-PET-comp_support.png">
-
-## Panel D: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category (GM12878 ONT)
-```bash
-OUT=CAGE/ONT_GM12878
-mkdir -p ${OUT}
-python ../CAGE/run_CAGE_analysis.py \
-        --gtf ${ONT_GTF} \
-        --cage ${CAGE} \
-        --maxdist 100 \
-        --o ${OUT}/GM12878
-
-Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
-    --f ${OUT}/GM12878_CAGE_results.csv \
-    --t CAGE \
-    --novelty ${OUT}/transcript_beds/GM12878_novelty.csv \
-    --splitISM \
-    --ymax 22000 \
-    -o ${OUTPLOTS}/GM12878_ONT
-```
-<img align="center" width="400" src="plots/GM12878_ONT_CAGE_support.png">
-
-## Panel E: Percentage of TALON transcript models with a poly(A) motif identified at their 3' end (GM12878 ONT)
+## Panel D: Percentage of TALON transcript models with a poly(A) motif identified at their 3' end (GM12878 ONT)
 ```bash
 OUT=PAS-comp/ONT_GM12878
 mkdir -p ${OUT}
@@ -126,6 +106,28 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 
 ```
 <img align="center" width="400" src="plots/GM12878_ONT_PAS-comp_support.png">
+
+## Panel E: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair (GM12878 PacBio)
+
+```bash
+OUT=RNA-PET/PacBio_GM12878
+mkdir -p ${OUT}
+python ../RNA-PET/run_RNA-PET_analysis.py \
+    --gtf ${PB_GTF} \
+    --rnapet ${RNAPET} \
+    --maxdist 100 \
+    --o ${OUT}/GM12878
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/GM12878_RNA-PET_results.csv \
+    --t RNA-PET \
+    --novelty ${OUT}/transcript_beds/GM12878_novelty.csv \
+    --ymax 22000 \
+    --splitISM \
+    -o ${OUTPLOTS}/GM12878_PacBio
+```
+<img align="center" width="400" src="plots/GM12878_PacBio_RNA-PET_support.png">
+
 
 ## Panel F: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair (GM12878 ONT)
 ```bash
