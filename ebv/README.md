@@ -27,7 +27,7 @@ talon \
 
 ### Get a whitelist of transcripts via TALON filtering
 ```bash
-printf "D8,D9" > pairings
+printf "PacBio_GM12878_1,PacBio_GM12878_2" > pairings
 talon_filter_transcripts \
     --db ebv.db \
     -a HHV4 \
@@ -67,9 +67,9 @@ talon_abundance \
 ### GM12878 files to compare with 
 ```bash
 sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
-gtf_GM=${sup_tables}S2_GM12878_talon_observedOnly.gtf
-unfilt_GM=${sup_tables}S3_GM12878_talon_abundance.tsv
-filt_GM=${sup_tables}S4_GM12878_talon_abundance_filtered.tsv
+ln -s ${sup_tables}S2_GM12878_talon_observedOnly.gtf S2_GM12878_talon_observedOnly.gtf
+ln -s ${sup_tables}S3_GM12878_talon_abundance.tsv S3_GM12878_talon_abundance.tsv
+ln -s ${sup_tables}S4_GM12878_talon_abundance_filtered.tsv S4_GM12878_talon_abundance_filtered.tsv
 ```
 
 ## Genome browser trackline
@@ -85,10 +85,10 @@ printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gt
 
 ## Plotting
 ### Generate EBV abundance violin plots
-```
+```bash
 python ebv_compute_tpms.py --c ebv_expression_config.csv
 Rscript plot_ebv_v_human_abundances.R \
           --gene_csv ebv_human_gene_abundance.csv \
-          --transcript_csv ebv_human_transcript_abundance.csv\
+          --transcript_csv ebv_human_transcript_abundance.csv \
           --datasets combined
 ```
