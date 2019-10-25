@@ -107,7 +107,7 @@ ebv_df = pd.read_csv(ebv_ab, sep='\t')
 
 # reformat human table
 # dc_datasets = ['D4', 'D5', 'D10', 'D11']
-datasets = ['D8', 'D9']
+datasets = ['PacBio_GM12878_1', 'PacBio_GM12878_2']
 # full_df.drop(dc_datasets, inplace=True, axis=1) # drop datasets we don't want
 full_df = full_df.loc[full_df[datasets].sum(axis=1) != 0] # drop transcripts with no reads in datasets we do want
 full_df = full_df.loc[full_df['transcript_ID'].isin(human_tids)] # drop ebv transcripts
@@ -124,7 +124,7 @@ t_df = pd.concat([full_df, ebv_df])
 # combine datasets
 combine_datasets = True
 if combine_datasets:
-    t_df['combined'] = t_df['D8']+t_df['D9']
+    t_df['combined'] = t_df['PacBio_GM12878_1']+t_df['PacBio_GM12878_2']
     datasets = ['combined']
 
 # # make sure the concatenation worked
@@ -189,7 +189,7 @@ ebv_df = pd.read_csv(ebv_unf_ab, sep='\t')
 
 # reformat human table
 # dc_datasets = ['D4', 'D5', 'D10', 'D11']
-datasets = ['D8', 'D9']
+datasets = ['PacBio_GM12878_1', 'PacBio_GM12878_2']
 # full_df.drop(dc_datasets, inplace=True, axis=1) # drop datasets we don't want
 full_df = full_df.loc[full_df['transcript_ID'].isin(human_tids)] # drop ebv transcripts
 full_df['ebv'] = 'Human' # give human/ebv designation
@@ -205,7 +205,7 @@ t_df = pd.concat([full_df, ebv_df])
 # combine datasets
 combine_datasets = True
 if combine_datasets:
-    t_df['combined'] = t_df['D8']+t_df['D9']
+    t_df['combined'] = t_df['PacBio_GM12878_1']+t_df['PacBio_GM12878_2']
     datasets = ['combined']
 
 # # make sure the concatenation worked
