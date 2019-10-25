@@ -35,14 +35,15 @@ talon_filter_transcripts \
     --o ebv_whitelist
 ```
 
-### Get unfiltered GTF file
+### Get filtered GTF file
 ```bash
 talon_create_GTF \
-          --db ebv.db \
-          --b HHV4 \
-          --a HHV4 \
-          --o ebv \
-          --observed
+      --db ebv.db \
+      --b HHV4 \
+      --a HHV4 \
+      --o ebv \
+      --whitelist ebv_whitelist \
+      --observed
 ```
 
 ### Get unfiltered abundance file
@@ -87,10 +88,15 @@ Rscript plot_ebv_v_human_abundances.R \
 ## Genome browser trackline
 ### Generate tracklines using above GTF
 ```bash
-python ../../analysis_scripts/gen_novelty_tracks_gtf.py \
+python ../analysis_scripts/gen_novelty_tracks_gtf.py \
           --c ebv_gtf_track_config.csv
 url=`cut -d, -f5 ebv_gtf_track_config.csv`
 n=`cut -d, -f2 ebv_gtf_track_config.csv`
 cp ebv_chr1.gtf ebv_talon_observedOnly_tracks/
 printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gtf' "$url" >> ebv_talon_observedOnly_tracks/ebv_talon_observedOnly_${n}_tracks
 ```
+
+From here, you can open the genome browser up and display your tracklines, and use the genome browser's PDF functionality or take a screenshot to get the genome browser shot. 
+
+<img align="center" width="300" src="ebv_browser.png ">
+
