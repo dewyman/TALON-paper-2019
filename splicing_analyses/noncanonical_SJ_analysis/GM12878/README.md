@@ -51,14 +51,15 @@ awk '{if($5 == 0) print $0}' /share/crsp/lab/seyedam/share/TALON_paper_data/illu
 
 2) Run comparison across platforms
 ```
-mkdir figures
+source activate mypython3.7.2
+mkdir -p figures
 python ../../compare_sjs_venn.py \
         -pb ncsj_PacBio_GM12878_pre-TC_SJs.txt \
 	-ont ncsj_ONT_GM12878_pre-TC_SJs.txt \
 	-illumina ncsj_Illumina_GM12878_pre-TC_SJs.txt \
 	-sample "GM12878 Noncanonical" \
         --log
+source deactivate
 ```
-
-
+<img align="center" width="400" src="figures/GM12878_Noncanonical_venn.png">
 
