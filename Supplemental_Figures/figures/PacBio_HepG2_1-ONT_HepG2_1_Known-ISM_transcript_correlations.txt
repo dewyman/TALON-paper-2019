@@ -1,3 +1,0 @@
-Pearson r: 0.64
-Spearman rho: -0.05
-LSR slope: 0.53
