@@ -1,0 +1,6 @@
+PacBio_K562_2
+PacBio_HepG2_1
+PacBio_GM12878_1
+PacBio_GM12878_2
+PacBio_K562_1
+PacBio_HepG2_2
