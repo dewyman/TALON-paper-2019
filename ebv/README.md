@@ -5,76 +5,39 @@ We wanted to see if TALON and PacBio long-read sequencing could be used to detec
 
 ## TALON
 ### Initialize TALON db with custom EBV gtf (using chr1 because sam files are fake mapped to chr1)
-```
+```bash
 sed 's/chrEBV/chr1/' ebv.gtf > ebv_chr1.gtf
-python ~/mortazavi_lab/bin/TALON/initialize_talon_database.py \
-          --f ebv_chr1.gtf \
-          --g HHV4 \
-          --a HHV4 \
-          --o ebv
+talon_initialize_database \
+    --f ebv_chr1.gtf \
+    --g HHV4 \
+    --a HHV4 \
+    --o ebv
 ```
 
 ### Run TALON on EBV reads extracted from mapped GM12878 sam files
-```
-python ~/mortazavi_lab/bin/TALON/talon.py \
-          --f ebv_talon_config.csv \
-          --db ebv.db \
-          --build HHV4 \
-          --o ebv
+```bash
+talon \
+    --f ebv_talon_config.csv \
+    --db ebv.db \
+    --build HHV4 \
+    --o ebv
 ```
 
 ## Post-TALON files
-### Get unfiltered abundance file
-```
-python ~/mortazavi_lab/bin/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-          --db ebv.db \
-          --a HHV4 \
-          --b HHV4 \
-          --o ebv
-```
 
-### Get filtered abundance file
-```
+### Get a whitelist of transcripts via TALON filtering
+```bash
 printf "D8,D9" > pairings
-python ~/mortazavi_lab/bin/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-          --db ebv.db \
-          --a HHV4 \
-          --b HHV4 \
-          --filter \
-          --p pairings \
-          --o ebv
+talon_filter_transcripts \
+    --db ebv.db \
+    -a HHV4 \
+    -p pairings \
+    --o ebv_whitelist
 ```
 
-### Get unfiltered whole GM12878 abundance file
-```
-printf "D8\nD9" > datasets
-python ~/mortazavi_lab/bin/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-          --db ~/mortazavi_lab/data/ont_tier1/full_gencode_v29_2019-05-24.db \
-          --a gencode_v29 \
-          --b hg38 \
-          --o gm12878
-python ../../analysis_scripts/get_dataset_specific_abundance.py \
-          --infile gm12878_talon_abundance.tsv \
-          --d datasets
-```
-
-### Get filtered whole GM12878 abundance file
-```
-python ~/mortazavi_lab/bin/TALON/post-TALON_tools/create_abundance_file_from_database.py \
-          --db ~/mortazavi_lab/data/ont_tier1/full_gencode_v29_2019-05-24.db \
-          --a gencode_v29 \
-          --b hg38 \
-          --o gm12878 \
-          --filter \
-          --pairings pairings
-python ../../analysis_scripts/get_dataset_specific_abundance.py \
-          --infile gm12878_talon_abundance_filtered.tsv \
-          --d datasets
-```
-
-### Get GTF file
-```
-python ~/mortazavi_lab/bin/TALON/post-TALON_tools/create_GTF_from_database.py \
+### Get unfiltered GTF file
+```bash
+talon_create_GTF \
           --db ebv.db \
           --b HHV4 \
           --a HHV4 \
@@ -82,14 +45,31 @@ python ~/mortazavi_lab/bin/TALON/post-TALON_tools/create_GTF_from_database.py \
           --observed
 ```
 
-### Get GM12878 GTF file
+### Get unfiltered abundance file
+```bash
+talon_abundance \
+    --db ebv.db \
+    --a HHV4 \
+    --b HHV4 \
+    --o ebv
 ```
-python ~/mortazavi_lab/bin/TALON/post-TALON_tools/create_GTF_from_database.py \
-            --db ~/mortazavi_lab/data/ont_tier1/full_gencode_v29_2019-05-24.db \
-            --a gencode_v29 \
-            --b hg38 \
-            --o gm12878 \
-            --observed
+
+### Get filtered abundance file
+```bash
+talon_abundance \
+    --db ebv.db \
+    --a HHV4 \
+    --b HHV4 \
+    --whitelist ebv_whitelist \
+    --o ebv
+```
+
+### GM12878 files to compare with 
+```bash
+sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+gtf_GM=${sup_tables}S2_GM12878_talon_observedOnly.gtf
+unfilt_GM=${sup_tables}S3_GM12878_talon_abundance.tsv
+filt_GM=${sup_tables}S4_GM12878_talon_abundance_filtered.tsv
 ```
 
 ## Genome browser trackline
