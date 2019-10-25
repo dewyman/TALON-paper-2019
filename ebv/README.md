@@ -98,5 +98,5 @@ printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gt
 
 From here, you can open the genome browser up and display your tracklines, and use the genome browser's PDF functionality or take a screenshot to get the genome browser shot. 
 
-<img align="center" width="300" src="ebv_browser.png ">
+<img align="center" width="500" src="ebv_browser.png ">
 
