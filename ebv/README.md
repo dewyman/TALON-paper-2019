@@ -82,8 +82,7 @@ Rscript plot_ebv_v_human_abundances.R \
           --datasets combined
 ```
 
-<img align="center" width="300" src="combined_genes_ebv_human.png ">
-<img align="center" width="300" src="combined_transcripts_ebv_human.png ">
+<img align="center" width="300" src="combined_genes_ebv_human.png "><img align="center" width="300" src="combined_transcripts_ebv_human.png ">
 
 ## Genome browser trackline
 ### Generate tracklines using above GTF
