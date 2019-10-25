@@ -4,13 +4,16 @@ Files/paths used to generate the panels of this figure:
 ```bash
 PLOTPATH=../plotting_scripts
 
-abundance=S19_GM12878_ont_talon_abundance.tsv
-filt_abundance=S20_GM12878_ont_talon_abundance_filtered.tsv
-tier1_filt_abundance=S32_full_gencode_v29_ont_talon_abundance_filtered.tsv
-gtf=S30_full_gencode_v29_ont_tracks_talon_observedOnly.gtf
+# download the supplementary tables and change this path!
+sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+
+abundance=${sup_tables}S19_GM12878_talon_abundance.tsv
+filt_abundance=${sup_tables}S20_GM12878_ont_talon_abundance_filtered.tsv
+tier1_filt_abundance=${sup_tables}S32_full_gencode_v29_ont_talon_abundance_filtered.tsv
+gtf=${sup_tables}S30_full_gencode_v29_ont_tracks_talon_observedOnly.gtf
 
 # for pb vs. ont plots
-pb_ont_abundance_filtered=S28_full_gencode_v29_pb_ont_talon_abundance.tsv
+pb_ont_abundance_filtered=${sup_tables}S28_full_gencode_v29_pb_ont_talon_abundance.tsv
 ```
 Abundance and GTF files are available as supplementary tables of the TALON paper. 
 
@@ -25,8 +28,8 @@ Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
           --d1 ONT_GM12878_1 \
           --d2 ONT_GM12878_2 \
           --celltype GM12878 \
-          --d1_type 'Rep1 ONT' \
-          --d2_type 'Rep2 ONT' \
+          --d1_type 'ONT Rep1' \
+          --d2_type 'ONT Rep2' \
           -o .
 ```
 <img align="center" width="400" src="ONT_GM12878_1-ONT_GM12878_2_gene_correlationPlot.png">
@@ -38,9 +41,9 @@ Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
 Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
          --f ${filt_abundance} \
          --d1 ONT_GM12878_1 \
-         --d1_type 'Rep1 ONT' \
+         --d1_type 'ONT Rep1' \
          --d2 ONT_GM12878_2 \
-         --d2_type 'Rep2 ONT' \
+         --d2_type 'ONT Rep2' \
          --celltype GM12878 \
          -o .
 ```
