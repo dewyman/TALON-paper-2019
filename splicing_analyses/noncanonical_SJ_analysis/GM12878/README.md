@@ -5,7 +5,7 @@ The goal is to look at the splice junctions in GM12878 long reads before Transcr
 
 ## Data processing
 
-1) Obtain PacBio GM12878 splice junctions (rep1 and 2) in pre-TranscriptClean reads
+1) Obtain PacBio GM12878 splice junctions (rep1 and 2) in pre-TranscriptClean reads. Note: this is slow when you have a lot of reads.
 ```
 data_dir=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/data
 cat ${data_dir}/PacBio_GM12878_1/Minimap2/all_mapped_FLNC_noScaff.sam \
@@ -22,8 +22,8 @@ time python ../../extract_SJs_from_sam.py \
 2) Obtain ONT GM12878 splice junctions in pre-TranscriptClean reads
 ```
 data_dir=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/data
-cat ${data_dir}/ONT_GM12878_1/Minimap2/all_mapped_noScaff.sam \
-    ${data_dir}/ONT_GM12878_2/Minimap2/all_mapped_noScaff.sam \
+cat ${data_dir}/ONT_GM12878_1/Minimap2/sorted_all_mapped_noScaff.sam \
+    ${data_dir}/ONT_GM12878_2/Minimap2/sorted_all_mapped_noScaff.sam \
     | grep -v "^@" > ONT_GM12878_pre-TC.sam
 
 
