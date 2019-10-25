@@ -61,5 +61,5 @@ python ../../compare_sjs_venn.py \
         --log
 source deactivate
 ```
-<img align="center" width="400" src="figures/GM12878_Noncanonical_venn.png">
+<img align="center" width="500" src="figures/GM12878_Noncanonical_venn.png">
 
