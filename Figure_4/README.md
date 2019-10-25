@@ -6,8 +6,9 @@ PLOTPATH=../plotting_scripts
 OUTPLOTS=plots
 mkdir -p ${OUTPLOTS}
 
-PB_GTF=S2_GM12878_talon_observedOnly.gtf
-ONT_GTF=S18_GM12878_ont_talon_observedOnly.gtf
+data_dir=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+PB_GTF=$data_dir/S2_GM12878_talon_observedOnly.gtf
+ONT_GTF=data_dir/S18_GM12878_ont_talon_observedOnly.gtf
 CAGE=../CAGE/data/FANTOM5/hg38_CAGE.bed
 RNAPET=../RNA-PET/data/GM12878_hg38.bed
 GENOME=../refs/hg38/hg38.fa
