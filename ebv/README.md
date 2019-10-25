@@ -72,17 +72,6 @@ ln -s ${sup_tables}S3_GM12878_talon_abundance.tsv S3_GM12878_talon_abundance.tsv
 ln -s ${sup_tables}S4_GM12878_talon_abundance_filtered.tsv S4_GM12878_talon_abundance_filtered.tsv
 ```
 
-## Genome browser trackline
-### Generate tracklines using above GTF
-```
-python ../../analysis_scripts/gen_novelty_tracks_gtf.py \
-          --c ebv_gtf_track_config.csv
-url=`cut -d, -f5 ebv_gtf_track_config.csv`
-n=`cut -d, -f2 ebv_gtf_track_config.csv`
-cp ebv_chr1.gtf ebv_talon_observedOnly_tracks/
-printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gtf' "$url" >> ebv_talon_observedOnly_tracks/ebv_talon_observedOnly_${n}_tracks
-```
-
 ## Plotting
 ### Generate EBV abundance violin plots
 ```bash
@@ -91,4 +80,18 @@ Rscript plot_ebv_v_human_abundances.R \
           --gene_csv ebv_human_gene_abundance.csv \
           --transcript_csv ebv_human_transcript_abundance.csv \
           --datasets combined
+```
+
+<img align="center" width="300" src="combined_genes_ebv_human.png ">
+<img align="center" width="300" src="combined_transcripts_ebv_human.png ">
+
+## Genome browser trackline
+### Generate tracklines using above GTF
+```bash
+python ../../analysis_scripts/gen_novelty_tracks_gtf.py \
+          --c ebv_gtf_track_config.csv
+url=`cut -d, -f5 ebv_gtf_track_config.csv`
+n=`cut -d, -f2 ebv_gtf_track_config.csv`
+cp ebv_chr1.gtf ebv_talon_observedOnly_tracks/
+printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gtf' "$url" >> ebv_talon_observedOnly_tracks/ebv_talon_observedOnly_${n}_tracks
 ```
