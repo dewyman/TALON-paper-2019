@@ -11,6 +11,7 @@
 #$ -N cortex_st
 
 DPATH=~/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/compare_sjs/mouse_brain/
+curpath=~/mortazavi_lab/bin/TALON-paper-2019/splicing_analyses/technology_SJ_comparison/
 reads="${DPATH}Cx1A_R1.fastq.gz,${DPATH}Cx2A_R1.fastq.gz ${DPATH}Cx1A_R2.fastq.gz,${DPATH}Cx2A_R2.fastq.gz"
 
 module load STAR/2.5.2a
@@ -28,7 +29,7 @@ STAR \
 	--alignIntronMin 20 \
 	--alignIntronMax 1000000 \
 	--alignMatesGapMax 1000000 \
-	--outFileNamePrefix cortex_aligned \
+	--outFileNamePrefix ${curpath}cortex_aligned \
 	--outSAMattributes NH HI NM MD jM jI \
 	--outSAMtype SAM \
 	--readFilesCommand zcat

@@ -11,6 +11,7 @@
 #$ -N map_K562_2
 
 DPATH=~/mortazavi_lab/data/tier1_filtered/illumina/
+curpath=~/mortazavi_lab/bin/TALON-paper-2019/splicing_analyses/technology_SJ_comparison/
 reads="${DPATH}K562/K562_rep2_illumina_1.fastq.gz ${DPATH}K562/K562_rep2_illumina_2.fastq.gz"
 
 module load STAR/2.5.2a
@@ -28,7 +29,7 @@ STAR \
 	--alignIntronMin 20 \
 	--alignIntronMax 1000000 \
 	--alignMatesGapMax 1000000 \
-	--outFileNamePrefix K562_Rep2_aligned \
+	--outFileNamePrefix ${curpath}K562_Rep2_aligned \
 	--outSAMattributes NH HI NM MD jM jI \
 	--outSAMtype SAM \
 	--readFilesCommand zcat
