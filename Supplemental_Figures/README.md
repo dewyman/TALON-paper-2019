@@ -375,6 +375,14 @@ Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
 Correlations are in ONT_K562_1-ONT_K562_2_Known-ISM_transcript_correlations.txt.  
 
 # Figure S12: Gene and transcript reproducibility across long-read platforms ONT and PacBio in HepG2 and K562
+```bash
+abundance=${sup_tables}S28_full_gencode_v29_pb_ont_talon_abundance.tsv
+filt_abundance=${sup_tables}S29_full_gencode_v29_pb_ont_talon_abundance_filtered.tsv
+hepg2_abundance=${sup_tables}S22_HepG2_talon_abundance.tsv
+hepg2_filt_abundance=${sup_tables}S23_HepG2_ont_talon_abundance_filtered.tsv
+k562_abundance=${sup_tables}S25_K562_talon_abundance.tsv
+k562_filt_abundance=${sup_tables}S26_K562_ont_talon_abundance_filtered.tsv
+```
 
 ## Panel A: Expression level of known and antisense genes in PacBio/ONT in HepG2
 
@@ -382,6 +390,7 @@ Correlations are in ONT_K562_1-ONT_K562_2_Known-ISM_transcript_correlations.txt.
 Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
           --f ${abundance} \
           --color green \
+          --antisense \
           --d1 PacBio_HepG2_1 \
           --d2 ONT_HepG2_1 \
           --celltype HepG2 \
@@ -399,6 +408,7 @@ Pearson and Spearman correlations are recorded in PacBio_HepG2_1-ONT_HepG2_1_gen
 Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
           --f ${abundance} \
           --color red \
+          --antisense \
           --d1 PacBio_K562_1 \
           --d2 ONT_K562_1 \
           --celltype HepG2 \
