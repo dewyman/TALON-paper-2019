@@ -238,6 +238,36 @@ Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
 ```
 <img align="center" width="400" src="figures/PacBio_K562_1_reads_by_isoform_category.png">
 
+# Figure S9: Epstein-Barr Virus transcriptome characterization in GM12878
+
+Run TALON and post-processing scripts as detailed in https://github.com/dewyman/TALON-paper-2019/tree/master/ebv/.
+ 
+## Panel A: Gene expression levels in GM12878 from the EBV chromosome and from the human chromosomes, labelled by gene novelty
+```bash
+ebv_dir=../ebv/
+python ${ebv_dir}ebv_compute_tpms.py --c ${ebv_dir}ebv_expression_config.csv
+Rscript ${ebv_dir}plot_ebv_v_human_abundances.R \
+          --gene_csv ${ebv_dir}ebv_human_gene_abundance.csv \
+          --transcript_csv ${ebv_dir}ebv_human_transcript_abundance.csv \
+          --datasets combined
+```
+<img align="center" width="400" src="figures/combined_genes_ebv_human.png">
+
+## Panel B: Transcript expression levels in GM12878 from the EBV chromosome and from the human chromosomes, labelled by transcript novelty.
+<img align="center" width="400" src="figures/combined_transcripts_ebv_human.png">
+
+## Panel C: Visualization of TALON GTF annotations in the UCSC genome browser for EBV transcripts in GM12878.
+```bash
+python ../analysis_scripts/gen_novelty_tracks_gtf.py \
+          --c ${ebv_dir}ebv_gtf_track_config.csv
+url=`cut -d, -f5 ${ebv_dir}ebv_gtf_track_config.csv`
+n=`cut -d, -f2 ${ebv_dir}ebv_gtf_track_config.csv`
+cp ${ebv_dir}ebv_chr1.gtf ${ebv_dir}ebv_talon_observedOnly_tracks/
+printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gtf' "$url" >> ${ebv_dir}ebv_talon_observedOnly_tracks/ebv_talon_observedOnly_${n}_tracks
+```
+Then, load the tracks into the genome browswer (after moving them to a public-facing directory on your computer/cluster), and take a screenshot or use the genome browser's PDF screenshot functionality
+<img align="center" width="400" src="figures/ebv_browser">
+
 # Figure S11: Transcript and gene quantification by PacBio/ONT and TALON 
 
 ## Panel A: Expression level of known and ISM transcript models in PacBio/ONT in GM12878
