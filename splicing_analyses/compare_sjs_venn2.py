@@ -37,10 +37,11 @@ def find_intersect_counts(dfa, dfb):
 
 	# get the unsupported long-read dfa stuff
 	# new = dfa[(~dfa.start.isin(temp.start))&(~dfa.stop.isin(temp.stop))&(~dfa.chrom.isin(temp.chrom))&(~dfa.strand.isin(temp.strand))]
-	new = dfa[~dfa.isin(temp)].dropna(how = 'all')
-	print('number of unsupported long read sjs : '+str(len(new.index)))
+	unsupp = dfa[~dfa.isin(temp)].dropna(how = 'all')
+	print('number of unsupported long read sjs : '+str(len(unsupp.index)))
+	print('number of supported long read sjs : '+str(len(temp.index)))
 
-	return (counts,new) 
+	return (counts,unsupp,temp) 
 
 def read_sj_file(infile):
 
@@ -56,9 +57,11 @@ def main():
 	dfa = read_sj_file(args.sj_1)
 	dfb = read_sj_file(args.sj_2)
 
-	(counts, temp) = find_intersect_counts(dfa, dfb)
+	(counts, unsupp, supp) = find_intersect_counts(dfa, dfb)
 
-	temp.to_csv('{}_unsupported_sjs.tab'.format(args.sample_name).replace(' ', '_'),
+	unsupp.to_csv('{}_unsupported_sjs.tab'.format(args.sample_name).replace(' ', '_'),
+		index=False, sep='\t', header=False)
+	supp.to_csv('{}_supported_sjs.tab'.format(args.sample_name).replace(' ', '_'),
 		index=False, sep='\t', header=False)
 
 	plt.figure(figsize=(8.5,8.5))
