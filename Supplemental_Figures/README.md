@@ -9,6 +9,9 @@ PLOTPATH=../plotting_scripts
 # download the supplementary tables and change this path!
 sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
 
+GM12878_kallisto1=../Illumina/GM12878/Kallisto/Rep1/abundance.tsv
+GM12878_kallisto2=../Illumina/GM12878/Kallisto/Rep2/abundance.tsv
+
 hepg2_abundance=${sup_tables}S6_HepG2_talon_abundance.tsv
 hepg2_filt_abundance=${sup_tables}S7_HepG2_talon_abundance_filtered.tsv
 hepg2_kallisto1=../Illumina/HepG2/Kallisto/Rep1/abundance.tsv
@@ -96,6 +99,21 @@ Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
 mv figures/gene_detection_by_TPM.png figures/K562_gene_detection_by_TPM.png
 ```
 <img align="center" width="400" src="figures/K562_gene_detection_by_TPM.png">
+
+# Figure S4: Further characterization of gene detection in GM12878 by short reads and PacBio long reads.
+
+## Panel A: Length of known genes binned by short-read expression level in GM12878 and colored by PacBio detection status. Gene length was computed by taking the median length of all known transcripts per gene.
+```
+Rscript ${PLOTPATH}/plot_gene_length_by_detection_for_datasets.R \
+           --db /share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/full_gencode_v29_2019-06-19.db \
+           --datasets PacBio_GM12878_1,PacBio_GM12878_2 \
+           --ik1 ${GM12878_kallisto1} \
+           --ik2 ${GM12878_kallisto2} \
+           --color blue \
+           -o figures
+```
+<img align="center" width="600" src="figures/length_by_detection_and_TPM_Median.png">
+
 
 # Figure S5: HepG2 and K562 TALON PacBio gene expression compared to Illumina short-read expression
 
