@@ -61,13 +61,6 @@ def getIntronMotif(chrom, start, end, genome):
    else:
        return "20" 
 
-# get value associated with keyword in the 9th column of gtf
-def get_field_value(key, fields):
-    if key not in fields:
-        return None
-    else:
-        return fields.split(key+' "')[1].split()[0].replace('";','')
-
 if __name__ == "__main__":
 
     junctions_seen = {}
@@ -95,15 +88,7 @@ if __name__ == "__main__":
             # Split GTF line on tab
             info = line.split("\t")
 
-            fields = info[-1]
-
             # Ignore entries that are not exons
-            if info[2] == 'transcript':
-              known_novel = get_field_value('transcript_status', fields)
-              if known_novel == 'TRUE':
-                novelty = get_field_value('transcript_type', fields)
-                if not novelty: novelty = 'KNOWN'
-
             if info[2] != "exon":
                 continue
 
@@ -113,18 +98,12 @@ if __name__ == "__main__":
             # Skip entries that lack a transcript ID
             if "transcript_id" not in description:
                 continue
-            if "exon_number" not in description:
-                continue
             
             transcriptID = (description.split("transcript_id ")[1]).split('"')[1]
-            exonNumber = int(description.split("exon_number ")[1].split(';')[0].replace('"', ''))
             strand = info[6]
 
             if transcriptID != prev_transcriptID:
                 # Start new transcript
-                if exonNumber != 1:
-                    print "Error: exons are not listed in order"
-                    exit()
                 prev_transcriptID = transcriptID
                 if strand == "+":
                     prev_exonEnd = info[4]
