@@ -82,6 +82,7 @@ def plot_indiv_dist(data, name, xmax, curr_color, outdir):
     ax = sns.distplot(data["read_length"], color = curr_color)
     ax.set(xlabel=xlabel, ylabel=ylabel)   
     ax.set(xlim=(0, xmax))
+    ax.set(ylim=(0, 0.0016))
     ymin, ymax = ax.get_ylim()
     ax.text(xmax*1/2, ymax*6/8, N50_label, **style)
  
