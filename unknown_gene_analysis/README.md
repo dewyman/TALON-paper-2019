@@ -14,8 +14,21 @@ In cases where the query overlaps a known gene, that will be prioritized over co
 
 ## The Data
 First, we generate a file of novel transcript/gene IDs for the novel models that were pairwise reproducible in at least one of the Tier 1 cell lines. Then we use this list to create a transcriptome GTF from the PacBio data. This is the file entitled 'novel_models_talon.gtf'.
+
+Abundance dataset columns:
+12. PacBio_K562_2
+13. PacBio_HepG2_1
+14. PacBio_GM12878_1
+15. PacBio_GM12878_2
+16. PacBio_K562_1
+17. PacBio_HepG2_2
+
 ```
-awk -v OFS=',' '{if($9 != "Known" && ($12*$13 > 0 || $14*$15 >0 || $16*$17 >0)) print $1,$2,$10}' ${tier1_abd_filt} > novel_models_talon.csv
+data_dir=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables
+tier1_abd_filt=${data_dir}/S17_full_gencode_v29_pb_talon_abundance_filtered.tsv
+human_db=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/full_gencode_v29_2019-06-19.db
+
+awk -v OFS=',' '{if($9 != "Known" && ($12*$16 > 0 || $14*$15 >0 || $13*$17 >0)) print $1,$2,$10}' ${tier1_abd_filt} > novel_models_talon.csv
 
 talon_create_GTF \
           --db ${human_db} \
@@ -25,11 +38,11 @@ talon_create_GTF \
           --datasets tier1_datasets.txt \
           --o novel_models
 ```
-We also generate a file indicating whether each of these genes is monoexonic or multiexonic using the abundance table:
+We also generate a file indicating whether each of these genes is monoexonic or multiexonic using the abundance table.
 ```
 # The first sorting command sorts by column 1 first and then by column 2 numerically and in reverse order
 # The second will remove duplicates taking into account just the first column
-awk -v OFS='\t' '{if($9 != "Known" && ($12*$13 > 0 || $14*$15 >0 || $16*$17 >0)) print $3,$7}' ${tier1_abd_filt} \
+awk -v OFS='\t' '{if($9 != "Known" && ($12*$16 > 0 || $14*$15 >0 || $13*$17 >0)) print $3,$7}' ${tier1_abd_filt} \
     | sort -k1,1 -k2,2rn \
     | sort -uk1,1 \        
     | awk -v OFS='\t' '{if($2 == 1) print $1,"monoexonic"; else print $1,"multiexonic"}' \

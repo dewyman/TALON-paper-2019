@@ -1,0 +1,17 @@
+dataset,celltype,name,color
+PacBio_HepG2_1,HepG2,PacBio HepG2 Rep1,tab:green
+PacBio_HepG2_2,HepG2,PacBio HepG2 Rep2,tab:green
+PacBio_GM12878_1,GM12878,PacBio GM12878 Rep1,tab:blue
+PacBio_GM12878_2,GM12878,PacBio GM12878 Rep2,tab:blue
+PacBio_GM12878_3,GM12878,PacBio GM12878 Rep3,tab:blue
+PacBio_GM12878_4,GM12878,PacBio GM12878 Rep4,tab:blue
+PacBio_K562_1,K562,PacBio K562 Rep1,tab:orange
+PacBio_K562_2,K562,PacBio K562 Rep2,tab:orange
+ONT_K562_1,K562,ONT K562 Rep1,tab:orange
+ONT_K562_2,K562,ONT K562 Rep2,tab:orange
+ONT_GM12878_1,GM12878,ONT GM12878 Rep1,tab:blue
+ONT_GM12878_2,GM12878,ONT GM12878 Rep2,tab:blue
+ONT_GM12878_3,GM12878,ONT GM12878 Rep3,tab:blue
+ONT_HepG2_1,HepG2,ONT HepG2 Rep1,tab:green
+ONT_HepG2_2,HepG2,ONT HepG2 Rep2,tab:green
+ONT_HepG2_3,HepG2,ONT HepG2 Rep3,tab:green
