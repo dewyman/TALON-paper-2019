@@ -10,7 +10,8 @@
 #$ -ckpt restart
 #$ -N map_hippo_1
 
-DPATH=~/mortazavi_lab/bin/TALON-paper-2019/analysis_scripts/compare_sjs/mouse_brain/
+DPATH=/share/crsp/lab/seyedam/share/TALON_paper_data/Hippocampus/
+curpath=~/mortazavi_lab/bin/TALON-paper-2019/splicing_analyses/pre_post_TC_TALON/
 reads="${DPATH}HP1a_IlPB83_R1.fastq.gz ${DPATH}HP1a_IlPB83_R2.fastq.gz"
 
 module load STAR/2.5.2a
@@ -28,7 +29,7 @@ STAR \
 	--alignIntronMin 20 \
 	--alignIntronMax 1000000 \
 	--alignMatesGapMax 1000000 \
-	--outFileNamePrefix hippocampus_Rep1_aligned \
+	--outFileNamePrefix ${curpath}hippocampus_Rep1_aligned \
 	--outSAMattributes NH HI NM MD jM jI \
 	--outSAMtype SAM \
 	--readFilesCommand zcat
