@@ -1,6 +1,6 @@
 # SJ Novelty Analysis
 
-** NOTE ** The analyses in this directory are dependent on having created sj files for illumina, pacbio, and ont datasets in https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/technology_SJ_comparison first! 
+**NOTE** The analyses in this directory are dependent on having created sj files for illumina, pacbio, and ont datasets in https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/technology_SJ_comparison first! 
 
 We wanted to investigate the support for and percent makeup for splice junctions of different novelty types. In this case we define splice junction novelty as the following: 
 
@@ -55,6 +55,8 @@ python ../plot_sj_novelty_counts.py \
 	--support_name Illumina
 ```
 
+<img align="center" width="500" src="figures/PacBio_GM12878_sj_novelty_Illumina_support.png">
+
 6. We can also visualize how known and novel splice junctions are supported by the different technologies (illumina, pacbio, ont)
 ```bash
 # get the novel PacBio splice junctions
@@ -74,6 +76,7 @@ python ../compare_sjs_venn2.py \
 	-sample "Illumina GM12878"
 
 # get the novel ONT splice junctions
+ln -s ../technology_SJ_comparison/ont_talon_GM12878_sjs.tab  ont_talon_GM12878_sjs.tab 
 python ../label_sj_novelty.py \
 	-sj ont_talon_GM12878_sjs.tab \
 	-ref_sj gencode_v29_sjs.tab 
