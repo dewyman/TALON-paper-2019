@@ -26,6 +26,17 @@ Abundance and GTF files are available as supplementary tables of the TALON paper
 Software versions:
 * R v3.5.1
 
+## Figure S1 and Figure S10: TALON read length distributions for PacBio and ONT Tier 1 ENCODE datasets
+```bash
+mkdir -p figures/read_lengths
+python ${PLOTPATH}/plot_read_length_distributions.py \
+    --r /share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/human_tier1_talon_read_annot.tsv \
+     --datasets PacBio_HepG2_1,PacBio_HepG2_2,PacBio_GM12878_1,PacBio_GM12878_2,PacBio_GM12878_3,PacBio_GM12878_4,PacBio_K562_1,PacBio_K562_2,ONT_HepG2_1,ONT_HepG2_2,ONT_HepG2_3,ONT_GM12878_1,ONT_GM12878_2,ONT_GM12878_3,ONT_K562_1,ONT_K562_2 \
+     --map read_length_name_mapping.csv \
+     --o figures/read_lengths
+```
+See resulting plots [here](https://github.com/dewyman/TALON-paper-2019/tree/master/Supplemental_Figures/figures/read_lengths).
+
 ## Panel A: Expression level of known genes (GENCODE v29) in each biological replicate of HepG2 in PacBio
 ```bash
 Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
