@@ -398,7 +398,7 @@ Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
           --d2_type 'ONT' \
           -o figures/
 ```
-<img align="center" width="400" src="figures/PacBio_HepG2_1-ONT_HepG2_1_gene_correlationPlot.png">
+<img align="center" width="400" src="figures/PacBio_HepG2_1-ONT_HepG2_1_withAntisense_gene_correlationPlot.png">
 
 Pearson and Spearman correlations are recorded in PacBio_HepG2_1-ONT_HepG2_1_gene_correlations.txt.
 
@@ -416,7 +416,7 @@ Rscript ${PLOTPATH}/plot_longread_gene_expression_corr.R \
           --d2_type 'ONT' \
           -o figures/
 ```
-<img align="center" width="400" src="figures/PacBio_K562_1-ONT_K562_1_gene_correlationPlot.png">
+<img align="center" width="400" src="figures/PacBio_K562_1-ONT_K562_1_withAntisense_gene_correlationPlot.png">
 
 Pearson and Spearman correlations are recorded in PacBio_K562_1-ONT_K562_1_gene_correlations.txt.
 
