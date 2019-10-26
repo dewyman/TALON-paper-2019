@@ -289,6 +289,14 @@ Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
 ```
 <img align="center" width="400" src="figures/PacBio_K562_1_reads_by_isoform_category.png">
 
+# Figure S8: Number of exons per transcript model detected in PacBio ENCODE tier 1 cell line transcriptomes. Transcripts are grouped by novelty type assignment.
+```
+Rscript ${PLOTPATH}/plot_n_exons_by_novelty.R \
+    --f ${tier1_filt_abundance} \
+    -o figures/
+```
+<img align="center" width="600" src="figures/transcript_exonCount_by_novelty_type.png">
+
 # Figure S9: Epstein-Barr Virus transcriptome characterization in GM12878
 
 Run TALON and post-processing scripts as detailed in https://github.com/dewyman/TALON-paper-2019/tree/master/ebv/.

@@ -22,6 +22,8 @@ main <-function() {
 
 plot_by_novelty <- function(data, outdir) {
 
+    print(nrow(data))
+
     fname <- paste(outdir, "/transcript_exonCount_by_novelty_type.png", sep="")
     xlabel <- "Novelty type"
     ylabel <- "Number of exons in transcript model"
