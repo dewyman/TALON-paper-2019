@@ -266,14 +266,15 @@ cp ${ebv_dir}ebv_chr1.gtf ${ebv_dir}ebv_talon_observedOnly_tracks/
 printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gtf' "$url" >> ${ebv_dir}ebv_talon_observedOnly_tracks/ebv_talon_observedOnly_${n}_tracks
 ```
 Then, load the tracks into the genome browswer (after moving them to a public-facing directory on your computer/cluster), and take a screenshot or use the genome browser's PDF screenshot functionality
-<img align="center" width="400" src="figures/ebv_browser.png">
+
+<img align="center" width="700" src="figures/ebv_browser.png">
 
 # Figure S11: Transcript and gene quantification by PacBio/ONT and TALON 
 
 ## Panel A: Expression level of known and ISM transcript models in PacBio/ONT in GM12878
 ```bash
-abundance=S28_full_gencode_v29_pb_ont_talon_abundance.tsv
-filt_abundance=S29_full_gencode_v29_pb_ont_talon_abundance_filtered.tsv
+abundance=${sup_tables}S28_full_gencode_v29_pb_ont_talon_abundance.tsv
+filt_abundance=${sup_tables}S29_full_gencode_v29_pb_ont_talon_abundance_filtered.tsv
 ```
 
 ```bash
@@ -292,11 +293,11 @@ Correlations are in PacBio_GM12878_1-ONT_GM12878_2_Known-ISM_transcript_correlat
 
 ## Panel B: Expression level of known genes (GENCODE v29) in each biological replicate of HepG2 in ONT
 ```bash
-hepg2_abundance=S22_HepG2_ont_talon_abundance.tsv
-hepg2_filt_abundance=S23_HepG2_ont_talon_abundance_filtered.tsv
+hepg2_abundance=${sup_tables}S22_HepG2_talon_abundance.tsv
+hepg2_filt_abundance=${sup_tables}S23_HepG2_ont_talon_abundance_filtered.tsv
 
-k562_abundance=S25_K562_ont_talon_abundance.tsv
-k562_filt_abundance=S26_K562_ont_talon_abundance_filtered.tsv
+k562_abundance=${sup_tables}S25_K562_talon_abundance.tsv
+k562_filt_abundance=${sup_tables}S26_K562_ont_talon_abundance_filtered.tsv
 ```
 
 ```bash
