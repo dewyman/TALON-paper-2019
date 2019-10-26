@@ -112,7 +112,7 @@ Rscript ${PLOTPATH}/plot_gene_length_by_detection_for_datasets.R \
            --color blue \
            -o figures
 ```
-<img align="center" width="400" src="figures/length_by_detection_and_TPM_Median.png">
+<img align="center" width="600" src="figures/length_by_detection_and_TPM_Median.png">
 
 
 # Figure S5: HepG2 and K562 TALON PacBio gene expression compared to Illumina short-read expression
