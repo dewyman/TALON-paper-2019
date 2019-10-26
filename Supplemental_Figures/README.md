@@ -266,7 +266,7 @@ cp ${ebv_dir}ebv_chr1.gtf ${ebv_dir}ebv_talon_observedOnly_tracks/
 printf 'track name="EBV Reference" visibility=pack color=0,0,128\n%s/ebv_chr1.gtf' "$url" >> ${ebv_dir}ebv_talon_observedOnly_tracks/ebv_talon_observedOnly_${n}_tracks
 ```
 Then, load the tracks into the genome browswer (after moving them to a public-facing directory on your computer/cluster), and take a screenshot or use the genome browser's PDF screenshot functionality
-<img align="center" width="400" src="figures/ebv_browser">
+<img align="center" width="400" src="figures/ebv_browser.png">
 
 # Figure S11: Transcript and gene quantification by PacBio/ONT and TALON 
 
