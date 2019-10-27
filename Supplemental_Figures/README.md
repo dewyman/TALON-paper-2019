@@ -10,6 +10,7 @@ PLOTPATH=../plotting_scripts
 sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
 
 CAGE=../CAGE/data/FANTOM5/hg38_CAGE.bed
+genome=../refs/hg38/hg38.fa
 
 GM12878_kallisto1=../Illumina/GM12878/Kallisto/Rep1/abundance.tsv
 GM12878_kallisto2=../Illumina/GM12878/Kallisto/Rep2/abundance.tsv
@@ -619,6 +620,33 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="600" src="figures/S17/K562_ONT_CAGE_support.png">
 
+# Figure S18: Poly(A) motif support by novelty category in HepG2 and K562. 
+## Panel A: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in HepG2 PacBio
+```
+source activate mypython3.7.2
+OUT=figures/S17/PacBio_HepG2/PAS
+mkdir -p ${OUT}
+python ../PAS-computational/run_computational_PAS_analysis.py \
+        --gtf ${pb_hepg2_gtf} \
+        --genome ${genome} \
+        --maxdist 35 \
+        --o ${OUT}/HepG2_PacBio
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/HepG2_PacBio_polyA_motif.csv \
+    --t PAS-comp \
+    --novelty ${OUT}/transcript_beds/HepG2_PacBio_novelty.csv \
+    --splitISM \
+    --ymax 26000 \
+    -o figures/S17/HepG2_PacBio
+```
+<img align="center" width="600" src="figures/S17/HepG2_PacBio_PAS-comp_support.png">
+
+## Panel B: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in K562 PacBio
+
+## Panel C: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in HepG2 ONT
+
+## Panel D: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in K562 ONT
 
 # Figure S22: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
 
