@@ -16,13 +16,15 @@ GM12878_kallisto2=../Illumina/GM12878/Kallisto/Rep2/abundance.tsv
 
 hepg2_abundance=${sup_tables}S6_HepG2_talon_abundance.tsv
 hepg2_filt_abundance=${sup_tables}S7_HepG2_talon_abundance_filtered.tsv
-hepg2_gtf=${sup_tables}S5_HepG2_talon_observedOnly.gtf
+pb_hepg2_gtf=${sup_tables}S5_HepG2_talon_observedOnly.gtf
+ont_hepg2_gtf=${sup_tables}S21_HepG2_ont_talon_observedOnly.gtf
 hepg2_kallisto1=../Illumina/HepG2/Kallisto/Rep1/abundance.tsv
 hepg2_kallisto2=../Illumina/HepG2/Kallisto/Rep2/abundance.tsv
 
 k562_abundance=${sup_tables}S9_K562_talon_abundance.tsv
 k562_filt_abundance=${sup_tables}S10_K562_talon_abundance_filtered.tsv
-k562_gtf=${sup_tables}S8_K562_talon_observedOnly.gtf
+pb_k562_gtf=${sup_tables}S8_K562_talon_observedOnly.gtf
+ont_k562_gtf=S24_K562_ont_talon_observedOnly.gtf
 k562_kallisto1=../Illumina/K562/Kallisto/Rep1/abundance.tsv
 k562_kallisto2=../Illumina/K562/Kallisto/Rep2/abundance.tsv
 
@@ -539,7 +541,7 @@ source activate mypython3.7.2
 OUT=figures/S17/PacBio_HepG2
 mkdir -p ${OUT}
 python ../CAGE/run_CAGE_analysis.py \
-        --gtf ${hepg2_gtf} \
+        --gtf ${pb_hepg2_gtf} \
         --cage ${CAGE} \
         --maxdist 100 \
         --o ${OUT}/PacBio_HepG2
@@ -554,13 +556,13 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="600" src="figures/S17/HepG2_PacBio_CAGE_support.png">
 
-## Panel B: Percentage of TALON transcript models with CAGE support for their 5’ end by novelty category in K562 PacBio
+## Panel B: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in K562 PacBio
 ```
 source activate mypython3.7.2
 OUT=figures/S17/PacBio_K562
 mkdir -p ${OUT}
 python ../CAGE/run_CAGE_analysis.py \
-        --gtf ${k562_gtf} \
+        --gtf ${pb_k562_gtf} \
         --cage ${CAGE} \
         --maxdist 100 \
         --o ${OUT}/PacBio_K562
@@ -574,6 +576,29 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
     -o figures/S17/K562_PacBio
 ```
 <img align="center" width="600" src="figures/S17/K562_PacBio_CAGE_support.png">
+
+## Panel C: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in HepG2 ONT
+```
+source activate mypython3.7.2
+OUT=figures/S17/ONT_HepG2
+mkdir -p ${OUT}
+python ../CAGE/run_CAGE_analysis.py \
+        --gtf ${ont_hepg2_gtf} \
+        --cage ${CAGE} \
+        --maxdist 100 \
+        --o ${OUT}/ONT_HepG2
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/ONT_HepG2_CAGE_results.csv \
+    --t CAGE \
+    --novelty ${OUT}/transcript_beds/ONT_HepG2_novelty.csv \
+    --splitISM \
+    --ymax 26000 \
+    -o figures/S17/HepG2_ONT
+```
+<img align="center" width="600" src="figures/S17/HepG2_ONT_CAGE_support.png">
+
+## Panel D: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in K562 ONT
 
 # Figure S22: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
 
