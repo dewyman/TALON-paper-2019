@@ -8,3 +8,4 @@ We did a lot of extra analysis of our data in terms of looking at splice junctio
 
 [isoform_SJ_support](https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/isoform_SJ_support): See how many transcript models have all of their splice junctions supported by Illumina data or the GENCODE annotation, subset on transcript novelty type, in PacBio and ONT GM12878, HepG2, and K562.
 
+[mouse_brain](https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/mouse_brain): Perform some of the above types of analysis on our PacBio mouse brain (hippocampus and cortex) data.
