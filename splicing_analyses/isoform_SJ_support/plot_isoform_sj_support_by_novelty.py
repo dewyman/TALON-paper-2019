@@ -45,8 +45,11 @@ def plot_support(df, args):
 	# 	order = ['Known', 'ISM', 'NIC', 'NNC', 'Intergenic', "Antisense"]
 
 	# plotting
-	plt.figure(figsize=(10,10))
+	plt.figure(figsize=(8.5,8.5))
 	sns.set(font_scale=1.5, style="whitegrid")
+
+	# font sizes
+	plt.rc('font', size=14)
 
 	top_plot = sns.barplot(x='Isoform Novelty', y='total_percent', data=df, 
 		color='white', order=order, edgecolor='black')
@@ -74,6 +77,8 @@ def plot_support(df, args):
 				'{:1.1f}%'.format(val),
 				ha="center",
 				c='#FFFFFF')
+
+	bottom_plot.set_xticklabels(bottom_plot.get_xticklabels(), fontsize=14)    # fontsize of the x and y labels
 
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_sj_novelty_illumina_isoform_novelty_support.pdf')
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_sj_novelty_illumina_isoform_novelty_support.png', dpi = 600)
