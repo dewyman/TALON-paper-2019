@@ -553,7 +553,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="600" src="figures/S17/HepG2_PacBio_CAGE_support.png">
 
-# Figure S20: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
+# Figure S22: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
 
 Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/mouse_brain
 
