@@ -50,10 +50,11 @@ def gen_summary_table(df):
 	gc_sup.drop('support', inplace=True, axis=1)
 
 	# furnish out the final table
-	ill_sup = ill_sup.merge(gc_sup, on=['novelty','total'])
+	ill_sup = ill_sup.merge(gc_sup, how='outer', on=['novelty','total'])
 	ill_sup = ill_sup[['novelty', 'total', 'illumina_count', 
 					   'percent_illumina', 'gencode_count', 
 					   'percent_gencode']]
+	ill_sup.fillna(0, inplace=True)
 
 	return ill_sup
 

@@ -48,6 +48,9 @@ def plot_support(df, args):
 	plt.figure(figsize=(8.5,8.5))
 	sns.set(font_scale=1.5, style="whitegrid")
 
+	# font sizes
+	plt.rc('font', size=14)
+
 	top_plot = sns.barplot(x='Isoform Novelty', y='total_percent', data=df, 
 		color='white', order=order, edgecolor='black')
 	bottom_plot = sns.barplot(x='Isoform Novelty', y='percent_illumina', 
@@ -57,13 +60,13 @@ def plot_support(df, args):
 	topbar = plt.Rectangle((0,0),1,1,fc='white', edgecolor='black')
 	bottombar = plt.Rectangle((0,0),1,1,fc='#0000A3',  edgecolor='black')
 
-	plt.title('{} Splice Junction Illumina Support by Isoform Novelty'.format(args.sample_name))
+	plt.title('{} SJ Illumina Support by Isoform Novelty'.format(args.sample_name))
 	bottom_plot.set_ylabel("Percent of Isoforms with 100% SJ Support")
 	for ntype, p in zip(order, bottom_plot.patches):
 		height = p.get_height()
 		bottom_plot.text(p.get_x()+p.get_width()/2.,
 				height + .3,
-				'n = {}'.format(df.loc[df['Isoform Novelty']==ntype]['total'].values[0]),
+				'n={}'.format(df.loc[df['Isoform Novelty']==ntype]['total'].values[0]),
 				ha="center")
 	for ntype, p in zip(order, bottom_plot.patches):
 		val = df.loc[df['Isoform Novelty'] == ntype]['percent_illumina'].values[0]
@@ -71,9 +74,11 @@ def plot_support(df, args):
 		height = (height/2)
 		bottom_plot.text(p.get_x()+p.get_width()/2.,
 				height,
-				'{:1.2f}%'.format(val),
+				'{:1.1f}%'.format(val),
 				ha="center",
 				c='#FFFFFF')
+
+	bottom_plot.set_xticklabels(bottom_plot.get_xticklabels(), fontsize=14)    # fontsize of the x and y labels
 
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_sj_novelty_illumina_isoform_novelty_support.pdf')
 	plt.savefig('figures/'+args.sample_name.replace(' ','_')+'_sj_novelty_illumina_isoform_novelty_support.png', dpi = 600)
