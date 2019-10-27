@@ -506,27 +506,27 @@ Check out this readme for a detailed explanation of the analysis and figure gene
 
 ## Panel A: Percent Illumina support for known and novel (NNC and NIC) splice junctions in PacBio long-read GM12878 data
 
-<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/PacBio_GM12878_sj_novelty_Illumina_support.png"> 
+<img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/PacBio_GM12878_sj_novelty_Illumina_support.png"> 
 
 ## Panel B: Percent Illumina support for known and novel (NNC and NIC) splice junctions in Oxford Nanopore long-read GM12878 data
 
-<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/ONT_GM12878_sj_novelty_Illumina_support.png"> 
+<img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/ONT_GM12878_sj_novelty_Illumina_support.png"> 
 
 ## Panel C: Venn diagram of splice junctions that are unsupported by GENCODE in PacBio
 
-<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/PacBio_GM12878_gc_venn2.png"> 
+<img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/PacBio_GM12878_gc_venn2.png"> 
 
 ## Panel D: Venn diagram of splice junctions that are unsupported by GENCODE in PacBio
 
-<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/ONT_GM12878_gc_venn2.png"> 
+<img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/ONT_GM12878_gc_venn2.png"> 
 
 ## Panel E: Venn diagram showing overlap and reproducibility of splice junctions not supported by GENCODE between PacBio, ONT, and Illumina
 
-<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/Novel_GM12878_venn.png"> 
+<img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/Novel_GM12878_venn.png"> 
 
 ## Panel F: Venn diagram showing overlap and reproducibility of splice junctions supported by GENCODE between PacBio, ONT, and Illumina
 
-<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/Known_GM12878_venn.png"> 
+<img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/Known_GM12878_venn.png"> 
 
 
 
