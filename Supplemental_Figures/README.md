@@ -553,6 +553,24 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="600" src="figures/S17/HepG2_PacBio_CAGE_support.png">
 
+# Figure S22: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
 
+Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/mouse_brain
+
+## Panel A: Venn diagram of cortex PacBio splice junction support from Illumina and GENCODE post-TranscriptClean and pre-TALON
+
+<img align="center" width="500" src="../splicing_analyses/mouse_brain/figures/Post-TC_Cortex_venn.png">
+
+## Panel B : Venn diagram of cortex PacBio splice junction support from Illumina and GENCODE post-TALON
+
+<img align="center" width="500" src="../splicing_analyses/mouse_brain/figures/Post-TALON_Cortex_venn.png">
+
+## Panel C: Venn diagram of hippocampus PacBio splice junction support from Illumina and GENCODE post-TranscriptClean and pre-TALON
+
+<img align="center" width="500" src="../splicing_analyses/mouse_brain/figures/Post-TC_Cortex_venn.png">
+
+## Panel D : Venn diagram of hippocampus PacBio splice junction support from Illumina and GENCODE post-TALON
+
+<img align="center" width="500" src="../splicing_analyses/mouse_brain/figures/Post-TALON_Cortex_venn.png">
 
 
