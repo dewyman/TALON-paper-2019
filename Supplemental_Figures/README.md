@@ -648,7 +648,7 @@ source activate mypython3.7.2
 OUT=figures/S18/PacBio_K562/PAS
 mkdir -p ${OUT}
 python ../PAS-computational/run_computational_PAS_analysis.py \
-        --gtf ${pb_hepg2_gtf} \
+        --gtf ${pb_k562_gtf} \
         --genome ${genome} \
         --maxdist 35 \
         --o ${OUT}/K562_PacBio
@@ -670,7 +670,7 @@ source activate mypython3.7.2
 OUT=figures/S18/ONT_HepG2/PAS
 mkdir -p ${OUT}
 python ../PAS-computational/run_computational_PAS_analysis.py \
-        --gtf ${pb_hepg2_gtf} \
+        --gtf ${ont_hepg2_gtf} \
         --genome ${genome} \
         --maxdist 35 \
         --o ${OUT}/HepG2_ONT
@@ -691,7 +691,7 @@ source activate mypython3.7.2
 OUT=figures/S18/ONT_K562/PAS
 mkdir -p ${OUT}
 python ../PAS-computational/run_computational_PAS_analysis.py \
-        --gtf ${pb_hepg2_gtf} \
+        --gtf ${ont_k562_gtf} \
         --genome ${genome} \
         --maxdist 35 \
         --o ${OUT}/K562_ONT
