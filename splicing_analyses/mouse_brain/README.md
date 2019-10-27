@@ -1,4 +1,4 @@
-## How do TranscriptClean and TALON affect splice junction support?
+## Mouse Brain SJ Analysis
 
 We wanted to see how running TranscriptClean and TALON affects whether or not splice junctions are supported by Illumina or Gencode. 
 
