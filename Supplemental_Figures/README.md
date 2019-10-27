@@ -9,11 +9,14 @@ PLOTPATH=../plotting_scripts
 # download the supplementary tables and change this path!
 sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
 
+CAGE=../CAGE/data/FANTOM5/hg38_CAGE.bed
+
 GM12878_kallisto1=../Illumina/GM12878/Kallisto/Rep1/abundance.tsv
 GM12878_kallisto2=../Illumina/GM12878/Kallisto/Rep2/abundance.tsv
 
 hepg2_abundance=${sup_tables}S6_HepG2_talon_abundance.tsv
 hepg2_filt_abundance=${sup_tables}S7_HepG2_talon_abundance_filtered.tsv
+hepg2_gtf=${sup_tables}S5_HepG2_talon_observedOnly.gtf
 hepg2_kallisto1=../Illumina/HepG2/Kallisto/Rep1/abundance.tsv
 hepg2_kallisto2=../Illumina/HepG2/Kallisto/Rep2/abundance.tsv
 
@@ -528,7 +531,27 @@ Check out this readme for a detailed explanation of the analysis and figure gene
 
 <img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/Known_GM12878_venn.png"> 
 
+# Figure S17: CAGE support by novelty category in HepG2 and K562.
+## Panel A: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in HepG2 PacBio
+```
+source activate mypython3.7.2
+OUT=figures/S17/PacBio_HepG2
+mkdir -p ${OUT}
+python ../CAGE/run_CAGE_analysis.py \
+        --gtf ${hepg2_gtf} \
+        --cage ${CAGE} \
+        --maxdist 100 \
+        --o ${OUT}/PacBio_HepG2
 
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/PacBio_HepG2_CAGE_results.csv \
+    --t CAGE \
+    --novelty ${OUT}/transcript_beds/PacBio_HepG2_novelty.csv \
+    --splitISM \
+    --ymax 30000 \ 
+    -o figures/S17/HepG2_PacBio
+```
+<img align="center" width="600" src="figures/S17/HepG2_PacBio_CAGE_support.png">
 
 
 
