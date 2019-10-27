@@ -548,7 +548,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
     --t CAGE \
     --novelty ${OUT}/transcript_beds/PacBio_HepG2_novelty.csv \
     --splitISM \
-    --ymax 22000 \ 
+    --ymax 30000 \ 
     -o figures/S17/HepG2_PacBio
 ```
 <img align="center" width="600" src="figures/S17/HepG2_PacBio_CAGE_support.png">
