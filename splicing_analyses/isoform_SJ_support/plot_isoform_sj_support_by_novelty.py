@@ -45,7 +45,7 @@ def plot_support(df, args):
 	# 	order = ['Known', 'ISM', 'NIC', 'NNC', 'Intergenic', "Antisense"]
 
 	# plotting
-	plt.figure(figsize=(8.5,8.5))
+	plt.figure(figsize=(10,10))
 	sns.set(font_scale=1.5, style="whitegrid")
 
 	top_plot = sns.barplot(x='Isoform Novelty', y='total_percent', data=df, 
