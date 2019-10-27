@@ -126,26 +126,28 @@ python ../compare_sjs_venn_new.py \
 7. Also perform the above analysis for HepG2 and K562
 ```bash
 # HepG2
-python label_sj_novelty.py \
+ln -s ../technology_SJ_comparison/pb_talon_HepG2_sjs.tab pb_talon_HepG2_sjs.tab
+python ../label_sj_novelty.py \
 	-sj pb_talon_HepG2_sjs.tab \
 	-ref_sj gencode_v29_sjs.tab 
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj pb_talon_HepG2_sjs_novelty.tab \
 	-sample "PacBio HepG2"
 
-python label_sj_novelty.py \
+ln -s ../technology_SJ_comparison/HepG2_alignedSJ.out.tab HepG2_alignedSJ.out.tab
+python ../label_sj_novelty.py \
 	-sj HepG2_alignedSJ.out.tab \
 	-ref_sj gencode_v29_sjs.tab 
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj pb_talon_HepG2_sjs_novelty.tab \
 	-sample "PacBio HepG2" \
 	--extra_support HepG2_alignedSJ.out_novelty.tab \
 	--support_name Illumina
 
 # get the novel PacBio splice junctions
-python compare_sjs_venn2.py \
+python ../compare_sjs_venn2.py \
 	-sj_1 pb_talon_HepG2_sjs_novelty.tab \
 	-sj_1_name "PacBio" \
 	-sj_2 gencode_v29_sjs.tab \
@@ -153,7 +155,7 @@ python compare_sjs_venn2.py \
 	-sample "PacBio HepG2"
 
 # get the novel Illumina splice junctions
-python compare_sjs_venn2.py \
+python ../compare_sjs_venn2.py \
  	-sj_1 HepG2_alignedSJ.out_novelty.tab \
 	-sj_1_name "Illumina" \
 	-sj_2 gencode_v29_sjs.tab \
@@ -161,21 +163,22 @@ python compare_sjs_venn2.py \
 	-sample "Illumina HepG2"
 
 # get the novel ONT splice junctions
-python label_sj_novelty.py \
+ln -s ../technology_SJ_comparison/ont_talon_HepG2_sjs.tab ont_talon_HepG2_sjs.tab
+python ../label_sj_novelty.py \
 	-sj ont_talon_HepG2_sjs.tab \
 	-ref_sj gencode_v29_sjs.tab 
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj ont_talon_HepG2_sjs_novelty.tab \
 	-sample "ONT HepG2"
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj ont_talon_HepG2_sjs_novelty.tab \
 	-sample "ONT HepG2" \
 	--extra_support HepG2_alignedSJ.out_novelty.tab \
 	--support_name Illumina
 
-python compare_sjs_venn2.py \
+python ../compare_sjs_venn2.py \
 	-sj_1 ont_talon_HepG2_sjs_novelty.tab \
 	-sj_1_name "ONT" \
 	-sj_2 gencode_v29_sjs.tab \
@@ -183,7 +186,7 @@ python compare_sjs_venn2.py \
 	-sample "ONT HepG2"
 
 # compare novel splice junctions between 3 technologies
-python compare_sjs_venn_new.py \
+python ../compare_sjs_venn_new.py \
 	-sj_1 PacBio_HepG2_unsupported_sjs.tab \
 	-sj_1_name "Novel PacBio SJs" \
 	-sj_3 Illumina_HepG2_unsupported_sjs.tab \
@@ -194,7 +197,7 @@ python compare_sjs_venn_new.py \
 	--log
 
 # compare known splice junctions between 3 technologies
-python compare_sjs_venn_new.py \
+python ../compare_sjs_venn_new.py \
 	-sj_1 PacBio_HepG2_supported_sjs.tab \
 	-sj_1_name "Known PacBio SJs" \
 	-sj_3 Illumina_HepG2_supported_sjs.tab \
@@ -211,26 +214,28 @@ python compare_sjs_venn_new.py \
 
 ```bash
 # K562
-python label_sj_novelty.py \
+ln -s ../technology_SJ_comparison/pb_talon_K562_sjs.tab pb_talon_K562_sjs.tab
+python ../label_sj_novelty.py \
 	-sj pb_talon_K562_sjs.tab \
 	-ref_sj gencode_v29_sjs.tab 
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj pb_talon_K562_sjs_novelty.tab \
 	-sample "PacBio K562"
 
-python label_sj_novelty.py \
+ln -s ../technology_SJ_comparison/K562_alignedSJ.out.tab K562_alignedSJ.out.tab
+python ../label_sj_novelty.py \
 	-sj K562_alignedSJ.out.tab \
 	-ref_sj gencode_v29_sjs.tab 
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj pb_talon_K562_sjs_novelty.tab \
 	-sample "PacBio K562" \
 	--extra_support K562_alignedSJ.out_novelty.tab \
 	--support_name Illumina
 
 # get the novel PacBio splice junctions
-python compare_sjs_venn2.py \
+python ../compare_sjs_venn2.py \
 	-sj_1 pb_talon_K562_sjs_novelty.tab \
 	-sj_1_name "PacBio" \
 	-sj_2 gencode_v29_sjs.tab \
@@ -238,7 +243,7 @@ python compare_sjs_venn2.py \
 	-sample "PacBio K562"
 
 # get the novel Illumina splice junctions
-python compare_sjs_venn2.py \
+python ../compare_sjs_venn2.py \
  	-sj_1 K562_alignedSJ.out_novelty.tab \
 	-sj_1_name "Illumina" \
 	-sj_2 gencode_v29_sjs.tab \
@@ -246,21 +251,22 @@ python compare_sjs_venn2.py \
 	-sample "Illumina K562"
 
 # get the novel ONT splice junctions
-python label_sj_novelty.py \
+ln -s ../technology_SJ_comparison/ont_talon_K562_sjs.tab ont_talon_K562_sjs.tab
+python ../label_sj_novelty.py \
 	-sj ont_talon_K562_sjs.tab \
 	-ref_sj gencode_v29_sjs.tab 
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj ont_talon_K562_sjs_novelty.tab \
 	-sample "ONT K562"
 
-python plot_sj_novelty_counts.py \
+python ../plot_sj_novelty_counts.py \
 	-sj ont_talon_K562_sjs_novelty.tab \
 	-sample "ONT K562" \
 	--extra_support K562_alignedSJ.out_novelty.tab \
 	--support_name Illumina
 
-python compare_sjs_venn2.py \
+python ../compare_sjs_venn2.py \
 	-sj_1 ont_talon_K562_sjs_novelty.tab \
 	-sj_1_name "ONT" \
 	-sj_2 gencode_v29_sjs.tab \
@@ -268,7 +274,7 @@ python compare_sjs_venn2.py \
 	-sample "ONT K562"
 
 # compare novel splice junctions between 3 technologies
-python compare_sjs_venn_new.py \
+python ../compare_sjs_venn_new.py \
 	-sj_1 PacBio_K562_unsupported_sjs.tab \
 	-sj_1_name "Novel PacBio SJs" \
 	-sj_3 Illumina_K562_unsupported_sjs.tab \
@@ -279,7 +285,7 @@ python compare_sjs_venn_new.py \
 	--log	
 
 # compare known splice junctions between 3 technologies
-python compare_sjs_venn_new.py \
+python ../compare_sjs_venn_new.py \
 	-sj_1 PacBio_K562_supported_sjs.tab \
 	-sj_1_name "Known PacBio SJs" \
 	-sj_3 Illumina_K562_supported_sjs.tab \
@@ -294,102 +300,13 @@ python compare_sjs_venn_new.py \
 
 <img align="center" width="250" src="figures/PacBio_K562_gc_venn2.png"> <img align="center" width="250" src="figures/Novel_K562_venn.png"> <img align="center" width="250" src="figures/Known_K562_venn.png">
 
-8. Also perform this analysis for the ONT data.
-```bash
-# GM12878
-python plot_sj_novelty_counts.py \
-	-sj ont_talon_GM12878_sjs_novelty.tab \
-	-sample "ONT GM12878"
-
-python plot_sj_novelty_counts.py \
-	-sj ont_talon_GM12878_sjs_novelty.tab \
-	-sample "ONT GM12878" \
-	--extra_support GM12878_alignedSJ.out_novelty.tab \
-	--support_name Illumina
-
-python compare_sjs_venn2.py \
-	-sj_1 ont_talon_GM12878_sjs_novelty.tab \
-	-sj_1_name "ONT" \
-	-sj_2 gencode_v29_sjs.tab \
-	-sj_2_name "Gencode" \
-	-sample "ONT GM12878"
-
-python compare_sjs_venn_new.py \
-	-sj_1 ONT_GM12878_unsupported_sjs.tab \
-	-sj_1_name "Novel ONT SJs" \
-	-sj_2 GM12878_alignedSJ.out.tab \
-	-sj_2_name "Illumina" \
-	-sj_3 pb_talon_GM12878_sjs_novelty.tab  \
-	-sj_3_name "PacBio" \
-	-sample "Novel ONT GM12878 SJs" \
-	--log
-```
+8. This analysis was also done in ONT, but since we already intersected novel ONT SJs with PacBio ones above, the figures were all already created.
 
 <img align="center" width="350" src="figures/ONT_GM12878_sj_novelty.png"> <img align="center" width="350" src="figures/ONT_GM12878_sj_novelty_Illumina_support.png">
 <img align="center" width="500" src="figures/ONT_GM12878_gc_venn2.png">
 
-```bash
-# HepG2
-python plot_sj_novelty_counts.py \
-	-sj ont_talon_HepG2_sjs_novelty.tab \
-	-sample "ONT HepG2"
-
-python plot_sj_novelty_counts.py \
-	-sj ont_talon_HepG2_sjs_novelty.tab \
-	-sample "ONT HepG2" \
-	--extra_support HepG2_alignedSJ.out_novelty.tab \
-	--support_name Illumina
-
-python compare_sjs_venn2.py \
-	-sj_1 ont_talon_HepG2_sjs_novelty.tab \
-	-sj_1_name "ONT" \
-	-sj_2 gencode_v29_sjs.tab \
-	-sj_2_name "Gencode" \
-	-sample "ONT HepG2"
-
-python compare_sjs_venn_new.py \
-	-sj_1 ONT_HepG2_unsupported_sjs.tab \
-	-sj_1_name "Novel ONT SJs" \
-	-sj_2 HepG2_alignedSJ.out.tab \
-	-sj_2_name "Illumina" \
-	-sj_3 pb_talon_HepG2_sjs_novelty.tab  \
-	-sj_3_name "PacBio" \
-	-sample "Novel ONT HepG2 SJs" \
-	--log
-```
-
 <img align="center" width="350" src="figures/ONT_HepG2_sj_novelty.png"> <img align="center" width="350" src="figures/ONT_HepG2_sj_novelty_Illumina_support.png">
 <img align="center" width="500" src="figures/ONT_HepG2_gc_venn2.png">
-
-```bash
-# K562
-python plot_sj_novelty_counts.py \
-	-sj ont_talon_K562_sjs_novelty.tab \
-	-sample "ONT K562"
-
-python plot_sj_novelty_counts.py \
-	-sj ont_talon_K562_sjs_novelty.tab \
-	-sample "ONT K562" \
-	--extra_support K562_alignedSJ.out_novelty.tab \
-	--support_name Illumina
-
-python compare_sjs_venn2.py \
-	-sj_1 ont_talon_K562_sjs_novelty.tab \
-	-sj_1_name "ONT" \
-	-sj_2 gencode_v29_sjs.tab \
-	-sj_2_name "Gencode" \
-	-sample "ONT K562"
-
-python compare_sjs_venn_new.py \
-	-sj_1 ONT_K562_unsupported_sjs.tab \
-	-sj_1_name "Novel ONT SJs" \
-	-sj_2 K562_alignedSJ.out.tab \
-	-sj_2_name "Illumina" \
-	-sj_3 pb_talon_K562_sjs_novelty.tab  \
-	-sj_3_name "PacBio" \
-	-sample "Novel ONT K562 SJs" \
-	--log
-```
 
 <img align="center" width="350" src="figures/ONT_K562_sj_novelty.png"> <img align="center" width="350" src="figures/ONT_K562_sj_novelty_Illumina_support.png">
 <img align="center" width="500" src="figures/ONT_K562_gc_venn2.png">
