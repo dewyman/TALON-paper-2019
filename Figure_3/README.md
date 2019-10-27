@@ -3,6 +3,7 @@
 Files/paths used to generate the panels of this figure:
 ```bash
 PLOTPATH=../plotting_scripts
+APATH=../analysis_scripts/
 
 # download the supplementary tables and change this path!
 sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
@@ -10,7 +11,7 @@ sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_
 abundance=${sup_tables}S19_GM12878_talon_abundance.tsv
 filt_abundance=${sup_tables}S20_GM12878_ont_talon_abundance_filtered.tsv
 tier1_filt_abundance=${sup_tables}S32_full_gencode_v29_ont_talon_abundance_filtered.tsv
-gtf=${sup_tables}S30_full_gencode_v29_ont_tracks_talon_observedOnly.gtf
+gtf=${sup_tables}S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly.gtf
 
 # for pb vs. ont plots
 pb_ont_abundance_filtered=${sup_tables}S28_full_gencode_v29_pb_ont_talon_abundance.tsv
@@ -98,9 +99,22 @@ Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
 <img align="center" width="400" src="PacBio_GM12878_1-ONT_GM12878_2_Known-Antisense_transcript_correlationPlot.png">
 Correlations are in PacBio_GM12878_1-ONT_GM12878_2_Known-Antisense_transcript_correlations.txt.
 
-<!-- ## Panel I: Visualization of ONT-derived custom GTF annotations in the UCSC genome browser for ENCODE tier 1 cell lines. 
+## Panel I: Visualization of ONT-derived custom GTF annotations in the UCSC genome browser for ENCODE tier 1 cell lines. 
 
-Make abundance bar plots for XRCC5 transcripts (for genome browser plot):
+Generate the tracklines from the combined ONT+PacBio GTF
+```bash
+# create config file for gtf creation
+# replace url with the url to your public-facing directory
+url=http://crick.bio.uci.edu/freese/TALON_gtf/S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_tracks 
+printf "${gtf},n+,0,none,$url" > pb_ont_track_config
+python ${APATH}gen_novelty_tracks_gtf.py \
+    --c pb_ont_track_config
+mv ${sup_tables}S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_tracks .
+```
+
+Load the resultant data from S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_tracks/S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_n+\_tracks into the "Custom Tracks" genome browser section and display!
+
+<!-- Make abundance bar plots for XRCC5 transcripts (for genome browser plot):
 ```
 Rscript ${PLOTPATH}/plot_expression_for_genome_browser.R \
         --f ${tier1_filt_abundance} \
@@ -109,5 +123,5 @@ Rscript ${PLOTPATH}/plot_expression_for_genome_browser.R \
         -o .
 ```
 <img align="center" width="400" src="transcript_expression.png">
-The resulting plot was combined manually with a UCSC genome browser screenshot to create Figure 2i. The bars from left to right are in the same order as the transcript names in TCF3_transcript_names.txt. The groups.csv file provides the dataset groupings needed to average expression values by cell line.
-  -->
+The resulting plot was combined manually with a UCSC genome browser screenshot to create Figure 2i. The bars from left to right are in the same order as the transcript names in TCF3_transcript_names.txt. The groups.csv file provides the dataset groupings needed to average expression values by cell line. -->
+ 
