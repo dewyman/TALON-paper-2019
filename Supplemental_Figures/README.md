@@ -502,7 +502,31 @@ Correlations are in PacBio_K562_1-ONT_K562_2_Known-ISM_transcript_correlations.t
 
 # Figure S15: Splice junction novelty and reproducibility across platforms
 
-Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/analysis_scripts/compare_sjs
+Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/SJ_novelty_analysis
+
+## Panel A: Percent Illumina support for known and novel (NNC and NIC) splice junctions in PacBio long-read GM12878 data
+
+<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/PacBio_GM12878_sj_novelty_Illumina_support.png"> 
+
+## Panel B: Percent Illumina support for known and novel (NNC and NIC) splice junctions in Oxford Nanopore long-read GM12878 data
+
+<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/ONT_GM12878_sj_novelty_Illumina_support.png"> 
+
+## Panel C: Venn diagram of splice junctions that are unsupported by GENCODE in PacBio
+
+<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/PacBio_GM12878_gc_venn2.png"> 
+
+## Panel D: Venn diagram of splice junctions that are unsupported by GENCODE in PacBio
+
+<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/ONT_GM12878_gc_venn2.png"> 
+
+## Panel E: Venn diagram showing overlap and reproducibility of splice junctions not supported by GENCODE between PacBio, ONT, and Illumina
+
+<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/Novel_GM12878_venn.png"> 
+
+## Panel F: Venn diagram showing overlap and reproducibility of splice junctions supported by GENCODE between PacBio, ONT, and Illumina
+
+<img align="center" width="400" src="../splicing_analysis/SJ_novelty_analysis/figures/Known_GM12878_venn.png"> 
 
 
 
