@@ -10,6 +10,9 @@ PLOTPATH=../plotting_scripts
 sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
 
 CAGE=../CAGE/data/FANTOM5/hg38_CAGE.bed
+HEPG2_RNAPET=../RNA-PET/data/HepG2_hg38.bed
+K562_RNAPET=../RNA-PET/data/K562_hg38.bed
+genome=../refs/hg38/hg38.fa
 
 GM12878_kallisto1=../Illumina/GM12878/Kallisto/Rep1/abundance.tsv
 GM12878_kallisto2=../Illumina/GM12878/Kallisto/Rep2/abundance.tsv
@@ -618,6 +621,182 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
     -o figures/S17/K562_ONT
 ```
 <img align="center" width="600" src="figures/S17/K562_ONT_CAGE_support.png">
+
+# Figure S18: Poly(A) motif support by novelty category in HepG2 and K562. 
+## Panel A: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in HepG2 PacBio
+```
+source activate mypython3.7.2
+OUT=figures/S18/PacBio_HepG2/PAS
+mkdir -p ${OUT}
+python ../PAS-computational/run_computational_PAS_analysis.py \
+        --gtf ${pb_hepg2_gtf} \
+        --genome ${genome} \
+        --maxdist 35 \
+        --o ${OUT}/HepG2_PacBio
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/HepG2_PacBio_polyA_motif.csv \
+    --t PAS-comp \
+    --novelty ${OUT}/transcript_beds/HepG2_PacBio_novelty.csv \
+    --splitISM \
+    --ymax 26000 \
+    -o figures/S18/HepG2_PacBio
+```
+<img align="center" width="600" src="figures/S18/HepG2_PacBio_PAS-comp_support.png">
+
+## Panel B: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in K562 PacBio
+```
+source activate mypython3.7.2
+OUT=figures/S18/PacBio_K562/PAS
+mkdir -p ${OUT}
+python ../PAS-computational/run_computational_PAS_analysis.py \
+        --gtf ${pb_k562_gtf} \
+        --genome ${genome} \
+        --maxdist 35 \
+        --o ${OUT}/K562_PacBio
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/K562_PacBio_polyA_motif.csv \
+    --t PAS-comp \
+    --novelty ${OUT}/transcript_beds/K562_PacBio_novelty.csv \
+    --splitISM \
+    --ymax 26000 \
+    -o figures/S18/K562_PacBio
+```
+<img align="center" width="600" src="figures/S18/K562_PacBio_PAS-comp_support.png">
+
+
+## Panel C: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in HepG2 ONT
+```
+source activate mypython3.7.2
+OUT=figures/S18/ONT_HepG2/PAS
+mkdir -p ${OUT}
+python ../PAS-computational/run_computational_PAS_analysis.py \
+        --gtf ${ont_hepg2_gtf} \
+        --genome ${genome} \
+        --maxdist 35 \
+        --o ${OUT}/HepG2_ONT
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/HepG2_ONT_polyA_motif.csv \
+    --t PAS-comp \
+    --novelty ${OUT}/transcript_beds/HepG2_ONT_novelty.csv \
+    --splitISM \
+    --ymax 26000 \
+    -o figures/S18/HepG2_ONT
+```
+<img align="center" width="600" src="figures/S18/HepG2_ONT_PAS-comp_support.png">
+
+## Panel D: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in K562 ONT
+```
+source activate mypython3.7.2
+OUT=figures/S18/ONT_K562/PAS
+mkdir -p ${OUT}
+python ../PAS-computational/run_computational_PAS_analysis.py \
+        --gtf ${ont_k562_gtf} \
+        --genome ${genome} \
+        --maxdist 35 \
+        --o ${OUT}/K562_ONT
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/K562_ONT_polyA_motif.csv \
+    --t PAS-comp \
+    --novelty ${OUT}/transcript_beds/K562_ONT_novelty.csv \
+    --splitISM \
+    --ymax 26000 \
+    -o figures/S18/K562_ONT
+```
+<img align="center" width="600" src="figures/S18/K562_ONT_PAS-comp_support.png">
+
+# Figure S19: RNA-PET support by novelty category in HepG2 and K562.
+
+## Panel A: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in HepG2 PacBio
+```
+source activate mypython3.7.2
+OUT=figures/S19/PacBio_HepG2
+mkdir -p ${OUT}
+
+python ../RNA-PET/run_RNA-PET_analysis.py \
+    --gtf ${pb_hepg2_gtf} \
+    --rnapet ${HEPG2_RNAPET} \
+    --maxdist 100 \
+    --o ${OUT}/HepG2_PacBio
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/HepG2_PacBio_RNA-PET_results.csv \
+    --t RNA-PET \
+    --novelty ${OUT}/transcript_beds/HepG2_PacBio_novelty.csv \
+    --ymax 26000 \
+    --splitISM \
+    -o figures/S19/HepG2_PacBio
+```
+<img align="center" width="600" src="figures/S19/HepG2_PacBio_RNA-PET_support.png">
+
+## Panel B: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in K562 PacBio
+```
+source activate mypython3.7.2
+OUT=figures/S19/PacBio_K562
+mkdir -p ${OUT}
+
+python ../RNA-PET/run_RNA-PET_analysis.py \
+    --gtf ${pb_k562_gtf} \
+    --rnapet ${K562_RNAPET} \
+    --maxdist 100 \
+    --o ${OUT}/K562_PacBio
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/K562_PacBio_RNA-PET_results.csv \
+    --t RNA-PET \
+    --novelty ${OUT}/transcript_beds/K562_PacBio_novelty.csv \
+    --ymax 26000 \
+    --splitISM \
+    -o figures/S19/K562_PacBio
+```
+<img align="center" width="600" src="figures/S19/K562_PacBio_RNA-PET_support.png">
+
+## Panel C: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in HepG2 ONT
+```
+source activate mypython3.7.2
+OUT=figures/S19/ONT_HepG2
+mkdir -p ${OUT}
+
+python ../RNA-PET/run_RNA-PET_analysis.py \
+    --gtf ${ont_hepg2_gtf} \
+    --rnapet ${HEPG2_RNAPET} \
+    --maxdist 100 \
+    --o ${OUT}/HepG2_ONT
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/HepG2_ONT_RNA-PET_results.csv \
+    --t RNA-PET \
+    --novelty ${OUT}/transcript_beds/HepG2_ONT_novelty.csv \
+    --ymax 26000 \
+    --splitISM \
+    -o figures/S19/HepG2_ONT
+```
+<img align="center" width="600" src="figures/S19/HepG2_ONT_RNA-PET_support.png">
+
+## Panel D: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in K562 ONT
+```
+source activate mypython3.7.2
+OUT=figures/S19/ONT_K562
+mkdir -p ${OUT}
+
+python ../RNA-PET/run_RNA-PET_analysis.py \
+    --gtf ${ont_k562_gtf} \
+    --rnapet ${K562_RNAPET} \
+    --maxdist 100 \
+    --o ${OUT}/K562_ONT
+
+Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
+    --f ${OUT}/K562_ONT_RNA-PET_results.csv \
+    --t RNA-PET \
+    --novelty ${OUT}/transcript_beds/K562_ONT_novelty.csv \
+    --ymax 26000 \
+    --splitISM \
+    -o figures/S19/K562_ONT
+```
+<img align="center" width="600" src="figures/S19/K562_ONT_RNA-PET_support.png">
 
 
 # Figure S22: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
