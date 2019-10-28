@@ -193,9 +193,7 @@ python ../compare_sjs_venn_new.py \
 	-sample "Post-TALON ONT GM12878"
 ```
 
-<img align="center" width="250" src="figures/Pre-TC_ONT_GM12878_venn.png">
-<img align="center" width="250" src="figures/Post-TC_ONT_GM12878_venn.png">
-<img align="center" width="250" src="figures/Post-TALON_ONT_GM12878_venn.png">
+<img align="center" width="250" src="figures/Pre-TC_ONT_GM12878_venn.png"><img align="center" width="250" src="figures/Post-TC_ONT_GM12878_venn.png"><img align="center" width="250" src="figures/Post-TALON_ONT_GM12878_venn.png">
 
 ```bash
 # ONT HepG2
@@ -279,3 +277,4 @@ python ../compare_sjs_venn_new.py \
 	-sample "Post-TALON ONT K562"
 ```
 
+<img align="center" width="250" src="figures/Pre-TC_ONT_K562_venn.png"><img align="center" width="250" src="figures/Post-TC_ONT_K562_venn.png"><img align="center" width="250" src="figures/Post-TALON_ONT_K562_venn.png">
