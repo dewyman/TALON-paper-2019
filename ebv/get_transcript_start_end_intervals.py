@@ -73,15 +73,18 @@ def main():
 
             start_interval, end_interval = make_intervals(entry, dist)
 
-            # Write BED entry for the start
-            start_entry = [ chromosome, str(start_interval[0]),
-                            str(start_interval[1]), name, "0", strand ]
-            start_bed.write("\t".join(start_entry) + "\n")
+            # skip circular chromosome weirdness
+            if start_interval[0] >= 0:
 
-            # Write BED entry for the end
-            end_entry = [ chromosome, str(end_interval[0]),
-                          str(end_interval[1]), name, "0", strand ]
-            end_bed.write("\t".join(end_entry) + "\n")
+                # Write BED entry for the start
+                start_entry = [ chromosome, str(start_interval[0]),
+                                str(start_interval[1]), name, "0", strand ]
+                start_bed.write("\t".join(start_entry) + "\n")
+
+                # Write BED entry for the end
+                end_entry = [ chromosome, str(end_interval[0]),
+                              str(end_interval[1]), name, "0", strand ]
+                end_bed.write("\t".join(end_entry) + "\n")
 
 if __name__ == '__main__':
     main()

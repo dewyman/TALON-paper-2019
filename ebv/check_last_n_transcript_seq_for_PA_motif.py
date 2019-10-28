@@ -78,9 +78,9 @@ def main():
             name = entry[3]
             strand = entry[5]
 
-#            # Skip chrM and chrEBV
-#           if chromosome in ["chrM", "chrEBV"]:
-#                continue
+            # Skip chrM 
+            if chromosome in ["chrM"]:
+                continue
 
             interval_start, interval_end = make_end_interval(entry, dist)
             seq = fetch_sequence(chromosome, interval_start, interval_end, strand, genome).upper()

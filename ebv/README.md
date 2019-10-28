@@ -100,3 +100,89 @@ From here, you can open the genome browser up and display your tracklines, and u
 
 <img align="center" width="700" src="ebv_browser.png ">
 
+## CAGE support
+
+<!-- 1. Install the (ENCODE long rna-seq pipeline)[https://github.com/ENCODE-DCC/long-rna-seq-pipeline] to get access to the rampage-idr peak-caller. 
+```bash 
+git clone https://github.com/ENCODE-DCC/long-rna-seq-pipeline
+```
+
+2. Replace long-rna-seq-pipeline/dnanexus/rampage/rampage-idr/resources/usr/bin/rampage_idr.sh with the modified version found in this directory (which has the line that throws out EBV stuff commented out).
+```bash
+cp rampage_idr.sh long-rna-seq-pipeline/dnanexus/rampage/rampage-idr/resources/usr/bin/
+`` -->
+
+1. Download the ENCODE CAGE GM12878 data in bed format, and extract only EBV TSSs, and cat them together
+```bash
+wget https://www.encodeproject.org/files/ENCFF383NVJ/@@download/ENCFF383NVJ.bed.gz
+wget https://www.encodeproject.org/files/ENCFF016XXM/@@download/ENCFF016XXM.bed.gz
+gunzip ENCFF383NVJ.bed.gz
+gunzip ENCFF016XXM.bed.gz
+
+grep chrEBV ENCFF383NVJ.bed > ENCFF383NVJ_ebv_only.bed
+grep chrEBV ENCFF016XXM.bed > ENCFF016XXM_ebv_only.bed
+
+cat ENCFF383NVJ_ebv_only.bed > cage_ebv_TSSs.bed
+cat ENCFF016XXM_ebv_only.bed >> cage_ebv_TSSs.bed
+```
+
+2. Replace chr1 with chrEBV in output TALON gtf so that it matches up with the EBV CAGE peaks.
+```bash
+sed 's/chr1/chrEBV/g' ebv_talon_observedOnly.gtf > ebv_talon_observedOnly_ebv.gtf
+```
+
+3. Intersect EBV CAGE peaks with TSSs found in our GM12878 data and plot!
+```bash
+mkdir figures
+
+python run_CAGE_analysis.py \
+  --gtf ebv_talon_observedOnly_ebv.gtf \
+  --cage cage_ebv_TSSs.bed \
+  --maxdist 100 \
+  --o ./ebv
+
+Rscript plot_support_by_novelty_type.R \
+  --f ebv_CAGE_results.csv \
+  --t CAGE \
+  --novelty transcript_beds/ebv_novelty.csv \
+  --splitISM \
+  --ymax 15 \
+  -o figures/ebv
+```
+
+<img align="center" width="700" src="figures/ebv_CAGE_support.png">
+
+## Computational PAS analysis
+
+See if TALON EBV transcript 3' ends are supported by poly-A recognition motifs.
+
+```bash
+python run_computational_PAS_analysis.py \
+  --gtf ebv_talon_observedOnly_ebv.gtf \
+  --genome ebv.fasta \
+  --maxdist 35 \
+  --o ./ebv
+
+Rscript plot_support_by_novelty_type.R \
+  --f ebv_polyA_motif.csv \
+  --t PAS-comp \
+  --novelty transcript_beds/ebv_novelty.csv \
+  --ymax 15 \
+  --splitISM \
+  -o figures/ebv
+```
+
+<img align="center" width="700" src="figures/ebv_PAS-comp_support.png">
+
+<!-- 2. Run the rampage_idr script on both sets of EBV CAGE peaks
+```bash
+bash long-rna-seq-pipeline/dnanexus/rampage/rampage-idr/resources/usr/bin/rampage_idr.sh \
+  ENCFF016XXM_ebv_only.bed \
+  ENCFF383NVJ_ebv_only.bed \
+  ebv_chrom_sizes \
+  ebv 
+```
+ -->
+
+
+
