@@ -537,9 +537,114 @@ Check out this readme for a detailed explanation of the analysis and figure gene
 
 <img align="center" width="400" src="../splicing_analyses/SJ_novelty_analysis/figures/Known_GM12878_venn.png"> 
 
+# Figure S16: TALON and FLAIR gene detection across sequencing platforms and samples
+
+See READMEs in the (compare_to_FLAIR)[https://github.com/dewyman/TALON-paper-2019/tree/master/compare_to_FLAIR/] directory to see how the data is generated
+
+## Panel A: Proportion of genes expressed in Illumina RNA-seq data that are also detected by TALON, FLAIR, or both in the corresponding PacBio GM12878
+
+```bash 
+sup_tables=/data/users/freese/TALON_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+abundance=${sup_tables}S3_GM12878_talon_abundance.tsv
+
+Rscript ../compare_to_FLAIR/compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ${abundance} \
+    --flair ../compare_to_FLAIR/GM12878/counts_matrix_talon_abd.tsv \
+    --talonD PacBio_GM12878_1,PacBio_GM12878_2 \
+    --flairD GM12878_Rep1_GM12878_batch1,GM12878_Rep2_GM12878_batch1 \
+    --ik1 ../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
+    -o .
+```
+
+<img align="center" width="400" src="../compare_to_FLAIR/GM12878/FLAIR/TALON_FLAIR_gene_detection_by_TPM.png">
+
+## Panel B: Proportion of genes expressed in Illumina RNA-seq data that are also detected by TALON, FLAIR, or both in the corresponding PacBio K562
+
+```bash
+sup_tables=/data/users/freese/TALON_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+abundance=${sup_tables}S9_K562_talon_abundance.tsv
+Rscript ../compare_to_FLAIR/compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ${abundance} \
+    --flair ../compare_to_FLAIR/K562/counts_matrix_talon_abd.tsv \
+    --talonD PacBio_K562_1,PacBio_K562_2 \
+    --flairD K562_Rep1_K562_batch1,K562_Rep2_K562_batch1 \
+    --ik1 ../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    -o FLAIR
+```
+
+<img align="center" width="400" src="../compare_to_FLAIR/K562/FLAIR/TALON_FLAIR_gene_detection_by_TPM.png">
+
+## Panel C: Proportion of genes expressed in Illumina RNA-seq data that are also detected by TALON, FLAIR, or both in the corresponding PacBio HepG2
+```bash
+sup_tables=/data/users/freese/TALON_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+abundance=${sup_tables}S6_HepG2_talon_abundance.tsvRscript ../compare_to_FLAIR/compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ${abundance} \
+    --flair ../compare_to_FLAIR/HepG2/counts_matrix_talon_abd.tsv \
+    --talonD PacBio_HepG2_1,PacBio_HepG2_2 \
+    --flairDD HepG2_Rep1_HepG2_batch1,HepG2_Rep2_HepG2_batch1 \
+    --ik1 ../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
+    -o FLAIR
+```
+
+<img align="center" width="400" src="../compare_to_FLAIR/HepG2/FLAIR/TALON_FLAIR_gene_detection_by_TPM.png">
+
+## Panel D: Proportion of genes expressed in Illumina RNA-seq data that are also detected by TALON, FLAIR, or both in the corresponding ONT GM12878
+
+```bash 
+sup_tables=/data/users/freese/TALON_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+abundance=${sup_tables}S19_GM12878_talon_abundance.tsv
+
+Rscript ../compare_to_FLAIR/compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ${abundance} \
+    --flair ../compare_to_FLAIR/ONT_GM12878/counts_matrix_talon_abd.tsv \
+    --talonD ONT_GM12878_1,ONT_GM12878_2 \
+    --flairD GM12878_ONT_Rep1_GM12878_batch1,GM12878_ONT_Rep2_GM12878_batch1 \
+    --ik1 ../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
+    -o .
+```
+
+<img align="center" width="400" src="../compare_to_FLAIR/ONT_GM12878/FLAIR/TALON_FLAIR_gene_detection_by_TPM.png">
+
+## Panel E: Proportion of genes expressed in Illumina RNA-seq data that are also detected by TALON, FLAIR, or both in the corresponding ONT K562
+
+```bash
+sup_tables=/data/users/freese/TALON_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+abundance=${sup_tables}S25_K562_talon_abundance.tsv
+Rscript ../compare_to_FLAIR/compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ${abundance} \
+    --flair ../compare_to_FLAIR/ONT_K562/counts_matrix_talon_abd.tsv \
+    --talonD ONT_K562_1,ONT_K562_2 \
+    --flairD K562_ONT_Rep1_K562_batch1,K562_ONT_Rep2_K562_batch1 \
+    --ik1 ../Illumina/K562/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../Illumina/K562/Kallisto/Rep2/abundance.tsv \
+    -o FLAIR
+```
+
+<img align="center" width="400" src="../compare_to_FLAIR/ONT_K562/FLAIR/TALON_FLAIR_gene_detection_by_TPM.png">
+
+## Panel F: Proportion of genes expressed in Illumina RNA-seq data that are also detected by TALON, FLAIR, or both in the corresponding ONT HepG2
+```bash
+sup_tables=/data/users/freese/TALON_data/revisions_10-19/human_TALON/analysis/supplementary_tables/
+abundance=${sup_tables}S22_HepG2_talon_abundance.tsv 
+Rscript ../compare_to_FLAIR/compare_TALON_FLAIR_detection_to_Illumina.R \
+    --talon ${abundance} \
+    --flair ../compare_to_FLAIR/ONT_HepG2/counts_matrix_talon_abd.tsv \
+    --talonD ONT_HepG2_1,ONT_PacBio_HepG2_2 \
+    --flairDD HepG2_ONT_Rep1_HepG2_batch1,HepG2_ONT_Rep2_HepG2_batch1 \
+    --ik1 ../Illumina/HepG2/Kallisto/Rep1/abundance.tsv \
+    --ik2 ../Illumina/HepG2/Kallisto/Rep2/abundance.tsv \
+    -o FLAIR
+```
+
+<img align="center" width="400" src="../compare_to_FLAIR/ONT_HepG2/FLAIR/TALON_FLAIR_gene_detection_by_TPM.png">
+
 # Figure S17: CAGE support by novelty category in HepG2 and K562.
 ## Panel A: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in HepG2 PacBio
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S17/PacBio_HepG2
 mkdir -p ${OUT}
@@ -554,13 +659,13 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
     --t CAGE \
     --novelty ${OUT}/transcript_beds/PacBio_HepG2_novelty.csv \
     --splitISM \
-    --ymax 26000 \ 
+    --ymax 26000 \
     -o figures/S17/HepG2_PacBio
 ```
 <img align="center" width="600" src="figures/S17/HepG2_PacBio_CAGE_support.png">
 
 ## Panel B: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in K562 PacBio
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S17/PacBio_K562
 mkdir -p ${OUT}
@@ -581,7 +686,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 <img align="center" width="600" src="figures/S17/K562_PacBio_CAGE_support.png">
 
 ## Panel C: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in HepG2 ONT
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S17/ONT_HepG2
 mkdir -p ${OUT}
@@ -602,7 +707,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 <img align="center" width="600" src="figures/S17/HepG2_ONT_CAGE_support.png">
 
 ## Panel D: Percentage of TALON transcript models with CAGE support for their 5' end by novelty category in K562 ONT
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S17/ONT_K562
 mkdir -p ${OUT}
@@ -624,7 +729,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 
 # Figure S18: Poly(A) motif support by novelty category in HepG2 and K562. 
 ## Panel A: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in HepG2 PacBio
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S18/PacBio_HepG2/PAS
 mkdir -p ${OUT}
@@ -645,7 +750,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 <img align="center" width="600" src="figures/S18/HepG2_PacBio_PAS-comp_support.png">
 
 ## Panel B: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in K562 PacBio
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S18/PacBio_K562/PAS
 mkdir -p ${OUT}
@@ -667,7 +772,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 
 
 ## Panel C: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in HepG2 ONT
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S18/ONT_HepG2/PAS
 mkdir -p ${OUT}
@@ -688,7 +793,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 <img align="center" width="600" src="figures/S18/HepG2_ONT_PAS-comp_support.png">
 
 ## Panel D: Percentage of TALON transcript models with a computationally predicted poly(A) motif within 35 nt of the 3' end by novelty category in K562 ONT
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S18/ONT_K562/PAS
 mkdir -p ${OUT}
@@ -711,7 +816,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 # Figure S19: RNA-PET support by novelty category in HepG2 and K562.
 
 ## Panel A: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in HepG2 PacBio
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S19/PacBio_HepG2
 mkdir -p ${OUT}
@@ -733,7 +838,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 <img align="center" width="600" src="figures/S19/HepG2_PacBio_RNA-PET_support.png">
 
 ## Panel B: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in K562 PacBio
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S19/PacBio_K562
 mkdir -p ${OUT}
@@ -755,7 +860,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 <img align="center" width="600" src="figures/S19/K562_PacBio_RNA-PET_support.png">
 
 ## Panel C: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in HepG2 ONT
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S19/ONT_HepG2
 mkdir -p ${OUT}
@@ -777,7 +882,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 <img align="center" width="600" src="figures/S19/HepG2_ONT_RNA-PET_support.png">
 
 ## Panel D: Percentage of TALON transcript models with RNA-PET support for their 5'-3' end pair by novelty category in K562 ONT
-```
+```bash
 source activate mypython3.7.2
 OUT=figures/S19/ONT_K562
 mkdir -p ${OUT}
@@ -801,7 +906,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 
 # Figure S22: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
 
-Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/mouse_brain
+Check out the (mouse_brain)[https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/mouse_brain] readme for a detailed explanation of the analysis and figure generation
 
 ## Panel A: Venn diagram of cortex PacBio splice junction support from Illumina and GENCODE post-TranscriptClean and pre-TALON
 
