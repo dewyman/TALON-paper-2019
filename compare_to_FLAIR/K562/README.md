@@ -81,5 +81,5 @@ Rscript ../compare_TALON_FLAIR_detection_to_Illumina.R \
     --flairD K562_Rep1_K562_batch1,K562_Rep2_K562_batch1 \
     --ik1 ../../Illumina/K562/Kallisto/Rep1/abundance.tsv \
     --ik2 ../../Illumina/K562/Kallisto/Rep2/abundance.tsv \
-    -o .
+    -o FLAIR
   ```

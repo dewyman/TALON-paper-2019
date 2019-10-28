@@ -82,5 +82,5 @@ Rscript ../compare_TALON_FLAIR_detection_to_Illumina.R \
     --flairD GM12878_Rep1_GM12878_batch1,GM12878_Rep2_GM12878_batch1 \
     --ik1 ../../Illumina/GM12878/Kallisto/Rep1/abundance.tsv \
     --ik2 ../../Illumina/GM12878/Kallisto/Rep2/abundance.tsv \
-    -o . 
+    -o FLAIR
 ```
