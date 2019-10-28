@@ -11,7 +11,7 @@ sup_tables=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_
 abundance=${sup_tables}S19_GM12878_talon_abundance.tsv
 filt_abundance=${sup_tables}S20_GM12878_ont_talon_abundance_filtered.tsv
 tier1_filt_abundance=${sup_tables}S32_full_gencode_v29_ont_talon_abundance_filtered.tsv
-gtf=${sup_tables}S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly.gtf
+gtf=${sup_tables}S30_full_gencode_v29_ont_tracks_talon_observedOnly.gtf
 
 # for pb vs. ont plots
 pb_ont_abundance_filtered=${sup_tables}S28_full_gencode_v29_pb_ont_talon_abundance.tsv
@@ -105,14 +105,14 @@ Generate the tracklines from the combined ONT+PacBio GTF
 ```bash
 # create config file for gtf creation
 # replace url with the url to your public-facing directory
-url=http://crick.bio.uci.edu/freese/TALON_gtf/S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_tracks 
+url=http://crick.bio.uci.edu/freese/TALON_gtf/S30_full_gencode_v29_ont_tracks_talon_observedOnly_tracks 
 printf "${gtf},n+,0,none,$url" > pb_ont_track_config
 python ${APATH}gen_novelty_tracks_gtf.py \
     --c pb_ont_track_config
-mv ${sup_tables}S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_tracks .
+mv ${sup_tables}S30_full_gencode_v29_ont_tracks_talon_observedOnly_tracks .
 ```
 
-Load the resultant data from S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_tracks/S27_full_gencode_v29_pb_ont_tracks_talon_observedOnly_n+\_tracks into the "Custom Tracks" genome browser section and display!
+Load the resultant data from S30_full_gencode_v29_ont_tracks_talon_observedOnly_tracks/S30_full_gencode_v29_ont_tracks_talon_observedOnly_n+\_tracks into the "Custom Tracks" genome browser section and display!
 
 <!-- Make abundance bar plots for XRCC5 transcripts (for genome browser plot):
 ```
