@@ -513,7 +513,7 @@ Correlations are in PacBio_K562_1-ONT_K562_2_Known-ISM_transcript_correlations.t
 
 # Figure S15: Splice junction novelty and reproducibility across platforms
 
-Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/SJ_novelty_analysis
+Check out this readme for a detailed explanation of the analysis and figure generation: https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/SJ_novelty_analysis
 
 ## Panel A: Percent Illumina support for known and novel (NNC and NIC) splice junctions in PacBio long-read GM12878 data
 
