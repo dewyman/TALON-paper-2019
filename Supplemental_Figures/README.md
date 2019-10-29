@@ -907,7 +907,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 
 # Figure S20: 5’ and 3’ end completeness of PacBio Epstein-Barr Virus transcripts
 
-Check out the (ebv)[https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/ebv] readme for a detailed explanation of the analysis and figure generation
+Check out the [ebv](https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/ebv) readme for a detailed explanation of the analysis and figure generation
 
 ## Panel A: Percentage of TALON EBV transcript models with CAGE support for their 5’ end by novelty category.
 
@@ -939,7 +939,7 @@ Rscript ${ebv}plot_support_by_novelty_type.R \
 
 # Figure S22: PacBio Cortex and Hippocampus Splice Junction Support in GENCODE and Illumina short reads
 
-Check out the (mouse_brain)[https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analysis/mouse_brain] readme for a detailed explanation of the analysis and figure generation
+Check out the [mouse_brain](https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/mouse_brain) readme for a detailed explanation of the analysis and figure generation
 
 ## Panel A: Venn diagram of cortex PacBio splice junction support from Illumina and GENCODE post-TranscriptClean and pre-TALON
 
