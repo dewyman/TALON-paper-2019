@@ -51,7 +51,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, dset){
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00",
                 "NNC" = "#E69F00", "Antisense" = "#000000",
                 "Intergenic" = "#CC79A7")
-    ymax <- 1.16*max(freqs_by_dataset$n)
+    ymax <- 1.35*max(freqs_by_dataset$n)
 
     n_datasets <- length(unique(observed_transcripts$dataset))
     png(filename = fname,
@@ -65,11 +65,11 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, dset){
                theme_bw(base_family = "Helvetica", base_size = 18) +
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
-                     axis.text.x = element_text(color="black", size = rel(1.75),
+                     axis.text.x = element_text(color="black", size = rel(2.5),
                                              angle = 25, vjust = 1, hjust=1),
-                     axis.text.y = element_text(color="black", size = rel(2)),
+                     axis.text.y = element_text(color="black", size = rel(2.5)),
                      axis.title.x = element_text(color="black", size=rel(1.5)),
-                     axis.title.y = element_text(color="black", size=rel(1.5))) +
+                     axis.title.y = element_text(color="black", size=rel(2))) +
                theme(legend.text = element_text(color="black", size = rel(1)),
                      legend.title = element_text(color="black", size=rel(1.25)),
                      legend.position=c(0.85,0.85),
@@ -81,7 +81,7 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, dset){
                   label = paste0(percent, '%')), 
                   stat = 'count', 
                   position = position_dodge(.9), 
-                  size = rel(10), vjust=-0.25) +
+                  size = rel(11), vjust=-0.25) +
                 guides(fill = FALSE)
 
 

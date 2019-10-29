@@ -73,7 +73,7 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
                                              angle = 25, vjust = 1, hjust=1),
                      axis.text.y = element_text(color="black", size = rel(2)),
                      axis.title.x = element_blank(),
-                     axis.title.y = element_text(color="black", size=rel(1.75))) +
+                     axis.title.y = element_text(color="black", size=rel(2))) +
                guides(fill = FALSE) + 
                coord_cartesian(ylim = c(1, ymax)) +
                theme(legend.position=c(0.7,0.8),
@@ -86,7 +86,7 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
                   label = paste0(percent, '%')),
                   stat = 'count',
                   position = position_dodge(.9),
-                  size = rel(10), vjust=-0.25)
+                  size = rel(11), vjust=-0.25)
                 
 
     print(g)

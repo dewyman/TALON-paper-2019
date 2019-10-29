@@ -284,18 +284,18 @@ mv figures/edgeR_PacBio_illumina_transcript_MA_plot.png figures/K562_edgeR_PacBi
 
 ## Panel G: Total number of PacBio reads assigned to each novelty category in PacBio HepG2 after transcript filtering
 ```bash
-Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
+Rscript ${PLOTPATH}/plot_novelty_category_read_counts_one_dataset.R \
          --f ${hepg2_filt_abundance}  \
-         --datasets PacBio_HepG2_1 \
+         --dataset PacBio_HepG2_1 \
          --o figures/
 ```
 <img align="center" width="400" src="figures/PacBio_HepG2_1_reads_by_isoform_category.png">
 
 ## Panel H: Total number of PacBio reads assigned to each novelty category in PacBio K562 after transcript filtering
 ```bash
-Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
+Rscript ${PLOTPATH}/plot_novelty_category_read_counts_one_dataset.R \
          --f ${k562_filt_abundance}  \
-         --datasets PacBio_K562_1 \
+         --dataset PacBio_K562_1 \
          --o figures/
 ```
 <img align="center" width="400" src="figures/PacBio_K562_1_reads_by_isoform_category.png">
