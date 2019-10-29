@@ -49,7 +49,7 @@ python ${PLOTPATH}/plot_read_length_distributions.py \
 ```
 See resulting plots [here](https://github.com/dewyman/TALON-paper-2019/tree/master/Supplemental_Figures/figures/read_lengths).
 
-Figure S3: HepG2 and K562 TALON PacBio gene quantification and expressionv
+# Figure S3: HepG2 and K562 TALON PacBio gene quantification and expressionv
 
 ## Panel A: Expression level of known genes (GENCODE v29) in each biological replicate of HepG2 in PacBio
 ```bash
