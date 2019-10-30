@@ -53,7 +53,7 @@ Correlations are in ONT_GM12878_1-ONT_GM12878_2_Known_transcript_correlations.tx
 
 ## Panel C: Total number of Oxford Nanopore reads assigned to each novelty category after transcript filtering
 ```bash
-Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
+Rscript ${PLOTPATH}/plot_novelty_category_read_counts_one_dataset.R \
          --f ${filt_abundance}  \
          --dataset ONT_GM12878_1 \
          --o .
