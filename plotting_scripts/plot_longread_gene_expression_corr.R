@@ -175,6 +175,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                         geom_density(alpha=.5) + 
                         scale_fill_manual(values = color_vec) + 
                         scale_color_manual(values = color_vec) +
+                        coord_cartesian(ylim=c(0, plot_max)) +
                         scale_x_continuous(breaks = seq(density_xmin, density_xmax, by = density_xmax), expand = c(0,0.2)) +
                         scale_y_continuous(breaks = seq(0, plot_max, by = plot_max)) +
                         theme(legend.position = "none",
@@ -190,6 +191,7 @@ expression_by_status <- function(merged_abundances, d1, d2, options, outdir, col
                        geom_density(alpha=.5) + 
                        scale_fill_manual(values = color_vec) +
                        scale_color_manual(values = color_vec) +
+                       coord_cartesian(ylim=c(0, plot_max)) +
                        scale_x_continuous(breaks = seq(density_xmin, density_xmax, by = density_xmax), expand = c(0,0.2)) +
                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
                        theme(legend.position = "none",
