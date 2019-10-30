@@ -186,8 +186,8 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
         xlab(xlabel)  + ylab(ylabel) + theme(text= element_text(size=24)) +
         theme(axis.text.x = element_text(color = "black", size=24),
               axis.text.y = element_text(color = "black", size=24)) +
-        scale_x_continuous(trans=log10_trans(), limits=c(0.1,32768))+
-        scale_y_continuous(trans=log10_trans(), limits=c(0.1,32768))+
+        scale_x_continuous(trans=log10_trans(), limits=c(0.1,36000))+
+        scale_y_continuous(trans=log10_trans(), limits=c(0.1,36000))+
         scale_colour_manual("Transcript status", values=color_vec) +
         theme(legend.position=c(0.73,0.2),
               legend.title = element_text(colour = 'black', size = 21),
@@ -216,30 +216,32 @@ expression_by_status <- function(merged_abundances, d1, d2, outdir, color_vec, c
 
      # density x lims 
      density_xmin = log(0.1, base=10)
-     density_xmax = log(32768, base=10)
+     density_xmax = log(36000, base=10)
 
      # Marginal density plot of x (top panel)
      xdensity <- ggplot(merged_abundances, aes(data1.log_TPM, fill=novelty, color=novelty)) + 
                         geom_density(alpha=.5) + 
                         scale_fill_manual(values = color_vec) + 
                         scale_color_manual(values = color_vec) +
+                        coord_cartesian(ylim=c(0, plot_max)) + 
                         scale_x_continuous(breaks = seq(density_xmin, density_xmax, by = density_xmax), expand = c(0,0.2)) +
-                        scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                        scale_y_continuous(breaks = seq(0.00, plot_max, by = plot_max )) +
                         theme(legend.position = "none",
                               axis.title.x=element_blank(),
                               axis.text.x=element_blank(),
                               axis.ticks.x=element_blank(),
                               axis.text.y=element_text(color = "black", size=14),
                               axis.title.y=element_text(color = "black", size=20),
-                              plot.margin = margin(0.75, 0, 0, 1.65, "cm"))
+                              plot.margin = margin(t = 0.75, r = 0, b = 0, l = 1.65, "cm"))
 
     # Marginal density plot of y (right panel)
     ydensity <- ggplot(merged_abundances, aes(data2.log_TPM, fill=novelty, color=novelty)) + 
                        geom_density(alpha=.5) + 
                        scale_fill_manual(values = color_vec) +
                        scale_color_manual(values = color_vec) +
+                       coord_cartesian(ylim=c(0, plot_max)) +
                        scale_x_continuous(breaks = seq(density_xmin, density_xmax, by = density_xmax), expand = c(0,0.2)) +
-                       scale_y_continuous(breaks = seq(0, plot_max, by = plot_max )) +
+                       scale_y_continuous(breaks = seq(0.00, plot_max, by = plot_max )) +
                        theme(legend.position = "none",
                              axis.title.y=element_blank(),
                              axis.text.y=element_blank(),
