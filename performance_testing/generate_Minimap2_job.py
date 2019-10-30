@@ -25,7 +25,7 @@ def get_options():
 def fill_template_script(n_reads, job_name, log_out, run_dir, fastq_file,
                         email = "dwyman@uci.edu", cores = 16,
                         minimap_path = "~/minimap2-2.15",
-                        ref_genome = "/pub/dwyman/TALON-paper-2019/refs/hg38/hg38.fa"):
+                        ref_genome = "/pub/dwyman/TALON-paper-2019/refs/mm10/mm10.fa"):
 
     template = Template(\
 '''#!/bin/bash
