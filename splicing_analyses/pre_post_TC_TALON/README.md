@@ -7,21 +7,26 @@ We want to see what the effect of running TALON has on GENCODE and Illumina supp
 1. Create pre-TranscriptClean splice junction files for PacBio GM12878 
 ```bash
 mkdir figures
-pre_sams=/share/crsp/lab/seyedam/share/TALON_paper_data/pre_TranscriptClean/
+module load samtools
+data=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/data/
+pre_TC=/Minimap2/sorted_all_mapped_FLNC_noScaff.sam
+post_TC=/TC_v2.0.2/TC_clean.sam
 REF=/data/users/freese/mortazavi_lab/ref/hg38/hg38.fa
 
+rep1=PacBio_GM12878_1
+rep2=PacBio_GM12878_2
+cat ${data}${rep1}${pre_TC} <(samtools view ${data}${rep2}${pre_TC}) > ${data}${rep1}/${rep1}-${rep2}_preTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${pre_sams}PacBio/GM12878/PacBio_GM12878_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_preTC.sam \
 	--genome $REF \
 	--o pb_pre_TC_GM12878
 ```
 
 2. Create post-TranscriptClean splice junction files for PacBio GM12878
 ```bash
-post_sams=/share/crsp/lab/seyedam/share/TALON_paper_data/post_TranscriptClean/
-
+cat ${data}${rep1}${post_TC} <(samtools view ${data}${rep2}${post_TC}) > ${data}${rep1}/${rep1}-${rep2}_postTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${post_sams}PacBio/GM12878/GM12878_Rep1-Rep2_sorted_canonical.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_postTC.sam \
 	--genome $REF \
 	--o pb_post_TC_GM12878
 ```
@@ -71,13 +76,17 @@ python ../compare_sjs_venn_new.py \
 6. Also do this analysis for HepG2 and K562 as well as ONT data.
 ```bash
 # PacBio HepG2
+rep1=PacBio_HepG2_1
+rep2=PacBio_HepG2_2
+cat ${data}${rep1}${pre_TC} <(samtools view ${data}${rep2}${pre_TC}) > ${data}${rep1}/${rep1}-${rep2}_preTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${pre_sams}PacBio/HepG2/PacBio_HepG2_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_preTC.sam \
 	--genome $REF \
 	--o pb_pre_TC_HepG2
 
+cat ${data}${rep1}${post_TC} <(samtools view ${data}${rep2}${post_TC}) > ${data}${rep1}/${rep1}-${rep2}_postTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${post_sams}PacBio/HepG2/PacBio_HepG2_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_postTC.sam \
 	--genome $REF \
 	--o pb_pre_TC_HepG2
 
@@ -113,13 +122,17 @@ python ../compare_sjs_venn_new.py \
 
 ```bash
 # PacBio K562
+rep1=PacBio_K562_1
+rep2=PacBio_K562_2
+cat ${data}${rep1}${pre_TC} <(samtools view ${data}${rep2}${pre_TC}) > ${data}${rep1}/${rep1}-${rep2}_preTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${pre_sams}PacBio/K562/PacBio_K562_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_preTC.sam \
 	--genome $REF \
 	--o pb_pre_TC_K562
 
+cat ${data}${rep1}${post_TC} <(samtools view ${data}${rep2}${post_TC}) > ${data}${rep1}/${rep1}-${rep2}_postTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${post_sams}PacBio/K562/PacBio_K562_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_postTC.sam \
 	--genome $REF \
 	--o pb_post_TC_K562
 
@@ -155,13 +168,18 @@ python ../compare_sjs_venn_new.py \
 
 ```bash
 # ONT GM12878
+pre_TC=/Minimap2/sorted_all_mapped_noScaff.sam
+rep1=ONT_GM12878_1
+rep2=ONT_GM12878_2
+cat ${data}${rep1}${pre_TC} <(samtools view ${data}${rep2}${pre_TC}) > ${data}${rep1}/${rep1}-${rep2}_preTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${pre_sams}ONT/GM12878/ONT_GM12878_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_preTC.sam \
 	--genome $REF \
 	--o ont_pre_TC_GM12878
 
+cat ${data}${rep1}${post_TC} <(samtools view ${data}${rep2}${post_TC}) > ${data}${rep1}/${rep1}-${rep2}_postTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${post_sams}ONT/GM12878/ONT_GM12878_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_postTC.sam \
 	--genome $REF \
 	--o ont_post_TC_GM12878
 
@@ -197,13 +215,18 @@ python ../compare_sjs_venn_new.py \
 
 ```bash
 # ONT HepG2
+pre_TC=/Minimap2/sorted_all_mapped_noScaff.sam
+rep1=ONT_HepG2_1
+rep2=ONT_HepG2_2
+cat ${data}${rep1}${pre_TC} <(samtools view ${data}${rep2}${pre_TC}) > ${data}${rep1}/${rep1}-${rep2}_preTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${pre_sams}ONT/HepG2/ONT_HepG2_Rep1-Rep3_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_preTC.sam \
 	--genome $REF \
 	--o ont_pre_TC_HepG2
 
+cat ${data}${rep1}${post_TC} <(samtools view ${data}${rep2}${post_TC}) > ${data}${rep1}/${rep1}-${rep2}_postTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${post_sams}ONT/HepG2/ONT_HepG2_Rep1-Rep3_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_postTC.sam \
 	--genome $REF \
 	--o ont_post_TC_HepG2
 
@@ -239,13 +262,18 @@ python ../compare_sjs_venn_new.py \
 
 ```bash
 # ONT K562
+pre_TC=/Minimap2/sorted_all_mapped_noScaff.sam
+rep1=ONT_K562_1
+rep2=ONT_K562_2
+cat ${data}${rep1}${pre_TC} <(samtools view ${data}${rep2}${pre_TC}) > ${data}${rep1}/${rep1}-${rep2}_preTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${pre_sams}ONT/K562/ONT_K562_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_preTC.sam \
 	--genome $REF \
 	--o ont_pre_TC_K562
 
+cat ${data}${rep1}${post_TC} <(samtools view ${data}${rep2}${post_TC}) > ${data}${rep1}/${rep1}-${rep2}_postTC.sam
 python ../extract_SJs_from_sam.py \
-	--sam ${post_sams}ONT/K562/ONT_K562_Rep1-Rep2_pre-TC.sam \
+	--sam ${data}${rep1}/${rep1}-${rep2}_postTC.sam \
 	--genome $REF \
 	--o ont_post_TC_K562
 
