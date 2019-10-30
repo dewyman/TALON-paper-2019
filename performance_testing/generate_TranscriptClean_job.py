@@ -23,9 +23,8 @@ def get_options():
 def fill_template_script(n_reads, job_name, log_out, run_dir, sam_file,
                         email = "dwyman@uci.edu", cores = 16,
                         TC_path = "~/TranscriptClean-2.0.2",
-                        ref_genome = "/pub/dwyman/TALON-paper-2019/refs/hg38/hg38.fa",
-                        sj_file = "/pub/dwyman/TALON-paper-2019/refs/TranscriptClean/gencode_v29_SJs.tsv",
-                        variant_file = "/pub/dwyman/TALON-paper-2019/refs/TranscriptClean/00-common_all.vcf.gz", conda_env = "mypython3.7.2"):
+                        ref_genome = "/pub/dwyman/TALON-paper-2019/refs/mm10/mm10.fa",
+                        sj_file = "/pub/dwyman/TALON-paper-2019/refs/TranscriptClean/gencode_vM21_SJs.tsv",
 
     template = Template(\
 '''#!/bin/bash
@@ -51,7 +50,6 @@ time python $TC_path/TranscriptClean.py \\
          -t $cores \\
          -g $ref_genome \\
          -j $sj_file \\
-         --variants $variant_file \\
          --canonOnly \\
          --tmpDir /scratch/$job_name \\
          --bufferSize 100 \\
@@ -71,7 +69,6 @@ echo input_size:$n_reads''')
                             'ref_genome':ref_genome,
                             'TC_path': TC_path,
                             'sj_file': sj_file,
-                            'variant_file': variant_file,
                             'conda_env':conda_env})
 
 def human_format(num):
