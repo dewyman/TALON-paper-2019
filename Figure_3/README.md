@@ -55,7 +55,7 @@ Correlations are in ONT_GM12878_1-ONT_GM12878_2_Known_transcript_correlations.tx
 ```bash
 Rscript ${PLOTPATH}/plot_novelty_category_read_counts.R \
          --f ${filt_abundance}  \
-         --datasets ONT_GM12878_1 \
+         --dataset ONT_GM12878_1 \
          --o .
 ```
 <img align="center" width="400" src="ONT_GM12878_1_reads_by_isoform_category.png">
