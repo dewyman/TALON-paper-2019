@@ -52,7 +52,7 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
     fname <- paste(outdir, "/", str_datasets, "_distinct_isoforms_by_category.png", sep="")
     xlabel <- "Category"
     ylabel <- "Number of distinct transcript models"
-    ymax <- 1.1*(max((distinct_transcripts %>% group_by(novelty) %>% count())$n))
+    ymax <- 1.35*(max((distinct_transcripts %>% group_by(novelty) %>% count())$n))
 
     colors <- c("Known" = "#009E73","ISM" = "#0072B2", "NIC" = "#D55E00", 
                 "NNC" = "#E69F00", "Antisense" = "#000000", 
@@ -69,7 +69,7 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
                theme_bw(base_family = "Helvetica", base_size = 20) +
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
-                     axis.text.x = element_text(color="black", size = rel(1.75),
+                     axis.text.x = element_text(color="black", size = rel(2.5),
                                              angle = 25, vjust = 1, hjust=1),
                      axis.text.y = element_text(color="black", size = rel(2)),
                      axis.title.x = element_blank(),
