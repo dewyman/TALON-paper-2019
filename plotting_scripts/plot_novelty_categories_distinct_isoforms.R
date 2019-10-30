@@ -71,16 +71,11 @@ plot_distinct_novelty <- function(distinct_transcripts, outdir, datasets){
                      axis.line.y = element_line(color="black", size = 0.5),
                      axis.text.x = element_text(color="black", size = rel(2.5),
                                              angle = 25, vjust = 1, hjust=1),
-                     axis.text.y = element_text(color="black", size = rel(2)),
+                     axis.text.y = element_text(color="black", size = rel(2.5)),
                      axis.title.x = element_blank(),
                      axis.title.y = element_text(color="black", size=rel(2))) +
                guides(fill = FALSE) + 
                coord_cartesian(ylim = c(1, ymax)) +
-               theme(legend.position=c(0.7,0.8),
-                     legend.title = element_text(colour = 'black', size = rel(2)),
-                     legend.background = element_rect(fill="white", color = "black"),
-                     legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = rel(2))) +
                yscale("log10", .format = TRUE) + 
                geom_text(aes(y = ..count..,
                   label = paste0(percent, '%')),
