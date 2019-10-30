@@ -60,9 +60,8 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, dset){
     g = ggplot(observed_transcripts, aes(x = novelty, fill = novelty)) + 
                geom_bar(position="dodge") + 
                xlab("") + ylab(ylabel) +
-               theme_bw(base_family = "Helvetica", base_size = 18) +
                scale_fill_manual("Isoform Type", values = colors) +
-               theme_bw(base_family = "Helvetica", base_size = 18) +
+               theme_bw(base_family = "Helvetica", base_size = 20) +
                theme(axis.line.x = element_line(color="black", size = 0.5),
                      axis.line.y = element_line(color="black", size = 0.5),
                      axis.text.x = element_text(color="black", size = rel(2.5),
@@ -70,11 +69,6 @@ plot_novelty_on_reads <- function(observed_transcripts, outdir, dset){
                      axis.text.y = element_text(color="black", size = rel(2.5)),
                      axis.title.x = element_text(color="black", size=rel(1.5)),
                      axis.title.y = element_text(color="black", size=rel(2))) +
-               theme(legend.text = element_text(color="black", size = rel(1)),
-                     legend.title = element_text(color="black", size=rel(1.25)),
-                     legend.position=c(0.85,0.85),
-                     legend.background = element_rect(fill="white", color = "black"),
-                     legend.key = element_rect(fill="transparent")) +
                 yscale("log10", .format = TRUE) +
                 coord_cartesian(ylim = c(1, ymax)) +
                 geom_text(aes(y = ..count.., 
