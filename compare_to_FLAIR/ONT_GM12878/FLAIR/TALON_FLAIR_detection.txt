@@ -1,5 +1,5 @@
 detection	n
-1	Not detected	2549
+1	Not detected	2548
 2	FLAIR only	174
-3	TALON only	2671
+3	TALON only	2672
 4	TALON and FLAIR	4982
