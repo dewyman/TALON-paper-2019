@@ -4,12 +4,11 @@ Files/paths used to generate the panels of this figure:
 ```bash
 PLOTPATH=../plotting_scripts
 
-abundance=S3_GM12878_talon_abundance.tsv
-filt_abundance=S4_GM12878_talon_abundance_filtered.tsv
-tier1_filt_abundance=S17_full_gencode_v29_pb_talon_abundance_filtered.tsv
-gtf=S15_full_gencode_v29_pb_tracks_talon.gtf
+abundance=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/S3_GM12878_talon_abundance.tsv
+filt_abundance=/share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/S4_GM12878_talon_abundance_filtered.tsv
 kallisto1=../Illumina/GM12878/Kallisto/Rep1/abundance.tsv
 kallisto2=../Illumina/GM12878/Kallisto/Rep2/abundance.tsv
+
 ```
 Abundance and GTF files are available as supplementary tables of the TALON paper. The Kallisto short-read abundance files are available directly from this repository at the provided relative paths.
 
