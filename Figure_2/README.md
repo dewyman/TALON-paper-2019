@@ -52,6 +52,7 @@ Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
          --ik1 ${kallisto1} \
          --ik2 ${kallisto2} \
          --color blue \
+         --ymax 16 \
          -o .
 ```
 <img align="center" width="400" src="edgeR_PacBio_illumina_gene_MA_plot.png">
@@ -103,6 +104,7 @@ Rscript ${PLOTPATH}/longread_v_illumina_transcripts_edgeR.R \
          --ik1 ${kallisto1} \
          --ik2 ${kallisto2} \
          --color green \
+         --ymax 16 \
           -o . 
 
 ```

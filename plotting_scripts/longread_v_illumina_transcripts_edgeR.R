@@ -87,7 +87,7 @@ main <-function() {
     illumina_PB_et$adj_pval <- p.adjust(illumina_PB_et$PValue, method = "bonferroni")
 
     # MA plot
-    ma_plot(illumina_PB_et, fill_color, opt$outdir, opt$dtype)
+    ma_plot(illumina_PB_et, fill_color, opt$outdir, opt$dtype, opt$xmax, opt$ymax)
 
     # Merge the EdgeR table with the other information
     illumina_PB_et <- cbind(illumina_PB_et, merged_illumina_pacbio)
@@ -97,7 +97,7 @@ main <-function() {
 }
 
 
-ma_plot <- function(data, fillcolor, outdir, dtype) {
+ma_plot <- function(data, fillcolor, outdir, dtype, xmax, ymax) {
 
     data$status <- as.factor(ifelse(abs(data$logFC) > 1 & data$adj_pval <= 0.01,
                              "Bonf. p-value <= 0.01", "Bonf. p-value > 0.01"))
@@ -110,25 +110,27 @@ ma_plot <- function(data, fillcolor, outdir, dtype) {
     ylabel <- paste0(dtype, " to Illumina log2-fold change")
 
     png(filename = fname,
-        width = 2500, height = 2500, units = "px",
+        width = 3000, height = 3000, units = "px",
         bg = "white",  res = 300)
 
     g <- ggplot(data, aes(x=logCPM, y=logFC, color = status)) +
          geom_point(alpha = 0.4, size = 2) +
-         xlab(xlabel) + ylab(ylabel) + theme_bw() +
+         xlab(xlabel) + ylab(ylabel) + 
+         coord_cartesian(xlim=c(0,xmax), ylim = c(-1*ymax,ymax)) +
          scale_color_manual(values = c("orange", fillcolor),
-                                  labels = c(paste0("Significant (n = ", n_sig, ")"),
-                                             paste0("Not significant (n = ", n_no_sig, ")"))) +
-         theme(axis.text.x = element_text(color="black", size=22),
-                     axis.text.y = element_text(color="black", size=22),
-                     axis.title.x = element_text(color="black", size=22),
-                     axis.title.y = element_text(color="black", size=22)) +
-               guides(colour = guide_legend(override.aes = list(alpha=1,size=2.5))) +
-               theme(legend.position=c(0.25,0.1),
-                     legend.title = element_blank(),
-                     legend.background = element_rect(fill="white", color = "black"),
-                     legend.key = element_rect(fill="transparent"),
-                     legend.text = element_text(colour = 'black', size = 16))
+                                  labels = c(paste0("Sig. (n = ", n_sig, ")"),
+                                             paste0("Not sig. (n = ", n_no_sig, ")"))) +
+         theme_bw(base_family = "Helvetica", base_size = 18) +
+         theme(axis.text.x = element_text(color="black", size=rel(2.5)),
+               axis.text.y = element_text(color="black", size=rel(2.5)),
+               axis.title.x = element_text(color="black", size=rel(2)),
+               axis.title.y = element_text(color="black", size=rel(2))) +
+         guides(colour = guide_legend(override.aes = list(alpha=1,size=2.5))) +
+         theme(legend.position=c(0.28,0.1),
+               legend.title = element_blank(),
+               legend.background = element_rect(fill="white", color = "black"),
+               legend.key = element_rect(fill="transparent"),
+               legend.text = element_text(colour = 'black', size = rel(1.5)))
 
     print(g)
     dev.off()
@@ -194,7 +196,11 @@ parse_options <- function() {
     make_option(c("-o","--outdir"), action = "store", dest = "outdir",
                 default = NULL, help = "Output directory for plots and outfiles"),
     make_option(c("--dtype"), action = "store", dest = "dtype",
-                default = "PacBio", help = "Datatype label to display on plot"))
+                default = "PacBio", help = "Datatype label to display on plot"),
+    make_option(c("--xmax"), action = "store", dest = "xmax",
+                default = 16, help = "Max x-value for plot (default = 16)"),
+    make_option(c("--ymax"), action = "store", dest = "ymax",
+                default = 20, help = "Max y-value for plot (default = 20)"))
 
     opt <- parse_args(OptionParser(option_list=option_list))
     return(opt)
