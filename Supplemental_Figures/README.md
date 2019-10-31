@@ -128,7 +128,7 @@ Rscript ${PLOTPATH}/plot_gene_length_by_detection_for_datasets.R \
 ## Panel B: Detection of known genes as a function of PacBio read depth in GM12878. The number of short-read genes that were detected in PacBio is shown cumulatively for each possible ordering of four PacBio datasets. The total number of Illumina genes was 10367.
 ```
 Rscript ${PLOTPATH}/plot_discovery_curve_knownOnly.R \
-    --f /share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/PacBio_GM12878_files/all_4_reps/PacBio_GM12878_all4_talon_abundance.tsv \
+    --f /share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/XS1_PacBio_GM12878_all4_talon_abundance.tsv \
     --color blue \
     --rc PacBio_GM12878_read_counts.csv \
     --ik1 ${GM12878_kallisto1} \
@@ -905,7 +905,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="600" src="figures/S19/K562_ONT_RNA-PET_support.png">
 
-# Figure S20: 5’ and 3’ end completeness of PacBio Epstein-Barr Virus transcripts
+# Figure S20: 5' and 3' end completeness of PacBio Epstein-Barr Virus transcripts
 
 Check out the [ebv](https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/ebv) readme for a detailed explanation of the analysis and figure generation
 
