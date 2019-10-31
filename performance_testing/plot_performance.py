@@ -7,12 +7,12 @@ import pandas as pd
 from matplotlib.ticker import ScalarFormatter
 
 def get_options():
-    """ Fetches the arguments for the program """
+    """ Fetches the arguments for the Program """
 
-    program_desc = ("Collects runtime, memory usage, and input size info from "
+    Program_desc = ("Collects runtime, memory usage, and input size info from "
                     "TranscriptClean log files and plots the results.")
 
-    parser = argparse.ArgumentParser(description=program_desc)
+    parser = argparse.ArgumentParser(description=Program_desc)
 
     parser.add_argument("--logs", "-l", dest = "logdir",
                         help = "Output directory for log files", type = str)
@@ -22,8 +22,8 @@ def get_options():
     args = parser.parse_args()
     return args
 
-def process_logs_of_type(log_dir, program_name):
-    """ Iterate through logs for a particular program and store performance
+def process_logs_of_type(log_dir, Program_name):
+    """ Iterate through logs for a particular Program and store performance
         metrics in a dataframe"""
 
     input_sizes = []
@@ -31,7 +31,7 @@ def process_logs_of_type(log_dir, program_name):
     memory_use = []
     n_cores = []
 
-    log_dir = log_dir + "/" + program_name + "/"
+    log_dir = log_dir + "/" + Program_name + "/"
     for log in glob("/".join([log_dir, "*.o*"])):
         try:
             input_size, runtime, memory, cores = parse_log(log)
@@ -45,9 +45,8 @@ def process_logs_of_type(log_dir, program_name):
     # Now format the data for plotting
     df = pd.DataFrame({'n_reads': input_sizes,
                        'runtime': runtimes,
-                       'memory': memory_use,
-                       'n_cores': n_cores})
-    df['program'] = program_name
+                       'memory': memory_use})
+    df['Program'] = Program_name
     return df 
 
 def parse_log(log):
@@ -90,9 +89,10 @@ def plot_reads_vs_var(df, y_var, ylabel, fname):
 
     style = dict(size=16, color='black')
     sb.set_context("paper", font_scale=1.25)
-    ax = sb.pointplot(data = df, x='n_reads', y=y_var, scale = 0.75)
+    sb.set_palette("colorblind")
+    ax = sb.pointplot(data = df, x='n_reads', y=y_var, hue = "Program", scale = 0.5)
     ax.set(xlabel=xlabel, ylabel=ylabel)
-    #ax.set_yscale('log', basey=2)
+    #ax.set_ylim((0,550))
     ax.grid(b=True, which='major')
     ax.set_axisbelow(True)
     ax.minorticks_on()
@@ -112,10 +112,16 @@ def main():
     TC = process_logs_of_type(log_dir, "TC")
     TALON = process_logs_of_type(log_dir, "TALON")
 
+    # Combine all the data
     all_data = pd.concat([minimap, TC, TALON])
-    
-    total_runtimes = all_data.groupby("n_reads").agg({'runtime': 'sum'})
-    plot_reads_vs_var(minimap, "runtime", "Runtime (min)", outprefix + "_minimap2_runtime.png")
+    total = all_data.groupby("n_reads").agg({'runtime': 'sum', 'memory': 'sum'})
+    total.index.name = 'n_reads'
+    total.reset_index(inplace=True)
+    total['Program'] = "Pipeline total"
+    all_data = pd.concat([all_data, total])
+
+    plot_reads_vs_var(all_data, "runtime", "Runtime (min)", outprefix + "_all_runtime.png")
+    plot_reads_vs_var(all_data, "memory", "Max RAM usage (G)", outprefix + "_all_memory.png")
 
 if __name__ == '__main__':
     main()
