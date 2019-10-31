@@ -974,15 +974,76 @@ Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
 ```
 Spearman rho: 0.75
 
-## GM12878 ONT vs. Illumina
+## K562 Pacbio vs. Illumina
+```
 Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
-    --f ${sup_tables}S3_GM12878_talon_abundance.tsv \
-    --ik1 ${GM12878_kallisto1} \
-    --ik2 ${GM12878_kallisto2} \
+    --f ${sup_tables}S9_K562_talon_abundance.tsv \
+    --ik1 ${k562_kallisto1} \
+    --ik2 ${k562_kallisto2} \
     --color blue \
-    --r1 PacBio_GM12878_1 \
-    --r2 PacBio_GM12878_2 \
+    --r1 PacBio_K562_1 \
+    --r2 PacBio_K562_2 \
     --srtype Illumina \
     --lrtype PacBio \
     -o figures/lr_sr_corr
 ```
+Spearman rho: 0.77
+
+## HepG2 Pacbio vs. Illumina
+```
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S6_HepG2_talon_abundance.tsv \
+    --ik1 ${hepg2_kallisto1} \
+    --ik2 ${hepg2_kallisto2} \
+    --color blue \
+    --r1 PacBio_HepG2_1 \
+    --r2 PacBio_HepG2_2 \
+    --srtype Illumina \
+    --lrtype PacBio \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.8 
+
+## GM12878 ONT vs. Illumina
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S19_GM12878_talon_abundance.tsv \
+    --ik1 ${GM12878_kallisto1} \
+    --ik2 ${GM12878_kallisto2} \
+    --color blue \
+    --r1 ONT_GM12878_1 \
+    --r2 ONT_GM12878_2 \
+    --srtype Illumina \
+    --lrtype ONT \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.66
+
+## K562 ONT vs. Illumina
+```
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S25_K562_talon_abundance.tsv \
+    --ik1 ${k562_kallisto1} \
+    --ik2 ${k562_kallisto2} \
+    --color blue \
+    --r1 ONT_K562_1 \
+    --r2 ONT_K562_2 \
+    --srtype Illumina \
+    --lrtype ONT \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.67
+
+## HepG2 ONT vs. Illumina
+```
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S22_HepG2_talon_abundance.tsv \
+    --ik1 ${hepg2_kallisto1} \
+    --ik2 ${hepg2_kallisto2} \
+    --color blue \
+    --r1 ONT_HepG2_1 \
+    --r2 ONT_HepG2_2 \
+    --srtype Illumina \
+    --lrtype ONT \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.75
