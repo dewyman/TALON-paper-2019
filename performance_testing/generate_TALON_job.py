@@ -34,7 +34,7 @@ def make_config(read_count, run_dir, sam_file):
 
 def fill_template_script(n_reads, job_name, log_out, run_dir, config_file,
                          email = "dwyman@uci.edu", cores = 16,
-                         db_path = "/pub/dwyman/TALON-paper-2019/refs/TALON/unmodified_full_gencode_v29_2019-06-19.db", conda_env = "python3.6"):
+                         db_path = "/pub/dwyman/TALON-paper-2019/refs/TALON/unmodified_full_gencode_vM21_2019-06-19.db", conda_env = "python3.6"):
 
     # Make a config file
 
@@ -59,7 +59,7 @@ cp $db_path talon.db
 
 time talon --f $config_file \\
            --db talon.db \\
-           --build hg38 \\
+           --build mm10 \\
            --cov 0.9 \\
            --identity 0 \\
            --o $run_dir/talon
@@ -114,7 +114,7 @@ def main():
         script_text = fill_template_script(n_reads, job_name, log_out, run_dir,                                            config_file)
         o.write(script_text)
     
-    #os.system("qsub %s" % (curr_script))
+    os.system("qsub %s" % (curr_script))
 
 if __name__ == '__main__':
     main()
