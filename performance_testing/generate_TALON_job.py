@@ -59,6 +59,7 @@ cp $db_path talon.db
 
 time talon --f $config_file \\
            --db talon.db \\
+           --threads 16 \\
            --build mm10 \\
            --cov 0.9 \\
            --identity 0 \\
