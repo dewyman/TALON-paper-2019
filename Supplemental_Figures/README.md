@@ -957,4 +957,32 @@ Check out the [mouse_brain](https://github.com/dewyman/TALON-paper-2019/tree/mas
 
 <img align="center" width="500" src="../splicing_analyses/mouse_brain/figures/Post-TALON_Cortex_venn.png">
 
+# Known gene expression correlation between long read platforms and Illumina for Tier 1 cell lines
+## GM12878 Pacbio vs. Illumina
+```
+mkdir -p figures/lr_sr_corr
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S3_GM12878_talon_abundance.tsv \
+    --ik1 ${GM12878_kallisto1} \
+    --ik2 ${GM12878_kallisto2} \
+    --color blue \
+    --r1 PacBio_GM12878_1 \
+    --r2 PacBio_GM12878_2 \
+    --srtype Illumina \
+    --lrtype PacBio \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.75
 
+## GM12878 ONT vs. Illumina
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S3_GM12878_talon_abundance.tsv \
+    --ik1 ${GM12878_kallisto1} \
+    --ik2 ${GM12878_kallisto2} \
+    --color blue \
+    --r1 PacBio_GM12878_1 \
+    --r2 PacBio_GM12878_2 \
+    --srtype Illumina \
+    --lrtype PacBio \
+    -o figures/lr_sr_corr
+```
