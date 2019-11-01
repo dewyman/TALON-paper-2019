@@ -128,7 +128,7 @@ Rscript ${PLOTPATH}/plot_gene_length_by_detection_for_datasets.R \
 ## Panel B: Detection of known genes as a function of PacBio read depth in GM12878. The number of short-read genes that were detected in PacBio is shown cumulatively for each possible ordering of four PacBio datasets. The total number of Illumina genes was 10367.
 ```
 Rscript ${PLOTPATH}/plot_discovery_curve_knownOnly.R \
-    --f /share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/PacBio_GM12878_files/all_4_reps/PacBio_GM12878_all4_talon_abundance.tsv \
+    --f /share/crsp/lab/seyedam/share/TALON_paper_data/revisions_10-19/human_TALON/analysis/supplementary_tables/XS1_PacBio_GM12878_all4_talon_abundance.tsv \
     --color blue \
     --rc PacBio_GM12878_read_counts.csv \
     --ik1 ${GM12878_kallisto1} \
@@ -905,7 +905,7 @@ Rscript ${PLOTPATH}/plot_support_by_novelty_type.R \
 ```
 <img align="center" width="600" src="figures/S19/K562_ONT_RNA-PET_support.png">
 
-# Figure S20: 5’ and 3’ end completeness of PacBio Epstein-Barr Virus transcripts
+# Figure S20: 5' and 3' end completeness of PacBio Epstein-Barr Virus transcripts
 
 Check out the [ebv](https://github.com/dewyman/TALON-paper-2019/tree/master/splicing_analyses/ebv) readme for a detailed explanation of the analysis and figure generation
 
@@ -957,4 +957,93 @@ Check out the [mouse_brain](https://github.com/dewyman/TALON-paper-2019/tree/mas
 
 <img align="center" width="500" src="../splicing_analyses/mouse_brain/figures/Post-TALON_Cortex_venn.png">
 
+# Known gene expression correlation between long read platforms and Illumina for Tier 1 cell lines
+## GM12878 Pacbio vs. Illumina
+```
+mkdir -p figures/lr_sr_corr
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S3_GM12878_talon_abundance.tsv \
+    --ik1 ${GM12878_kallisto1} \
+    --ik2 ${GM12878_kallisto2} \
+    --color blue \
+    --r1 PacBio_GM12878_1 \
+    --r2 PacBio_GM12878_2 \
+    --srtype Illumina \
+    --lrtype PacBio \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.75
 
+## K562 Pacbio vs. Illumina
+```
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S9_K562_talon_abundance.tsv \
+    --ik1 ${k562_kallisto1} \
+    --ik2 ${k562_kallisto2} \
+    --color blue \
+    --r1 PacBio_K562_1 \
+    --r2 PacBio_K562_2 \
+    --srtype Illumina \
+    --lrtype PacBio \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.77
+
+## HepG2 Pacbio vs. Illumina
+```
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S6_HepG2_talon_abundance.tsv \
+    --ik1 ${hepg2_kallisto1} \
+    --ik2 ${hepg2_kallisto2} \
+    --color blue \
+    --r1 PacBio_HepG2_1 \
+    --r2 PacBio_HepG2_2 \
+    --srtype Illumina \
+    --lrtype PacBio \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.8 
+
+## GM12878 ONT vs. Illumina
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S19_GM12878_talon_abundance.tsv \
+    --ik1 ${GM12878_kallisto1} \
+    --ik2 ${GM12878_kallisto2} \
+    --color blue \
+    --r1 ONT_GM12878_1 \
+    --r2 ONT_GM12878_2 \
+    --srtype Illumina \
+    --lrtype ONT \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.66
+
+## K562 ONT vs. Illumina
+```
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S25_K562_talon_abundance.tsv \
+    --ik1 ${k562_kallisto1} \
+    --ik2 ${k562_kallisto2} \
+    --color blue \
+    --r1 ONT_K562_1 \
+    --r2 ONT_K562_2 \
+    --srtype Illumina \
+    --lrtype ONT \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.67
+
+## HepG2 ONT vs. Illumina
+```
+Rscript ${PLOTPATH}/plot_longread_illumina_gene_correlation.R \
+    --f ${sup_tables}S22_HepG2_talon_abundance.tsv \
+    --ik1 ${hepg2_kallisto1} \
+    --ik2 ${hepg2_kallisto2} \
+    --color blue \
+    --r1 ONT_HepG2_1 \
+    --r2 ONT_HepG2_2 \
+    --srtype Illumina \
+    --lrtype ONT \
+    -o figures/lr_sr_corr
+```
+Spearman rho: 0.75
