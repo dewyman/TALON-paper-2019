@@ -42,12 +42,18 @@ def get_field_value(key, fields):
 
 def find_novelty_type(fields):
 	nov_types = []
-	if 'antisense' in fields: nov_types.append('antisense')
-	if 'intergenic' in fields: nov_types.append('intergenic')
-	if 'ISM_transcript' in fields: nov_types.append('ISM')
-	if 'NIC' in fields: nov_types.append('NIC')
-	if 'NNC' in fields: nov_types.append('NNC')
-	if 'transcript_status "KNOWN"' in fields: nov_types.append('Known')
+	if get_field_value('antisense_transcript', fields) == 'TRUE':
+		nov_types.append('antisense')
+	if get_field_value('intergenic_transcript', fields) == 'TRUE':
+		nov_types.append('intergenic')
+	if get_field_value('ISM_transcript', fields) == 'TRUE':
+		nov_types.append('ISM')
+	if get_field_value('NIC_transcript', fields) == 'TRUE':
+		nov_types.append('NIC')
+	if get_field_value('NNC_transcript', fields) == 'TRUE':
+		nov_types.append('NNC')
+	if get_field_value('transcript_status', fields) == 'KNOWN':
+		nov_types.append('Known')
 	return nov_types
 
 def get_transcript_df(g):
