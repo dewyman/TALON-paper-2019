@@ -22,10 +22,16 @@ def get_args():
 
 def read_dge_file(f):
 
-	df = pd.read_csv(f, sep='\t',
-		names=['gene', 'log2FC', 'log2CPM', 'p'],
-		usecols=[0,1,2,4],
-		header=0)
+	try:
+		df = pd.read_csv(f, sep='\t',
+			names=['gene', 'log2FC', 'log2CPM', 'p'],
+			usecols=[0,1,2,5],
+			header=0)
+	except:
+		df = pd.read_csv(f, sep=',',
+			names=['gene', 'log2FC', 'log2CPM', 'p'],
+			usecols=[0,1,2,5],
+			header=0)
 	return df
 
 def plot_pairwise_MA(dfa, dfb, namea, nameb, sample_name):
