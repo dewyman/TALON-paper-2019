@@ -165,6 +165,8 @@ def determine_sj_support(g, df, ref_df, gc_df):
 				if sj not in gc_df.id.values.tolist():
 					# print('culprit exon not found in gc~')
 					df.loc[df.transcript_id == tid, 'gencode_sj_support'] = False
+
+
 			# print()
 		# clean up if the last entry is monoexonic
 		if n_exons == 1: 
@@ -182,10 +184,10 @@ def main():
 	print('Loading illumina sj file....')
 	ill_df = read_sj_file(args.ref_sj)
 	print('Loading gencode sj file....')
-	gc_df = read_sj_file(args.ref_sj_2)
+	gc_df = read_sj_file(args.ref_sj_2) 
 
 	# # testing
-	gc_df.to_csv('gencode_sjs.csv', index=False)
+	# gc_df.to_csv('gencode_sjs.csv', index=False)
 
 	df = get_transcript_df(args.gtf)
 	# print(df.head())
@@ -193,7 +195,7 @@ def main():
 	# print(df.novelty.unique())
 
 	print('Determining sj support for each transcript....')
-	df = determine_sj_support(args.gtf, df, ill_df, gc_df)
+	df = determine_sj_support(args.gtf, df, ill_df, gc_df) 
 
 	df.to_csv('{}_isoform_sj_support.csv'.format(args.sample_name),
 			  index=False)
