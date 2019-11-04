@@ -48,7 +48,7 @@ Rscript ${PLOTPATH}/plot_detection_by_TPM_for_datasets.R \
 ```bash
 Rscript ${PLOTPATH}/longread_v_illumina_genes_edgeR.R \
          --f ${abundance} \
-         --datasets PacBio_GM12878_1,PacBio_GM12878_2 \ 
+         --datasets PacBio_GM12878_1,PacBio_GM12878_2 \
          --ik1 ${kallisto1} \
          --ik2 ${kallisto2} \
          --color blue \
@@ -69,7 +69,7 @@ Rscript ${PLOTPATH}/plot_novelty_categories_distinct_isoforms.R \
 ## Panel E: Expression level of known transcript models in each biological replicate of GM12878
 ```bash
 Rscript ${PLOTPATH}/plot_longread_transcript_expression_corr.R \
-         --f ${filt_abundance} \ 
+         --f ${filt_abundance} \
          --d1 PacBio_GM12878_1 \
          --d1_type 'Rep1 PacBio' \
          --d2 PacBio_GM12878_2 \
