@@ -14,23 +14,22 @@ Abundance and GTF files are available as supplementary tables of the TALON paper
 Software versions:
 * R v3.5.1
 
-## Panel A: Isoform diversity for one representative dataset of cortex 
+## Panel A: Isoform diversity for both datasets of cortex 
 ```bash
-# TODO
+Rscript PLOTHPATH/plot_novelty_categories_distinct_isoforms.R --f Brain_talon_abundance_filtered.tsv --datasets PacBio_Cortex_1,PacBio_Cortex_2 -o ourputDir/
 ```
-<!-- <img align="center" width="400" src="TODO"> -->
+<!-- <img align="center" width="400" src=""> -->
 
- Pearson and Spearman correlations are recorded in ONT_GM12878_1-ONT_GM12878_2_gene_correlations.txt.
 
-## Panel B: Isoform diversity for one representative dataset of hippocampus
+## Panel B: Isoform diversity for both datasets of hippocampus
 ```bash
-# TODO
+Rscript PLOTHPATH/plot_novelty_categories_distinct_isoforms.R --f Brain_talon_abundance_filtered.tsv --datasets PacBio_Hippocampus_1,PacBio_Hippocampus_2 -o ourputDir/
 ```
 <!-- <img align="center" width="400" src="TODO"> -->
 
 ## Panel C: #TODO of genes with higher novelty read counts (NIC+NNC) than known, of which #TODO are only higher in cortex and #TODO higher in hippocampus
 ```bash
-# TODO
+pythin S36.python
 ```
 
 <!-- <img align="center" width="400" src="TODO"> -->
